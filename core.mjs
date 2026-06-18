@@ -1659,3 +1659,226 @@ export function qaV106RulesPatch(){
   const divinityLegal=defLegal(p2,p2.hand[1],room.match.pendingAttack,'CENTER');
   return {marketBargainMana:mb?.mana_cost, healthPotionUsers:hints.playableUsersByCard?.['0'], casterHp:hp(caster), purifyChoice, dodgeLegal, divinityLegal, eyesCardCost:MAIN.get('S1-ARC-004')?.mana_cost};
 }
+
+// ============================================================
+// v1.0.7 Closed Alpha browser PvP rules polish
+// - Reload draw resolves correctly from S1B2 script rows.
+// - Eyes of the Hawk lets the user choose the opponent hand card and announces the choice.
+// - Beastman / Korvak Primal Strike racial is implemented through a target choice.
+// - Charged Shot / Ambush Shot / Sacred Stormblade are no-dodge attacks, but Block stays legal.
+// - Blessing of Divinity response to Venom Detonation protects all affected allied Heroes in one resolution.
+// - Defensive Block values use card data fallbacks and Deflect dynamic class text.
+// - Response pass / selected response resolution emits non-blocking opponent notices.
+// ============================================================
+(function(){
+  const V107_RELOAD='S1-ARC-005';
+  const V107_EYES='S1-ARC-004';
+  const V107_BOD='S1-CLE-024';
+  const V107_VENOM_DETONATION='S1-THF-018';
+  const V107_NO_DODGE_ATTACKS=new Set(['S1-ARC-008','S1-ARC-018','S1-WAR-021']);
+
+  function v107Is(card,id,name=''){
+    return !!card && (String(card.card_id||'')===id || (!!name && String(card.card_name||'')===name));
+  }
+  function v107IsNoDodgeAttack(card){
+    return !!card && (V107_NO_DODGE_ATTACKS.has(String(card.card_id||'')) || /cannot be dodged/i.test(String([card.short_text,card.effect_text,card.full_description].filter(Boolean).join(' '))));
+  }
+  function v107CardNoticeData(card){
+    return {card_id:card?.card_id||'',card_name:card?.card_name||'',image_url:card?.image_url||'',thumbnail_url:card?.thumbnail_url||card?.image_url||'',local_thumbnail_path:card?.local_thumbnail_path||''};
+  }
+  function v107AnnounceResponse(room,seat,card,title,message){
+    if(!card)return;
+    pushNotice(room,{sourceSeat:seat,title, ...v107CardNoticeData(card), message});
+  }
+  function v107BlockAmount(card,receiver){
+    const meta=DEF.get(card?.card_id)||{};
+    const name=String(card?.card_name||'');
+    if(name==='Deflect'){
+      return ['Gladiator','Conqueror'].includes(String(receiver?.class||'')) ? 40 : 30;
+    }
+    const direct=n(meta.block_amount,NaN);
+    if(Number.isFinite(direct))return direct;
+    const txt=String(card?.block_value||meta.block_value||card?.effect_text||'');
+    const nums=[...txt.matchAll(/\b(\d+)\b/g)].map(m=>Number(m[1])).filter(Number.isFinite);
+    return nums.length?nums[nums.length-1]:0;
+  }
+  function v107BeastmanTargets(m,seat){
+    const out=[];
+    for(const targetSeat of [seat,opponent(seat)]){
+      for(const slot of LANES){
+        const h=m.players[targetSeat]?.board?.[slot];
+        if(alive(h) && n(h.damage)>0){
+          out.push({targetSeat,slot,hero:h});
+        }
+      }
+    }
+    return out;
+  }
+
+  const openAttack_v107=openAttack;
+  openAttack=function(room,seat,card,userSlot,targetSeat,targetSlot,fromCasting=false){
+    const r=openAttack_v107(room,seat,card,userSlot,targetSeat,targetSlot,fromCasting);
+    const a=room.match?.pendingAttack;
+    if(r && a && a.card===card && v107IsNoDodgeAttack(card)){
+      a.noDodge=true;
+      // Charged Shot / Ambush Shot / Sacred Stormblade only prevent Dodge. They should not suppress Block cards.
+      if(String(card.card_id||'')!== 'S1-WAR-018' && String(card.card_name||'')!=='Execute') a.unblockable=false;
+    }
+    return r;
+  };
+
+  const defLegal_v107=defLegal;
+  defLegal=function(p,card,a,currentSlot){
+    const types=(DEF.get(card?.card_id)||{}).response_types||[];
+    if((a?.noDodge || v107IsNoDodgeAttack(a?.card)) && types.includes('DODGE')) return false;
+    // Venom Detonation is an all-poison detonation; Dodge is not a meaningful response.
+    if((a?.poisonBurst || String(a?.card?.card_id||'')===V107_VENOM_DETONATION) && types.includes('DODGE')) return false;
+    return defLegal_v107(p,card,a,currentSlot);
+  };
+
+  const resolveResponseMath_v107=resolveResponseMath;
+  resolveResponseMath=function(room,a,slot){
+    const sel=a?.selected;
+    if(sel?.card){
+      const meta=DEF.get(sel.card.card_id);
+      const receiver=room.match.players[a.targetSeat]?.board?.[slot];
+      if(meta && (meta.response_types||[]).includes('BLOCK')){
+        const old=meta.block_amount;
+        meta.block_amount=v107BlockAmount(sel.card,receiver);
+        try{return resolveResponseMath_v107(room,a,slot)}
+        finally{meta.block_amount=old}
+      }
+    }
+    return resolveResponseMath_v107(room,a,slot);
+  };
+
+  const executeNonAttackCard_v107=executeNonAttackCard;
+  executeNonAttackCard=function(room,seat,card,userSlot,targetSeat,targetSlot,script){
+    const m=room.match,p=m.players[seat],user=p.board[userSlot],opp=m.players[opponent(seat)];
+    if(v107Is(card,V107_RELOAD,'Reload')){
+      draw(p,2,false);
+      addLog(room,`${user?.name||'Hero'} uses Reload: draw 2 cards.`);
+      return;
+    }
+    if(v107Is(card,V107_EYES,'Eyes of the Hawk')){
+      if(!opp.hand.length) throw new Error('Eyes of the Hawk requires the opponent to have at least 1 card in hand.');
+      m.pendingChoice={
+        type:'V107_EYES_OF_THE_HAWK',
+        seat,
+        sourceSeat:seat,
+        targetSeat:opponent(seat),
+        card:v107CardNoticeData(card),
+        prompt:'Eyes of the Hawk: choose 1 card from your opponent hand to shuffle into their deck.',
+        options:opp.hand.map((c,i)=>({index:i,handIndex:i,card:c}))
+      };
+      addLog(room,`Eyes of the Hawk: Player ${seat} chooses 1 card from Player ${opponent(seat)} hand.`);
+      return;
+    }
+    return executeNonAttackCard_v107(room,seat,card,userSlot,targetSeat,targetSlot,script);
+  };
+
+  const useRacial_v107=useRacial;
+  useRacial=function(room,client,slot){
+    const m=assertActive(room,client),p=m.players[client.seat],h=p.board[slot];
+    if(alive(h) && h.race==='Beastman'){
+      if(m.phase!=='Deploy Phase') throw new Error('Primal Strike is used during Deploy Phase.');
+      if(h.status.Stun || p.racial<=0 || p.racialUsedTurn || h.racialUsed) throw new Error('Primal Strike is not available.');
+      const targets=v107BeastmanTargets(m,client.seat);
+      if(!targets.length) throw new Error('Primal Strike requires an injured active Hero.');
+      m.pendingChoice={
+        type:'V107_BEASTMAN_PRIMAL_STRIKE',
+        seat:client.seat,
+        userSlot:slot,
+        prompt:`${h.name} / Primal Strike: choose 1 injured Hero to take 20 damage.`,
+        options:targets.map((x,i)=>({index:i,targetSeat:x.targetSeat,targetSlot:x.slot,card:virtualChoiceCard(`BEASTMAN-${x.targetSeat}-${x.slot}`,`Player ${x.targetSeat} ${x.slot} / ${x.hero.name}`,`Deal 20 damage to injured Hero. Current HP ${hp(x.hero)} / ${x.hero.maxHp}.`)}))
+      };
+      addLog(room,`PRIMAL STRIKE WINDOW: ${h.name} may spend 1 Racial Token to damage an injured Hero.`);
+      return;
+    }
+    return useRacial_v107(room,client,slot);
+  };
+
+  const selectResponse_v107=selectResponse;
+  selectResponse=function(room,client,index,targetSlot=null,providerSlot=null){
+    const a=room.match?.pendingAttack;
+    const r=selectResponse_v107(room,client,index,targetSlot,providerSlot);
+    if(a?.selected?.card){
+      v107AnnounceResponse(room,client.seat,a.selected.card,'Opponent Selects DEF Response',`Player ${client.seat} selects ${a.selected.card.card_name}${a.selected.providerSlot?` using ${a.selected.providerSlot}`:''}${a.selected.redirectTarget?` -> ${a.selected.redirectTarget}`:''}.`);
+    }
+    return r;
+  };
+
+  const passResponse_v107=passResponse;
+  passResponse=function(room,client){
+    const a=room.match?.pendingAttack;
+    const slot=a?.slots?.[a.index];
+    const card=a?.card;
+    const r=passResponse_v107(room,client);
+    if(a&&card)pushNotice(room,{sourceSeat:client.seat,title:'Opponent Passes Response',card_name:'',message:`Player ${client.seat} passes response for ${card.card_name}${slot?` at ${slot}`:''}.`});
+    return r;
+  };
+
+  const resolveResponse_v107=resolveResponse;
+  resolveResponse=function(room,client){
+    const a=room.match?.pendingAttack;
+    if(a?.poisonBurst && a.targetSeat===client.seat && a.selected?.special==='V104_DIVINITY_RESPONSE'){
+      if(maybeOpenBindingLight(room,a)) return;
+      const selected=a.selected;
+      const p=room.match.players[a.targetSeat];
+      p.discard.push(selected.card);
+      for(const slot of a.slots){
+        const h=p.board[slot];
+        addLog(room,`Blessing of Divinity protects ${h?.name||slot} from Venom Detonation damage.`);
+        applyRecordedHit(room,a,{slot,dmg:n(a.damageBySlot?.[slot],a.damage),avoid:false,negate:false,returnAttack:false,statusApplies:true,fixedFinal:0,redirectTarget:null});
+      }
+      v107AnnounceResponse(room,client.seat,selected.card,'Opponent Response Resolves',`Blessing of Divinity prevents Venom Detonation damage to all affected allied Heroes.`);
+      a.selected=null;
+      finishAttack(room,a);
+      return;
+    }
+    const selected=a?.selected?.card||null;
+    const slot=a?.slots?.[a.index];
+    const r=resolveResponse_v107(room,client);
+    if(selected){
+      v107AnnounceResponse(room,client.seat,selected,'Opponent Response Resolves',`Player ${client.seat} resolves ${selected.card_name}${slot?` for ${slot}`:''}.`);
+    }
+    return r;
+  };
+
+  const resolveChoice_v107=resolveChoice;
+  resolveChoice=function(room,client,index){
+    const m=room.match,c=m.pendingChoice;
+    if(c?.type==='V107_EYES_OF_THE_HAWK'){
+      if(c.seat!==client.seat) throw new Error('This Eyes of the Hawk choice belongs to the other player.');
+      const opt=c.options[n(index,-1)]; if(!opt) throw new Error('Choose a card from opponent hand.');
+      const opp=m.players[c.targetSeat];
+      const idx=Math.max(0,Math.min(opp.hand.length-1,n(opt.handIndex,opt.index)));
+      const [picked]=opp.hand.splice(idx,1);
+      if(!picked) throw new Error('That card is no longer in opponent hand.');
+      opp.deck=shuffle(opp.deck.concat([picked]));
+      m.pendingChoice=null;
+      addLog(room,`Eyes of the Hawk shuffles ${picked.card_name} from Player ${c.targetSeat} hand into their deck.`);
+      pushNotice(room,{sourceSeat:c.sourceSeat,targetSeat:c.targetSeat,title:'Opponent Resolves Eyes of the Hawk',...c.card,message:`Player ${c.sourceSeat} chooses ${picked.card_name} from your hand and shuffles it into your deck.`});
+      pushNotice(room,{sourceSeat:c.sourceSeat,title:'Opponent Resolves Eyes of the Hawk',...c.card,message:`Eyes of the Hawk shuffles ${picked.card_name} from Player ${c.targetSeat} hand into their deck.`});
+      return;
+    }
+    if(c?.type==='V107_BEASTMAN_PRIMAL_STRIKE'){
+      if(c.seat!==client.seat) throw new Error('This Primal Strike choice belongs to the other player.');
+      const opt=c.options[n(index,-1)]; if(!opt) throw new Error('Choose an injured Hero.');
+      const p=m.players[client.seat], user=p.board[c.userSlot], target=m.players[opt.targetSeat]?.board?.[opt.targetSlot];
+      if(!alive(user) || user.race!=='Beastman') throw new Error('Primal Strike user is no longer available.');
+      if(!alive(target) || n(target.damage)<=0) throw new Error('Primal Strike target must be an injured active Hero.');
+      if(p.racial<=0 || p.racialUsedTurn || user.racialUsed) throw new Error('Primal Strike is already spent this turn.');
+      p.racial--; p.racialUsedTurn=true; user.racialUsed=true;
+      const before=hp(target);
+      target.damage=Math.min(target.maxHp,n(target.damage)+20);
+      addLog(room,`${user.name} uses Primal Strike: ${target.name} takes 20 damage (HP ${before} -> ${hp(target)}).`);
+      announceCardUse(room,client.seat,{card_id:user.id,card_name:'Primal Strike',image_url:user.image_url,thumbnail_url:user.thumbnail_url,local_thumbnail_path:user.local_thumbnail_path},`${user.name} spends 1 Racial Token to deal 20 damage to Player ${opt.targetSeat} ${opt.targetSlot} / ${target.name}.`,'Opponent Uses Racial Trait');
+      if(hp(target)<=0) defeat(room,opt.targetSeat,opt.targetSlot);
+      m.pendingChoice=null;
+      checkWin(room);
+      return;
+    }
+    return resolveChoice_v107(room,client,index);
+  };
+})();
