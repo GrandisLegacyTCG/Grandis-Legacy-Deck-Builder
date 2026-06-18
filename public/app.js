@@ -10319,21 +10319,25 @@ function connect() {
   ws.onerror = () => local("WebSocket error.", "error-text");
 }
 async function setupDiscord() {
+  const fallbackRoom = query.get("room") || "grandis-alpha";
   if (isDebug) {
-    state.roomId = query.get("room") || "debug-room";
+    state.roomId = fallbackRoom || "debug-room";
     connect();
     return;
   }
   if (placeholder) {
-    state.roomId = query.get("room") || "grandis-alpha";
+    state.roomId = fallbackRoom;
     local("Discord Client ID missing; using closed-alpha fallback room.", "error-text");
     connect();
     return;
   }
   try {
     state.sdk = new DiscordSDK(appId);
-    state.roomId = state.sdk.instanceId;
-    await state.sdk.ready();
+    const sdkReady = state.sdk.ready();
+    const readyTimeout = new Promise((_, reject) => setTimeout(() => reject(new Error("Discord SDK ready timeout")), 3e3));
+    await Promise.race([sdkReady, readyTimeout]);
+    state.roomId = state.sdk.instanceId || fallbackRoom;
+    if (!state.sdk.instanceId) local(`Discord SDK ready but instanceId missing; using closed-alpha fallback room ${state.roomId}.`, "error-text");
     try {
       await state.sdk.subscribe(Events.ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE, () => {
       });
@@ -10341,8 +10345,8 @@ async function setupDiscord() {
     }
     connect();
   } catch (e) {
-    state.roomId = query.get("room") || "grandis-alpha";
-    local(`Discord SDK failed; using closed-alpha fallback room ${state.roomId}.`, "error-text");
+    state.roomId = fallbackRoom;
+    local(`Discord SDK failed or timed out; using closed-alpha fallback room ${state.roomId}.`, "error-text");
     local(String(e), "error-text");
     connect();
   }
@@ -10841,3 +10845,47 @@ const pendingOpponentCardNotice_v105=pendingOpponentCardNotice;
 pendingOpponentCardNotice=function(){v105DrainNotices();return null};
 const renderMatch_v105=renderMatch;
 renderMatch=function(m){const out=renderMatch_v105.apply(this,arguments);v105DrainNotices();v105RenderSidecar();return out};
+
+
+// ============================================================
+// v1.0.1 Closed Alpha browser PvP polish
+// - compact non-blocking played sidecar with real text for RESOLVE entries
+// - keep sidecar useful when an action has no card image
+// ============================================================
+(function(){
+  const oldCardImageRecord = typeof v105CardImageRecord === 'function' ? v105CardImageRecord : null;
+  v105CardImageRecord = function(n){
+    const rec = oldCardImageRecord ? oldCardImageRecord(n) : {...(n||{})};
+    const cid = String(rec?.card_id || '').trim();
+    if (cid && !rec.local_thumbnail_path) rec.local_thumbnail_path = `runtime_thumbnail_assets/cards/${cid}.webp`;
+    return rec;
+  };
+  function shortActionMessage(it){
+    const raw = String(it?.message || it?.title || '').replace(/\s+/g,' ').trim();
+    if(!raw) return 'status update';
+    return raw.length > 54 ? raw.slice(0,51) + '…' : raw;
+  }
+  function isResolveItem(it){
+    const label = String(it?.label || '').toUpperCase();
+    return label === 'RESOLVE' || (!it?.card_name && !it?.card_id);
+  }
+  v105RenderSidecar = function(){
+    const el = v105EnsureSidecar(); if(!el) return;
+    const bag = state.pvpActionSidecar || (state.pvpActionSidecar = {items:[], selectedId:null, lastRound:null});
+    const items = bag.items || [];
+    const selected = items.find(x=>x.id===bag.selectedId) || items[items.length-1] || null;
+    const title = state.role === 'spectator' ? 'MATCH PLAYED' : 'OPPONENT PLAYED';
+    const tiles = items.length ? items.map((it)=>{
+      const active = it.id === selected?.id ? ' active' : '';
+      if(isResolveItem(it)){
+        return `<button class="pvp-action-tile pvp-action-resolve-tile${active}" data-pvp-action="${esc(it.id)}" title="${esc(shortActionMessage(it))}"><span class="pvp-action-label">${esc(it.label || 'RESOLVE')}</span><span class="pvp-action-resolve-summary">${esc(shortActionMessage(it))}</span></button>`;
+      }
+      const rec = v105CardImageRecord(it);
+      return `<button class="pvp-action-tile${active}" data-pvp-action="${esc(it.id)}" title="${esc(it.card_name || it.title || 'Action')}">${runtimeImg(rec,`alt="${esc(it.card_name || it.label || 'Action')}"`)}<span class="pvp-action-label">${esc(it.label || 'ACTION')}</span></button>`;
+    }).join('') : `<div class="pvp-action-empty">No opponent action yet.</div>`;
+    const detail = selected ? `<div class="pvp-action-detail"><b>${esc(selected.label || 'ACTION')} — ${esc(selected.card_name || selected.title || 'Match Update')}</b><br>${esc(selected.message || 'Click an action tile to inspect it.')}${selected.card_name ? `<br><button data-pvp-review="${esc(selected.id)}">Review Card</button>` : ''}</div>` : '';
+    el.innerHTML = `<div class="pvp-action-head"><div class="pvp-action-title">${title}<small>non-blocking</small></div></div><div class="pvp-action-grid">${tiles}</div>${detail}`;
+    el.querySelectorAll('[data-pvp-action]').forEach(b=>b.onclick=()=>{bag.selectedId=b.dataset.pvpAction;v105RenderSidecar();});
+    el.querySelectorAll('[data-pvp-review]').forEach(b=>b.onclick=()=>v105PreviewNoticeCard(items.find(x=>x.id===b.dataset.pvpReview)));
+  };
+})();
