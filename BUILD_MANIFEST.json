@@ -1,0 +1,7 @@
+{
+  "package": "Grandis_Legacy_Discord_PvP_v1.0.0_Closed_Alpha_Deploy_Prep",
+  "version": "v1.0.0 Closed Alpha Deployment Prep",
+  "build_note": "Zero-cost hosted deployment prep based on Discord PvP v0.10.5 RC gameplay. Adds Render blueprint and closed-alpha bug-report template. No intentional gameplay changes.",
+  "created": "2026-06-18",
+  "baseline": "Grandis_Legacy_S1B1_S1B2_Discord_PvP_Alpha_v0.10.5_RC_Bundle.zip"
+}

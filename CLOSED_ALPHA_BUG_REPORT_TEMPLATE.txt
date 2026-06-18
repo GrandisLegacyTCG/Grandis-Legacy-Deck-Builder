@@ -1,0 +1,25 @@
+GRANDIS LEGACY DISCORD PVP BUG REPORT
+
+Build:
+Room ID:
+Tester names:
+Decks used:
+Mode: Main / Quick
+Turn + Phase:
+Card / Hero / Action involved:
+
+What happened:
+
+What should have happened:
+
+Can you reproduce it?
+- Yes / No / Not sure
+
+Steps to reproduce:
+1.
+2.
+3.
+
+Screenshot / video:
+
+Extra notes:

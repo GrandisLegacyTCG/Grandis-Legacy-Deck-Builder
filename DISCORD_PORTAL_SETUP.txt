@@ -1,0 +1,14 @@
+DISCORD PORTAL CHECKLIST
+========================
+Activities > Settings
+- Enable Activities: ON
+- Maximum Participants: 2
+- Supported Platforms: Web
+
+Activities > URL Mappings
+- Prefix: /
+- Target: your-current-tunnel.trycloudflare.com
+  Do not include https:// and do not add a trailing slash.
+
+The temporary trycloudflare URL changes whenever the tunnel restarts.
+Update URL Mappings only when that hostname changes.

@@ -1,0 +1,21 @@
+{
+  "name": "grandis-legacy-discord-pvp-closed-alpha",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "build": "esbuild src/app.js --bundle --format=esm --platform=browser --outfile=public/app.js",
+    "check": "node --check server.js && node --check core.mjs",
+    "qa": "node --check server.js && node --check core.mjs && node --check src/app.js && node --check public/app.js && node QA_RUNTIME_TEST.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@discord/embedded-app-sdk": "^2.0.0",
+    "esbuild": "^0.25.0"
+  },
+  "description": "Grandis Legacy Discord PvP v1.0.0 Closed Alpha deployment prep bundle."
+}

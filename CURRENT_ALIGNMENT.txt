@@ -1,0 +1,28 @@
+Grandis Legacy Discord PvP v1.0.0 Closed Alpha Deployment Prep
+Build date: 2026-06-18
+
+Active baseline:
+- S1B1 source: Grandis Legacy S1B1 Checkpoint Package - 140626.zip. Treat as stable/locked.
+- S1B2 source: Grandis Legacy S1B2 v0.2.rar, with S1B2 Runtime CSV Source v0.2.3 for source hygiene.
+- Discord gameplay base: v0.10.5 RC behavior.
+
+Current locked runtime rules:
+- Chain Mail is Warrior / Archer / Thief, not Rogue.
+- Poison Mist remains 6 Mana.
+- Finnian Rank III / Nightshade Venom: Poison duration +1 and all Attack damage +10.
+- Venom Sovereign is non-Ultimate and may be tributed as a normal EXP card.
+- Venom Detonation remains Ultimate and restricted to Thief / Rogue / Renegade lineage.
+- Archer Marksman / Grand Ranger bonus applies only to Single Target Attack damage.
+- Health Potion and other hero-related Items still require a Hero target; no-hero universal Items activate directly.
+- Halfling Second Chance is optional, not automatic.
+- Revived Rank II returns with 300 EXP; revived Rank III returns with 700 EXP.
+
+Deployment direction:
+- Target version for first Discord-hosted closed alpha: v1.0.0.
+- First zero-cost path: single Node web service on Render Free or equivalent free hosting.
+- Do not treat free hosting as final production readiness.
+
+Watch list:
+- Archer / Grand Ranger runtime balance and PvP pacing still need playtest.
+- Multi-room reliability and disconnect/reconnect handling need hosted validation.
+- Logging/monitoring still needs improvement after first hosted smoke test.

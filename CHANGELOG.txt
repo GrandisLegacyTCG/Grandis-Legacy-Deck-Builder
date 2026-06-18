@@ -1,0 +1,17 @@
+Grandis Legacy Discord PvP v1.0.0 Closed Alpha Deployment Prep
+
+v1.0.0 scope:
+- Establishes the first Discord-hosted Closed Alpha version target.
+- Keeps v0.10.5 gameplay/runtime behavior as the base.
+- Adds zero-cost deployment prep files for Render Free Web Service.
+- Adds closed-alpha bug report template.
+- Removes .env from the distributable prep folder; keep .env.example only.
+- Normalizes Starter 05 display label to: Starter 05 — Conqueror / Crusader / Renegade.
+- Updates visible build/version metadata to v1.0.0 where runtime reads VERSION.
+
+Gameplay note:
+- No intentional gameplay/balance changes in this prep pass.
+- Archer / Grand Ranger remains balance-watch pending more PvP playtest.
+
+Known alpha caveat:
+- Free hosting can sleep/restart. This is acceptable for small closed alpha, not final public release.

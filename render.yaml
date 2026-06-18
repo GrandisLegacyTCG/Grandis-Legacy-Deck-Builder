@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: grandis-legacy-discord-pvp-v100-alpha
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DISCORD_CLIENT_ID
+        sync: false
