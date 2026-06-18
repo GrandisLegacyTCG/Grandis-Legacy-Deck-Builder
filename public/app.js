@@ -10325,7 +10325,9 @@ async function setupDiscord() {
     return;
   }
   if (placeholder) {
-    badge("error", "Config Needed");
+    state.roomId = query.get("room") || "grandis-alpha";
+    local("Discord Client ID missing; using closed-alpha fallback room.", "error-text");
+    connect();
     return;
   }
   try {
@@ -10339,8 +10341,10 @@ async function setupDiscord() {
     }
     connect();
   } catch (e) {
-    badge("error", "SDK Failed");
+    state.roomId = query.get("room") || "grandis-alpha";
+    local(`Discord SDK failed; using closed-alpha fallback room ${state.roomId}.`, "error-text");
     local(String(e), "error-text");
+    connect();
   }
 }
 async function loadPreset(kind) {
