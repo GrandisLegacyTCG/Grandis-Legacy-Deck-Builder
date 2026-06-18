@@ -1,0 +1,605 @@
+{
+  "schema_version": "GL-DECK-1.0",
+  "builder_version": "v0.5.6-rc",
+  "deck_name": "Starter 01 — Elemental Lord / Conqueror / Saint",
+  "display_name": "Starter 01 — Elemental Lord / Conqueror / Saint",
+  "preset_id": "starter_01_elemental_lord_conqueror_saint",
+  "format": "S1B1-v2.1.4 + S1B2-v0.2.2-archer-hero-sync",
+  "main_deck_count": 50,
+  "legacy_package_count": 5,
+  "legacy_deck_count": 20,
+  "legacy_deck_label": "Legacy Deck",
+  "legacy_deck_package_slots": [
+    {
+      "progression": "S1-MAG-H001",
+      "legacy": "S1-MAG-L001"
+    },
+    {
+      "progression": "S1-WAR-H001",
+      "legacy": "S1-WAR-L001"
+    },
+    {
+      "progression": "S1-CLE-H001",
+      "legacy": "S1-CLE-L001"
+    },
+    {
+      "progression": "S1-MAG-H004",
+      "legacy": "S1-MAG-L002"
+    },
+    {
+      "progression": "S1-CLE-H004",
+      "legacy": "S1-CLE-L002"
+    }
+  ],
+  "legacy_deck_expanded": [
+    {
+      "card_id": "S1-MAG-H001",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-H002",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-H003",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-L001",
+      "card_name": "Ancestral Tome",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-WAR-H001",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H002",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H003",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-L001",
+      "card_name": "Warrior's Relic",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-CLE-H001",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-CLE-H002",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-CLE-H003",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-CLE-L001",
+      "card_name": "Sun God Church",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-MAG-H004",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-MAG-H005",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-MAG-H006",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-MAG-L002",
+      "card_name": "Arcane Wand",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-CLE-H004",
+      "card_name": "Thrain Sunborn",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Thrain Sunborn — Cleric;Priest;Saint + Wand of First Light"
+    },
+    {
+      "card_id": "S1-CLE-H005",
+      "card_name": "Thrain Sunborn",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Thrain Sunborn — Cleric;Priest;Saint + Wand of First Light"
+    },
+    {
+      "card_id": "S1-CLE-H006",
+      "card_name": "Thrain Sunborn",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Thrain Sunborn — Cleric;Priest;Saint + Wand of First Light"
+    },
+    {
+      "card_id": "S1-CLE-L002",
+      "card_name": "Wand of First Light",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Thrain Sunborn — Cleric;Priest;Saint + Wand of First Light"
+    }
+  ],
+  "side_package_count": 5,
+  "side_deck_count": 20,
+  "side_deck_package_slots": [
+    {
+      "progression": "S1-MAG-H001",
+      "legacy": "S1-MAG-L001"
+    },
+    {
+      "progression": "S1-WAR-H001",
+      "legacy": "S1-WAR-L001"
+    },
+    {
+      "progression": "S1-CLE-H001",
+      "legacy": "S1-CLE-L001"
+    },
+    {
+      "progression": "S1-MAG-H004",
+      "legacy": "S1-MAG-L002"
+    },
+    {
+      "progression": "S1-CLE-H004",
+      "legacy": "S1-CLE-L002"
+    }
+  ],
+  "side_deck_expanded": [
+    {
+      "card_id": "S1-MAG-H001",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-H002",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-H003",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-L001",
+      "card_name": "Ancestral Tome",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-WAR-H001",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H002",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H003",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-L001",
+      "card_name": "Warrior's Relic",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-CLE-H001",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-CLE-H002",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-CLE-H003",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-CLE-L001",
+      "card_name": "Sun God Church",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-MAG-H004",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-MAG-H005",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-MAG-H006",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-MAG-L002",
+      "card_name": "Arcane Wand",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-CLE-H004",
+      "card_name": "Thrain Sunborn",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Thrain Sunborn — Cleric;Priest;Saint + Wand of First Light"
+    },
+    {
+      "card_id": "S1-CLE-H005",
+      "card_name": "Thrain Sunborn",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Thrain Sunborn — Cleric;Priest;Saint + Wand of First Light"
+    },
+    {
+      "card_id": "S1-CLE-H006",
+      "card_name": "Thrain Sunborn",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Thrain Sunborn — Cleric;Priest;Saint + Wand of First Light"
+    },
+    {
+      "card_id": "S1-CLE-L002",
+      "card_name": "Wand of First Light",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Thrain Sunborn — Cleric;Priest;Saint + Wand of First Light"
+    }
+  ],
+  "is_valid": true,
+  "validation_issues": [],
+  "validation_warnings": [],
+  "main_deck": [
+    {
+      "card_id": "S1-MAG-001",
+      "card_name": "Arcane Bolt",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-002",
+      "card_name": "Ice Lance",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-003",
+      "card_name": "Fireball",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-004",
+      "card_name": "Mana Shield",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-005",
+      "card_name": "Mirror Image",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-006",
+      "card_name": "Meditation",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-007",
+      "card_name": "Tornado",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-008",
+      "card_name": "Frostbite",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-009",
+      "card_name": "Fire Blast",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-010",
+      "card_name": "Glacial Spike",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-011",
+      "card_name": "Ice Block",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-012",
+      "card_name": "Fire Wall",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-013",
+      "card_name": "Wildfire",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-016",
+      "card_name": "Nova Strike",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-001",
+      "card_name": "Slash",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-002",
+      "card_name": "Power Slash",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-003",
+      "card_name": "Parry",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-004",
+      "card_name": "Cover Up",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-006",
+      "card_name": "Savage Blow",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-007",
+      "card_name": "Upward Thrust",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-008",
+      "card_name": "Wild Swing",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-009",
+      "card_name": "Rage Swing",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-010",
+      "card_name": "Rage Blast",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-011",
+      "card_name": "Side Step",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-012",
+      "card_name": "Deflect",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-014",
+      "card_name": "Final Grit",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-015",
+      "card_name": "Charge Attack",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-001",
+      "card_name": "Smite",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-002",
+      "card_name": "Sacred Bolt",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-003",
+      "card_name": "Brilliant Radiance",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-004",
+      "card_name": "Purify",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-005",
+      "card_name": "Flash Heal",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-006",
+      "card_name": "Blessing of Might",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-007",
+      "card_name": "Blessing of Wisdom",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-008",
+      "card_name": "Holy Fire",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-009",
+      "card_name": "Holy Ring",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-011",
+      "card_name": "Holy Barrier",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-012",
+      "card_name": "Binding Light",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-013",
+      "card_name": "God's Blessing",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-015",
+      "card_name": "Resurrection",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-001",
+      "card_name": "Health Potion",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-002",
+      "card_name": "Greater Health Potion",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-003",
+      "card_name": "Stamina Potion",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-005",
+      "card_name": "Mana Catalyst",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-008",
+      "card_name": "Phoenix Feather",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-018",
+      "card_name": "Magic Compass",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-EVT-003",
+      "card_name": "Scouting",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-EVT-004",
+      "card_name": "Relentless Leveling",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-EVT-010",
+      "card_name": "Déjà vu",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-EVT-011",
+      "card_name": "Coordination Attack",
+      "quantity": 1
+    }
+  ],
+  "default_formation": {
+    "LEFT": "S1-MAG-H001",
+    "CENTER": "S1-WAR-H001",
+    "RIGHT": "S1-CLE-H001"
+  },
+  "source_database_version": "S1B1-v2.1.4 + S1B2-v0.2.2-archer-hero-sync",
+  "builder_version_note": "Clean replacement for the old Mixed starter concept. 40 Skills split 14/13/13 plus 10 Item/Event cards.",
+  "item_event_count": 10
+}

@@ -1,0 +1,560 @@
+{
+  "schema_version": "GL-DECK-1.0",
+  "builder_version": "v0.5.6-rc",
+  "deck_name": "Starter 03 — Elemental Lord / Renegade / Grand Ranger",
+  "display_name": "Starter 03 — Elemental Lord / Renegade / Grand Ranger",
+  "preset_id": "starter_03_elemental_lord_renegade_grand_ranger",
+  "format": "S1B1-v2.1.4 + S1B2-v0.2.2-archer-hero-sync",
+  "main_deck_count": 50,
+  "legacy_package_count": 5,
+  "legacy_deck_count": 20,
+  "legacy_deck_label": "Legacy Deck",
+  "legacy_deck_package_slots": [
+    {
+      "progression": "S1-MAG-H001",
+      "legacy": "S1-MAG-L001"
+    },
+    {
+      "progression": "S1-THF-H001",
+      "legacy": "S1-THF-L002"
+    },
+    {
+      "progression": "S1-ARC-H001",
+      "legacy": "S1-ARC-L001"
+    },
+    {
+      "progression": "S1-MAG-H004",
+      "legacy": "S1-MAG-L002"
+    },
+    {
+      "progression": "S1-WAR-H001",
+      "legacy": "S1-WAR-L001"
+    }
+  ],
+  "legacy_deck_expanded": [
+    {
+      "card_id": "S1-MAG-H001",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-H002",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-H003",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-L001",
+      "card_name": "Ancestral Tome",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-THF-H001",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Archives"
+    },
+    {
+      "card_id": "S1-THF-H002",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Archives"
+    },
+    {
+      "card_id": "S1-THF-H003",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Archives"
+    },
+    {
+      "card_id": "S1-THF-L002",
+      "card_name": "Hidden Archives",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Archives"
+    },
+    {
+      "card_id": "S1-ARC-H001",
+      "card_name": "Korvak Ironfang",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Korvak Ironfang — Archer;Marksman;Grand Ranger + Golden Arrows"
+    },
+    {
+      "card_id": "S1-ARC-H002",
+      "card_name": "Korvak Ironfang",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Korvak Ironfang — Archer;Marksman;Grand Ranger + Golden Arrows"
+    },
+    {
+      "card_id": "S1-ARC-H003",
+      "card_name": "Korvak Ironfang",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Korvak Ironfang — Archer;Marksman;Grand Ranger + Golden Arrows"
+    },
+    {
+      "card_id": "S1-ARC-L001",
+      "card_name": "Golden Arrows",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Korvak Ironfang — Archer;Marksman;Grand Ranger + Golden Arrows"
+    },
+    {
+      "card_id": "S1-MAG-H004",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-MAG-H005",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-MAG-H006",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-MAG-L002",
+      "card_name": "Arcane Wand",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-WAR-H001",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H002",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H003",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-L001",
+      "card_name": "Warrior's Relic",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    }
+  ],
+  "side_package_count": 5,
+  "side_deck_count": 20,
+  "side_deck_package_slots": [
+    {
+      "progression": "S1-MAG-H001",
+      "legacy": "S1-MAG-L001"
+    },
+    {
+      "progression": "S1-THF-H001",
+      "legacy": "S1-THF-L002"
+    },
+    {
+      "progression": "S1-ARC-H001",
+      "legacy": "S1-ARC-L001"
+    },
+    {
+      "progression": "S1-MAG-H004",
+      "legacy": "S1-MAG-L002"
+    },
+    {
+      "progression": "S1-WAR-H001",
+      "legacy": "S1-WAR-L001"
+    }
+  ],
+  "side_deck_expanded": [
+    {
+      "card_id": "S1-MAG-H001",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-H002",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-H003",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-L001",
+      "card_name": "Ancestral Tome",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-THF-H001",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Archives"
+    },
+    {
+      "card_id": "S1-THF-H002",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Archives"
+    },
+    {
+      "card_id": "S1-THF-H003",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Archives"
+    },
+    {
+      "card_id": "S1-THF-L002",
+      "card_name": "Hidden Archives",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Archives"
+    },
+    {
+      "card_id": "S1-ARC-H001",
+      "card_name": "Korvak Ironfang",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Korvak Ironfang — Archer;Marksman;Grand Ranger + Golden Arrows"
+    },
+    {
+      "card_id": "S1-ARC-H002",
+      "card_name": "Korvak Ironfang",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Korvak Ironfang — Archer;Marksman;Grand Ranger + Golden Arrows"
+    },
+    {
+      "card_id": "S1-ARC-H003",
+      "card_name": "Korvak Ironfang",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Korvak Ironfang — Archer;Marksman;Grand Ranger + Golden Arrows"
+    },
+    {
+      "card_id": "S1-ARC-L001",
+      "card_name": "Golden Arrows",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Korvak Ironfang — Archer;Marksman;Grand Ranger + Golden Arrows"
+    },
+    {
+      "card_id": "S1-MAG-H004",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-MAG-H005",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-MAG-H006",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-MAG-L002",
+      "card_name": "Arcane Wand",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord + Arcane Wand"
+    },
+    {
+      "card_id": "S1-WAR-H001",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H002",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H003",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-L001",
+      "card_name": "Warrior's Relic",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    }
+  ],
+  "is_valid": true,
+  "validation_issues": [],
+  "validation_warnings": [],
+  "main_deck": [
+    {
+      "card_id": "S1-MAG-001",
+      "card_name": "Arcane Bolt",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-MAG-002",
+      "card_name": "Ice Lance",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-003",
+      "card_name": "Fire Ball",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-MAG-007",
+      "card_name": "Tornado",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-009",
+      "card_name": "Fire Blast",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-MAG-013",
+      "card_name": "Wildfire",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-014",
+      "card_name": "Lightning Storm",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-016",
+      "card_name": "Nova Strike",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-017",
+      "card_name": "Frostfire Nova",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-MAG-018",
+      "card_name": "Dual Casting",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-THF-003",
+      "card_name": "Evasion",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-006",
+      "card_name": "Smoke Screen",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-THF-011",
+      "card_name": "Elusive Escape",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-012",
+      "card_name": "Poison Mist",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-013",
+      "card_name": "Venom Strike",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-THF-014",
+      "card_name": "Viper's Fang",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-THF-015",
+      "card_name": "Venom Sovereign",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-THF-016",
+      "card_name": "Finishing Strike",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-THF-018",
+      "card_name": "Venom Detonation",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ARC-002",
+      "card_name": "Poison Arrow",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-ARC-006",
+      "card_name": "Frost Arrow",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ARC-007",
+      "card_name": "Burning Arrow",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-ARC-008",
+      "card_name": "Ambush Shot",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-ARC-009",
+      "card_name": "Arrow Volley",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ARC-010",
+      "card_name": "Arrow Barrage",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ARC-015",
+      "card_name": "Power Shot",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ARC-016",
+      "card_name": "Soul Shot",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ARC-017",
+      "card_name": "Dual Arrow",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ARC-018",
+      "card_name": "Charged Shot",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-001",
+      "card_name": "Health Potion",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-003",
+      "card_name": "Stamina Potion",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-005",
+      "card_name": "Mana Catalyst",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-006",
+      "card_name": "Magic Scope",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-007",
+      "card_name": "Ring of Protection",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-012",
+      "card_name": "Spectral Grappling Hook",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-016",
+      "card_name": "Chain Mail",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-017",
+      "card_name": "Flashpowder Bomb",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-018",
+      "card_name": "Magic Compass",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-EVT-003",
+      "card_name": "Scouting",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-EVT-004",
+      "card_name": "Relentless Leveling",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-EVT-007",
+      "card_name": "Intercept",
+      "quantity": 1
+    }
+  ],
+  "default_formation": {
+    "LEFT": "S1-MAG-H001",
+    "CENTER": "S1-THF-H001",
+    "RIGHT": "S1-ARC-H001"
+  },
+  "source_database_version": "S1B1-v2.1.4 + S1B2-v0.2.2-archer-hero-sync",
+  "builder_version_note": "Renegade-center fast attack starter: only Thief/Renegade carries the heavier DEF/survival package, while Mage and Archer are rebuilt as damage engines to close games faster.",
+  "item_event_count": 12
+}

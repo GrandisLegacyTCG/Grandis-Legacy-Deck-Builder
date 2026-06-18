@@ -1,0 +1,437 @@
+{
+  "schema_version": "GL-DECK-1.0",
+  "builder_version": "0.5.2-rc",
+  "deck_name": "S1B2 Rogue Test Deck — Hidden Archives",
+  "format": "S1B1+S1B2 Combined PvP Test",
+  "main_deck_count": 50,
+  "legacy_package_count": 5,
+  "legacy_deck_count": 20,
+  "legacy_deck_label": "Legacy Deck",
+  "legacy_deck_package_slots": [
+    {
+      "progression": "S1-THF-H001",
+      "legacy": "S1-THF-L002"
+    },
+    {
+      "progression": "S1-WAR-H001",
+      "legacy": "S1-WAR-L001"
+    },
+    {
+      "progression": "S1-MAG-H001",
+      "legacy": "S1-MAG-L001"
+    },
+    {
+      "progression": "S1-MAG-H004",
+      "legacy": "S1-MAG-L002"
+    },
+    {
+      "progression": "S1-CLE-H001",
+      "legacy": "S1-CLE-L001"
+    }
+  ],
+  "legacy_deck_expanded": [
+    {
+      "card_id": "S1-THF-H001",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "PKG-THF-FINNIAN-ARCHIVES"
+    },
+    {
+      "card_id": "S1-THF-H002",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "PKG-THF-FINNIAN-ARCHIVES"
+    },
+    {
+      "card_id": "S1-THF-H003",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "PKG-THF-FINNIAN-ARCHIVES"
+    },
+    {
+      "card_id": "S1-THF-L002",
+      "card_name": "Hidden Archives",
+      "card_type": "Legacy",
+      "package_id": "PKG-THF-FINNIAN-ARCHIVES"
+    },
+    {
+      "card_id": "S1-WAR-H001",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "PKG-WAR-DRAXEN"
+    },
+    {
+      "card_id": "S1-WAR-H002",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "PKG-WAR-DRAXEN"
+    },
+    {
+      "card_id": "S1-WAR-H003",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "PKG-WAR-DRAXEN"
+    },
+    {
+      "card_id": "S1-WAR-L001",
+      "card_name": "Warrior's Relic",
+      "card_type": "Legacy",
+      "package_id": "PKG-WAR-DRAXEN"
+    },
+    {
+      "card_id": "S1-MAG-H001",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "PKG-MAG-VAELIS"
+    },
+    {
+      "card_id": "S1-MAG-H002",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "PKG-MAG-VAELIS"
+    },
+    {
+      "card_id": "S1-MAG-H003",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "PKG-MAG-VAELIS"
+    },
+    {
+      "card_id": "S1-MAG-L001",
+      "card_name": "Ancestral Tome",
+      "card_type": "Legacy",
+      "package_id": "PKG-MAG-VAELIS"
+    },
+    {
+      "card_id": "S1-MAG-H004",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "PKG-MAG-ALDRIC"
+    },
+    {
+      "card_id": "S1-MAG-H005",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "PKG-MAG-ALDRIC"
+    },
+    {
+      "card_id": "S1-MAG-H006",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "PKG-MAG-ALDRIC"
+    },
+    {
+      "card_id": "S1-MAG-L002",
+      "card_name": "Arcane Wand",
+      "card_type": "Legacy",
+      "package_id": "PKG-MAG-ALDRIC"
+    },
+    {
+      "card_id": "S1-CLE-H001",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "PKG-CLE-ELARA"
+    },
+    {
+      "card_id": "S1-CLE-H002",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "PKG-CLE-ELARA"
+    },
+    {
+      "card_id": "S1-CLE-H003",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "PKG-CLE-ELARA"
+    },
+    {
+      "card_id": "S1-CLE-L001",
+      "card_name": "Sun God Church",
+      "card_type": "Legacy",
+      "package_id": "PKG-CLE-ELARA"
+    }
+  ],
+  "side_package_count": 5,
+  "side_deck_count": 20,
+  "side_deck_package_slots": [
+    {
+      "progression": "S1-THF-H001",
+      "legacy": "S1-THF-L002"
+    },
+    {
+      "progression": "S1-WAR-H001",
+      "legacy": "S1-WAR-L001"
+    },
+    {
+      "progression": "S1-MAG-H001",
+      "legacy": "S1-MAG-L001"
+    },
+    {
+      "progression": "S1-MAG-H004",
+      "legacy": "S1-MAG-L002"
+    },
+    {
+      "progression": "S1-CLE-H001",
+      "legacy": "S1-CLE-L001"
+    }
+  ],
+  "side_deck_expanded": [
+    {
+      "card_id": "S1-THF-H001",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "PKG-THF-FINNIAN-ARCHIVES"
+    },
+    {
+      "card_id": "S1-THF-H002",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "PKG-THF-FINNIAN-ARCHIVES"
+    },
+    {
+      "card_id": "S1-THF-H003",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "PKG-THF-FINNIAN-ARCHIVES"
+    },
+    {
+      "card_id": "S1-THF-L002",
+      "card_name": "Hidden Archives",
+      "card_type": "Legacy",
+      "package_id": "PKG-THF-FINNIAN-ARCHIVES"
+    },
+    {
+      "card_id": "S1-WAR-H001",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "PKG-WAR-DRAXEN"
+    },
+    {
+      "card_id": "S1-WAR-H002",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "PKG-WAR-DRAXEN"
+    },
+    {
+      "card_id": "S1-WAR-H003",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "PKG-WAR-DRAXEN"
+    },
+    {
+      "card_id": "S1-WAR-L001",
+      "card_name": "Warrior's Relic",
+      "card_type": "Legacy",
+      "package_id": "PKG-WAR-DRAXEN"
+    },
+    {
+      "card_id": "S1-MAG-H001",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "PKG-MAG-VAELIS"
+    },
+    {
+      "card_id": "S1-MAG-H002",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "PKG-MAG-VAELIS"
+    },
+    {
+      "card_id": "S1-MAG-H003",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "PKG-MAG-VAELIS"
+    },
+    {
+      "card_id": "S1-MAG-L001",
+      "card_name": "Ancestral Tome",
+      "card_type": "Legacy",
+      "package_id": "PKG-MAG-VAELIS"
+    },
+    {
+      "card_id": "S1-MAG-H004",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "PKG-MAG-ALDRIC"
+    },
+    {
+      "card_id": "S1-MAG-H005",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "PKG-MAG-ALDRIC"
+    },
+    {
+      "card_id": "S1-MAG-H006",
+      "card_name": "Aldric Ashford",
+      "card_type": "Hero",
+      "package_id": "PKG-MAG-ALDRIC"
+    },
+    {
+      "card_id": "S1-MAG-L002",
+      "card_name": "Arcane Wand",
+      "card_type": "Legacy",
+      "package_id": "PKG-MAG-ALDRIC"
+    },
+    {
+      "card_id": "S1-CLE-H001",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "PKG-CLE-ELARA"
+    },
+    {
+      "card_id": "S1-CLE-H002",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "PKG-CLE-ELARA"
+    },
+    {
+      "card_id": "S1-CLE-H003",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "PKG-CLE-ELARA"
+    },
+    {
+      "card_id": "S1-CLE-L001",
+      "card_name": "Sun God Church",
+      "card_type": "Legacy",
+      "package_id": "PKG-CLE-ELARA"
+    }
+  ],
+  "is_valid": true,
+  "validation_issues": [],
+  "validation_warnings": [],
+  "main_deck": [
+    {
+      "card_id": "S1-THF-001",
+      "card_name": "Dash Stab",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-002",
+      "card_name": "Jump Slash",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-003",
+      "card_name": "Evasion",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-004",
+      "card_name": "Steal",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-005",
+      "card_name": "Sixth Sense",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-006",
+      "card_name": "Smoke Screen",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-007",
+      "card_name": "Horizontal Slash",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-008",
+      "card_name": "Vertical Slash",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-009",
+      "card_name": "X Cross Slash",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-010",
+      "card_name": "Backslash",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-011",
+      "card_name": "Elusive Escape",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-012",
+      "card_name": "Poison Mist",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-013",
+      "card_name": "Venom Strike",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-014",
+      "card_name": "Viper's Fang",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-015",
+      "card_name": "Venom Sovereign",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-016",
+      "card_name": "Finishing Strike",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-017",
+      "card_name": "Venom Binding",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-018",
+      "card_name": "Venom Detonation",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-ITM-003",
+      "card_name": "Stamina Potion",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-ITM-005",
+      "card_name": "Mana Catalyst",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-ITM-006",
+      "card_name": "Magic Scope",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-ITM-009",
+      "card_name": "Crystal Ball",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-ITM-016",
+      "card_name": "Chain Mail",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-EVT-003",
+      "card_name": "Scouting",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-EVT-004",
+      "card_name": "Relentless Leveling",
+      "quantity": 2
+    }
+  ],
+  "default_formation": {
+    "LEFT": "S1-THF-H001",
+    "CENTER": "S1-WAR-H001",
+    "RIGHT": "S1-MAG-H001"
+  },
+  "source_database_version": "S1B1-v2.1.4 + S1B2-v0.2-thief-patch",
+  "builder_version_note": "Discord PvP S1B1+S1B2 v0.9.0 RC preset payload."
+}

@@ -1,0 +1,575 @@
+{
+  "schema_version": "GL-DECK-1.0",
+  "builder_version": "v0.5.6-rc",
+  "deck_name": "Starter 05 — Conqueror / Crusader / Renegade",
+  "display_name": "Starter 05 — Conqueror / Crusader / Renegade",
+  "preset_id": "starter_05_conqueror_crusader_renegade",
+  "format": "S1B1-v2.1.4 + S1B2-v0.2.2-archer-hero-sync",
+  "main_deck_count": 50,
+  "legacy_package_count": 5,
+  "legacy_deck_count": 20,
+  "legacy_deck_label": "Legacy Deck",
+  "legacy_deck_package_slots": [
+    {
+      "progression": "S1-WAR-H001",
+      "legacy": "S1-WAR-L001"
+    },
+    {
+      "progression": "S1-WAR-H004",
+      "legacy": "S1-WAR-L002"
+    },
+    {
+      "progression": "S1-THF-H001",
+      "legacy": "S1-THF-L001"
+    },
+    {
+      "progression": "S1-CLE-H001",
+      "legacy": "S1-CLE-L001"
+    },
+    {
+      "progression": "S1-MAG-H001",
+      "legacy": "S1-MAG-L001"
+    }
+  ],
+  "legacy_deck_expanded": [
+    {
+      "card_id": "S1-WAR-H001",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H002",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H003",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-L001",
+      "card_name": "Warrior's Relic",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H004",
+      "card_name": "Aurex Sunsworn",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Aurex Sunsworn — Warrior;Paladin;Crusader + Statue of the Lightbringer"
+    },
+    {
+      "card_id": "S1-WAR-H005",
+      "card_name": "Aurex Sunsworn",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Aurex Sunsworn — Warrior;Paladin;Crusader + Statue of the Lightbringer"
+    },
+    {
+      "card_id": "S1-WAR-H006",
+      "card_name": "Aurex Sunsworn",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Aurex Sunsworn — Warrior;Paladin;Crusader + Statue of the Lightbringer"
+    },
+    {
+      "card_id": "S1-WAR-L002",
+      "card_name": "Statue of the Lightbringer",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Aurex Sunsworn — Warrior;Paladin;Crusader + Statue of the Lightbringer"
+    },
+    {
+      "card_id": "S1-THF-H001",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Stash"
+    },
+    {
+      "card_id": "S1-THF-H002",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Stash"
+    },
+    {
+      "card_id": "S1-THF-H003",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Stash"
+    },
+    {
+      "card_id": "S1-THF-L001",
+      "card_name": "Hidden Stash",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Stash"
+    },
+    {
+      "card_id": "S1-CLE-H001",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-CLE-H002",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-CLE-H003",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-CLE-L001",
+      "card_name": "Sun God Church",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-MAG-H001",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-H002",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-H003",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-L001",
+      "card_name": "Ancestral Tome",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    }
+  ],
+  "side_package_count": 5,
+  "side_deck_count": 20,
+  "side_deck_package_slots": [
+    {
+      "progression": "S1-WAR-H001",
+      "legacy": "S1-WAR-L001"
+    },
+    {
+      "progression": "S1-WAR-H004",
+      "legacy": "S1-WAR-L002"
+    },
+    {
+      "progression": "S1-THF-H001",
+      "legacy": "S1-THF-L001"
+    },
+    {
+      "progression": "S1-CLE-H001",
+      "legacy": "S1-CLE-L001"
+    },
+    {
+      "progression": "S1-MAG-H001",
+      "legacy": "S1-MAG-L001"
+    }
+  ],
+  "side_deck_expanded": [
+    {
+      "card_id": "S1-WAR-H001",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H002",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H003",
+      "card_name": "Draxen Blacksand",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-L001",
+      "card_name": "Warrior's Relic",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-1",
+      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror + Warrior's Relic"
+    },
+    {
+      "card_id": "S1-WAR-H004",
+      "card_name": "Aurex Sunsworn",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Aurex Sunsworn — Warrior;Paladin;Crusader + Statue of the Lightbringer"
+    },
+    {
+      "card_id": "S1-WAR-H005",
+      "card_name": "Aurex Sunsworn",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Aurex Sunsworn — Warrior;Paladin;Crusader + Statue of the Lightbringer"
+    },
+    {
+      "card_id": "S1-WAR-H006",
+      "card_name": "Aurex Sunsworn",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Aurex Sunsworn — Warrior;Paladin;Crusader + Statue of the Lightbringer"
+    },
+    {
+      "card_id": "S1-WAR-L002",
+      "card_name": "Statue of the Lightbringer",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-2",
+      "package_name": "Aurex Sunsworn — Warrior;Paladin;Crusader + Statue of the Lightbringer"
+    },
+    {
+      "card_id": "S1-THF-H001",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Stash"
+    },
+    {
+      "card_id": "S1-THF-H002",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Stash"
+    },
+    {
+      "card_id": "S1-THF-H003",
+      "card_name": "Finnian Copperpot",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Stash"
+    },
+    {
+      "card_id": "S1-THF-L001",
+      "card_name": "Hidden Stash",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-3",
+      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Stash"
+    },
+    {
+      "card_id": "S1-CLE-H001",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-CLE-H002",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-CLE-H003",
+      "card_name": "Elara Heavens",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-CLE-L001",
+      "card_name": "Sun God Church",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-4",
+      "package_name": "Elara Heavens — Cleric;Priest;Saint + Sun God Church"
+    },
+    {
+      "card_id": "S1-MAG-H001",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-H002",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-H003",
+      "card_name": "Vaelis Stormweave",
+      "card_type": "Hero",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    },
+    {
+      "card_id": "S1-MAG-L001",
+      "card_name": "Ancestral Tome",
+      "card_type": "Legacy",
+      "package_id": "CUSTOM-SLOT-5",
+      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord + Ancestral Tome"
+    }
+  ],
+  "is_valid": true,
+  "validation_issues": [],
+  "validation_warnings": [],
+  "main_deck": [
+    {
+      "card_id": "S1-WAR-019",
+      "card_name": "Radiant Cleave",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-WAR-020",
+      "card_name": "Shield Bash",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-WAR-021",
+      "card_name": "Sacred Stormblade",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-022",
+      "card_name": "Unbroken Stand",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-WAR-023",
+      "card_name": "Divine Slash",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-024",
+      "card_name": "Heroic Charge",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-019",
+      "card_name": "Holy Slash",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-020",
+      "card_name": "Hammer of Justice",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-021",
+      "card_name": "Sacred Bulwark",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-CLE-024",
+      "card_name": "Blessing of Divinity",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-001",
+      "card_name": "Slash",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-002",
+      "card_name": "Power Slash",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-003",
+      "card_name": "Parry",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-004",
+      "card_name": "Cover Up",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-007",
+      "card_name": "Upward Thrust",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-009",
+      "card_name": "Rage Swing",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-010",
+      "card_name": "Rage Blast",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-011",
+      "card_name": "Side Step",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-012",
+      "card_name": "Deflect",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-015",
+      "card_name": "Charge Attack",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-017",
+      "card_name": "Fiery Thrust",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-WAR-018",
+      "card_name": "Execute",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-THF-007",
+      "card_name": "Horizontal Slash",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-008",
+      "card_name": "Vertical Slash",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-009",
+      "card_name": "X Cross Slash",
+      "quantity": 2
+    },
+    {
+      "card_id": "S1-THF-011",
+      "card_name": "Elusive Escape",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-THF-013",
+      "card_name": "Venom Strike",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-THF-014",
+      "card_name": "Viper's Fang",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-THF-015",
+      "card_name": "Venom Sovereign",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-THF-016",
+      "card_name": "Finishing Strike",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-THF-017",
+      "card_name": "Venom Binding",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-THF-018",
+      "card_name": "Venom Detonation",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-001",
+      "card_name": "Health Potion",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-003",
+      "card_name": "Stamina Potion",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-005",
+      "card_name": "Mana Catalyst",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-006",
+      "card_name": "Magic Scope",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-008",
+      "card_name": "Phoenix Feather",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-013",
+      "card_name": "Ring of Grace",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-014",
+      "card_name": "Holy Medallion",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-ITM-016",
+      "card_name": "Chain Mail",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-EVT-003",
+      "card_name": "Scouting",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-EVT-004",
+      "card_name": "Relentless Leveling",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-EVT-008",
+      "card_name": "Forged Alliance",
+      "quantity": 1
+    },
+    {
+      "card_id": "S1-EVT-011",
+      "card_name": "Coordination Attack",
+      "quantity": 1
+    }
+  ],
+  "default_formation": {
+    "LEFT": "S1-WAR-H001",
+    "CENTER": "S1-WAR-H004",
+    "RIGHT": "S1-THF-H001"
+  },
+  "source_database_version": "S1B1-v2.1.4 + S1B2-v0.2.2-archer-hero-sync",
+  "builder_version_note": "Crusader-center attack starter. Renegade is attack-heavy; only Renegade DEF Skill is Rank II Elusive Escape.",
+  "item_event_count": 12
+}
