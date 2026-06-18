@@ -1520,3 +1520,142 @@ export function qaV103AmbushDiscardBeforeResponse(){
     return pushNotice_v105CastingResolve(room, notice);
   };
 })();
+
+// ============================================================
+// v1.0.6 Closed Alpha browser PvP rules patch
+// - Market Bargain runtime cost corrected to 2 Mana.
+// - Venom Detonation is non-dodgeable; Divinity-style prevention remains legal.
+// - All-heroes effects resolve after choosing the user, without target click.
+// - Eyes of the Hawk shuffles a random opponent hand card into their deck.
+// - Purify lets the player choose which negative status to remove.
+// - Item cards can be used while a hero is Casting, because Items do not Exhaust.
+// ============================================================
+(function(){
+  const V106_MARKET_BARGAIN='S1-EVT-002';
+  const V106_EYES_OF_HAWK='S1-ARC-004';
+  const V106_PURIFY='S1-CLE-004';
+  const V106_VENOM_DETONATION='S1-THF-018';
+
+  function v106IsMarketBargain(card){return card?.card_id===V106_MARKET_BARGAIN||card?.card_name==='Market Bargain'}
+  function v106IsItem(card){return String(card?.card_type||'')==='Item'}
+  function v106IsHealingItem(card){
+    const txt=String([card?.card_name,card?.effect_text,card?.short_text,card?.full_description].filter(Boolean).join(' ')).toLowerCase();
+    return !!(v106IsItem(card)&&(String(card?.card_id||'')==='S1-ITM-001'||String(card?.card_id||'')==='S1-ITM-002'||n(card?.heal)>0||(/heal/.test(txt)&&/potion|health/.test(txt))));
+  }
+  function v106IsAllHeroesEffect(card){
+    const t=String([card?.target_type,card?.targeting_rule,card?.effect_text,card?.short_text,card?.full_description].filter(Boolean).join(' ')).toLowerCase();
+    return /all (your|allied|friendly|own|opponent|enemy|opposing)?\s*heroes|all active|global|each (allied|opponent|enemy|opposing) hero/.test(t);
+  }
+  function v106NegativeStatuses(h){return NEGATIVE.filter(k=>n(h?.status?.[k])>0)}
+
+  // Correct existing in-memory card rows even if data/game_data.json has not been uploaded yet.
+  for(const row of [MAIN.get(V106_MARKET_BARGAIN), ...(DATA?.mainPool||[]).filter(c=>v106IsMarketBargain(c))].filter(Boolean)){
+    row.mana_cost='2'; row.requires_mana='True';
+  }
+
+  const canUser_v106 = canUser;
+  canUser = function(card,h,m=null,seat=null,slot=null){
+    if(v106IsItem(card)) return !!(alive(h)&&classAllowed(card,h));
+    return canUser_v106(card,h,m,seat,slot);
+  };
+
+  const v045UsersForCard_v106 = v045UsersForCard;
+  v045UsersForCard = function(m,seat,card){
+    if(v106IsItem(card)){
+      const p=m.players?.[seat];
+      return LANES.filter(l=>{const h=p?.board?.[l];return alive(h)&&classAllowed(card,h)});
+    }
+    return v045UsersForCard_v106(m,seat,card);
+  };
+
+  const actionHints_v106 = actionHints;
+  actionHints = function(m,seat){
+    const out=actionHints_v106(m,seat); if(!out||m.status!=='active')return out;
+    const p=m.players?.[seat]; if(!p)return out;
+    const mapped={...(out.playableUsersByCard||{})};
+    const allowed=new Set(out.playableCardIndexes||[]);
+    for(const [index,card] of (p.hand||[]).entries()){
+      if(v106IsItem(card)){
+        const slots=v045UsersForCard(m,seat,card);
+        mapped[String(index)]=slots;
+        if(slots.length && timingAllows(card,m.phase) && n(card.mana_cost)<=n(p.mana)) allowed.add(index);
+      }
+    }
+    out.playableUsersByCard=mapped;
+    out.playableCardIndexes=[...allowed].sort((a,b)=>a-b);
+    return out;
+  };
+
+  const defLegal_v106 = defLegal;
+  defLegal = function(p,card,a,currentSlot){
+    const types=(DEF.get(card?.card_id)||{}).response_types||[];
+    if((a?.poisonBurst || String(a?.card?.card_id||'')===V106_VENOM_DETONATION) && types.includes('DODGE')) return false;
+    return defLegal_v106(p,card,a,currentSlot);
+  };
+
+  const executeNonAttackCard_v106 = executeNonAttackCard;
+  executeNonAttackCard = function(room,seat,card,userSlot,targetSeat,targetSlot,script){
+    const m=room.match, p=m.players[seat], user=p.board[userSlot], opp=m.players[opponent(seat)], target=m.players[targetSeat]?.board?.[targetSlot];
+    if(card?.card_id===V106_EYES_OF_HAWK || card?.card_name==='Eyes of the Hawk'){
+      if(!opp.hand.length) throw new Error('Eyes of the Hawk requires the opponent to have at least 1 card in hand.');
+      const idx=Math.floor(Math.random()*opp.hand.length);
+      const [picked]=opp.hand.splice(idx,1);
+      opp.deck=shuffle(opp.deck.concat([picked]));
+      addLog(room,`${user?.name||'Hero'} uses Eyes of the Hawk: a random card from Player ${opponent(seat)} hand is shuffled into their deck.`);
+      return;
+    }
+    if(card?.card_id===V106_PURIFY || card?.card_name==='Purify'){
+      if(!target || !alive(target)) throw new Error('Purify requires one allied Hero target.');
+      const statuses=v106NegativeStatuses(target);
+      if(!statuses.length){addLog(room,`Purify finds no negative status on ${target.name}.`);return;}
+      m.pendingChoice={type:'V106_PURIFY_STATUS',seat,targetSeat,targetSlot,cardName:card.card_name,targetName:target.name,options:statuses.map((status,index)=>({index,status,card:virtualChoiceCard(`PURIFY-${status}`,`Remove ${status}`,`Purify removes ${status} from ${target.name}.`)})),prompt:`Purify: choose 1 negative status to remove from ${target.name}.`};
+      addLog(room,`Purify: Player ${seat} chooses which negative status to remove from ${target.name}.`);
+      return;
+    }
+    return executeNonAttackCard_v106(room,seat,card,userSlot,targetSeat,targetSlot,script);
+  };
+
+  const playCard_v106 = playCard;
+  playCard = function(room,client,args={}){
+    const m=assertActive(room,client), p=m.players[client.seat], card=p.hand[n(args?.index,-1)];
+    if(card && v106IsAllHeroesEffect(card) && card.card_subtype!=='ATK' && !args.targetSlot){
+      args={...args,targetSlot:args.userSlot};
+    }
+    return playCard_v106(room,client,args);
+  };
+
+  const resolveChoice_v106 = resolveChoice;
+  resolveChoice = function(room,client,index){
+    const m=room.match, c=m.pendingChoice;
+    if(c?.type==='V106_PURIFY_STATUS'){
+      if(c.seat!==client.seat) throw new Error('This Purify choice belongs to the other player.');
+      const opt=c.options[n(index,-1)]; if(!opt) throw new Error('Choose a status to remove.');
+      const target=m.players[c.targetSeat]?.board?.[c.targetSlot];
+      if(target?.status && n(target.status[opt.status])>0){delete target.status[opt.status];addLog(room,`Purify removes ${opt.status} from ${target.name}.`)}
+      else addLog(room,`Purify could not find ${opt.status} on ${c.targetName||'the target'}.`);
+      m.pendingChoice=null;
+      return;
+    }
+    return resolveChoice_v106(room,client,index);
+  };
+})();
+
+export function qaV106RulesPatch(){
+  const mb=MAIN.get('S1-EVT-002');
+  const caster=makeHero('S1-MAG-H001');caster.actionZone='Tornado';caster.damage=20;
+  const cleric=makeHero('S1-CLE-H001');cleric.status.Burn=1;
+  const p1=v060QaPlayer([clone(MAIN.get('S1-ITM-001')),clone(MAIN.get('S1-CLE-004')),clone(MAIN.get('S1-ARC-004'))],{LEFT:caster,CENTER:cleric,RIGHT:makeHero('S1-ARC-H001')});
+  const poisoned=makeHero('S1-WAR-H001');poisoned.status.Poison=2;
+  const p2=v060QaPlayer([clone(MAIN.get('S1-WAR-011')),clone(MAIN.get('S1-CLE-024'))],{CENTER:poisoned});
+  const room={id:'qa-v106',clients:new Map(),spectators:new Map(),seq:0,logs:[],match:v060QaMatch(p1,p2)};room.match.phase='Deploy Phase';
+  const hints=actionHints(room.match,1);
+  playCard(room,{seat:1},{index:0,userSlot:'LEFT',targetSlot:'LEFT'});
+  p1.mana=10;playCard(room,{seat:1},{index:0,userSlot:'CENTER',targetSlot:'CENTER'});
+  const purifyChoice=room.match.pendingChoice?.options?.map(o=>o.status);
+  resolveChoice(room,{seat:1},0);
+  room.match.phase='Battle Phase';p1.hand=[clone(MAIN.get('S1-THF-018'))];p1.board.RIGHT=makeHero('S1-THF-H003');p1.mana=10;
+  playCard(room,{seat:1},{index:0,userSlot:'RIGHT'});
+  const dodgeLegal=defLegal(p2,p2.hand[0],room.match.pendingAttack,'CENTER');
+  const divinityLegal=defLegal(p2,p2.hand[1],room.match.pendingAttack,'CENTER');
+  return {marketBargainMana:mb?.mana_cost, healthPotionUsers:hints.playableUsersByCard?.['0'], casterHp:hp(caster), purifyChoice, dodgeLegal, divinityLegal, eyesCardCost:MAIN.get('S1-ARC-004')?.mana_cost};
+}
