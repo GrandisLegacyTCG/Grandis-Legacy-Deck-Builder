@@ -2108,3 +2108,33 @@ export function qaV106RulesPatch(){
     return r;
   };
 })();
+
+// ============================================================
+// v1.0.10 Closed Alpha server notice polish
+// - Eyes of the Hawk emits a public opponent-played notice after resolve,
+//   including which card was shuffled, so the affected player can review it.
+// ============================================================
+(function(){
+  function v110IsEyesChoice(c){ return /EYES_OF_THE_HAWK/i.test(String(c?.type||'')); }
+  function v110CardNoticeData(card){
+    return {card_id:card?.card_id||'',card_name:card?.card_name||'',image_url:card?.image_url||'',thumbnail_url:card?.thumbnail_url||card?.image_url||'',local_thumbnail_path:card?.local_thumbnail_path||''};
+  }
+  const resolveChoice_v110=resolveChoice;
+  resolveChoice=function(room,client,index){
+    const c=room.match?.pendingChoice;
+    if(v110IsEyesChoice(c)){
+      const targetSeat=c.targetSeat;
+      const opt=c.options?.[n(index,-1)];
+      const handIndex=n(opt?.handIndex,opt?.index);
+      const before=room.match?.players?.[targetSeat]?.hand?.[handIndex];
+      const beforeName=before?.card_name||'1 face-down card';
+      const src=c.sourceSeat||c.seat||client.seat;
+      const noticeCard=v110CardNoticeData(c.card||{card_id:'S1-ARC-004',card_name:'Eyes of the Hawk',local_thumbnail_path:'runtime_thumbnail_assets/cards/S1-ARC-004.webp'});
+      const r=resolveChoice_v110(room,client,index);
+      // Extra public notice keeps Eyes visible in Opponent Played even when the owner-targeted notice is consumed by choice flow.
+      pushNotice(room,{sourceSeat:src,title:'Opponent Resolves Eyes of the Hawk',...noticeCard,message:`Eyes of the Hawk shuffles ${beforeName} from Player ${targetSeat} hand into their deck.`});
+      return r;
+    }
+    return resolveChoice_v110(room,client,index);
+  };
+})();
