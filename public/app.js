@@ -11183,3 +11183,24 @@ renderMatch=function(m){const out=renderMatch_v105.apply(this,arguments);v105Dra
     return chooseResponse_v107.apply(this,arguments);
   };
 })();
+
+// ============================================================
+// v1.0.8 Closed Alpha browser PvP client fixes
+// - Eyes of the Hawk choice modal shows face-down card backs only.
+// ============================================================
+(function(){
+  function v108IsEyesChoice(choice){ return /EYES_OF_THE_HAWK/i.test(String(choice?.type||'')); }
+  const choiceModal_v108=choiceModal;
+  choiceModal=function(choice){
+    if(!v108IsEyesChoice(choice)) return choiceModal_v108.apply(this,arguments);
+    const options=choice?.options||[];
+    const back='runtime_thumbnail_assets/ui/Back-of-Card.webp';
+    const tiles=options.map((o,i)=>{
+      const idx=Number(o.index??i);
+      const c={index:idx,card_id:`GL-HIDDEN-HAND-${idx}`,card_name:`Face-down Hand Card ${idx+1}`,card_type:'Hidden',card_subtype:'Opponent Hand',mana_cost:0,effect_text:'Choose this hidden opponent hand card.',local_thumbnail_path:back,thumbnail_url:'',image_url:''};
+      return cardTile(c,{choice:true});
+    }).join('')||'<p class=small>No legal options.</p>';
+    openModal(`<h2>Eyes of the Hawk</h2><p>${choice.prompt?esc(choice.prompt):'Choose one face-down card from the opponent hand.'}</p><div class="notice"><b>Hidden choice.</b><br><span class="small">Cards stay face-down. The Eyes user chooses a hand position, not revealed card information.</span></div><div class="choice-grid">${tiles}</div>`,false,'choice');
+    document.querySelectorAll('[data-choice]').forEach((b)=>b.onclick=()=>send('resolve-choice',{index:+b.dataset.choice}));
+  };
+})();
