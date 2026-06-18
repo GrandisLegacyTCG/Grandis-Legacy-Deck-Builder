@@ -10917,3 +10917,120 @@ renderMatch=function(m){const out=renderMatch_v105.apply(this,arguments);v105Dra
     el.querySelectorAll('[data-pvp-review]').forEach(b=>b.onclick=()=>v105PreviewNoticeCard(items.find(x=>x.id===b.dataset.pvpReview)));
   };
 })();
+
+// ============================================================
+// v1.0.3 Closed Alpha browser PvP fixes
+// - player-specific Opponent Played retention/clear timing
+// - no-hero Items resolve from Play button even after older item-self override
+// - Arrow Barrage asks mana amount before opening opponent Response Window
+// ============================================================
+(function(){
+  function v103IsNoHeroItem(c){
+    if(!c || c.card_type !== 'Item') return false;
+    if(c.card_name === 'Phoenix Feather') return false;
+    const t = String(c.target_type || '').toLowerCase();
+    const req = String(c.requires_target || '').toUpperCase();
+    const text = String([c.card_name,c.short_text,c.effect_text,c.full_description].filter(Boolean).join(' ')).toLowerCase();
+    if(t.includes('hero') || t.includes('legacy') || t.includes('opponent event')) return false;
+    if(String(c.heal || '').trim() !== '') return false;
+    if(req === 'FALSE') return true;
+    return /(mana pool|player mana|deck|hand|self \/ player|search|draw|reveal|shuffle)/.test(t + ' ' + text);
+  }
+  function v103FirstUser(c){
+    const mapped = (typeof hintedUsers === 'function' ? hintedUsers(c) : []) || [];
+    return mapped[0] || (typeof activeSlots === 'function' ? activeSlots(state.snapshot?.match?.you)[0] : null) || 'CENTER';
+  }
+  function v103ChooseArrowBarrageMana(c,selection,targetSlot){
+    const mana = Math.max(0, Number(state.snapshot?.match?.you?.mana || 0));
+    if(mana <= 0){
+      local('Arrow Barrage requires at least 1 Mana Shard to spend.', 'error-text');
+      return;
+    }
+    const opts = Array.from({length:mana},(_,i)=>i+1).map(v=>`<option value="${v}">${v} Mana → ${v*10} base damage</option>`).join('');
+    openModal(`<h2>Arrow Barrage — Spend Mana</h2><p>Choose how many Mana Shards to spend before the opponent Response Window opens.</p><label>Mana to spend<select id="arrowBarrageManaSelect">${opts}</select></label><div class="notice"><b>Target:</b> ${esc(targetSlot)}<br><span class="small">Damage is 10 × Mana spent, before Archer/Marksman/Grand Ranger bonuses.</span></div><div class="modal-footer"><button id="confirmArrowBarrageMana" class="primary">Confirm Attack</button><button id="cancelArrowBarrageMana">Cancel</button></div>`, true, 'arrow-barrage-mana');
+    const sel = document.getElementById('arrowBarrageManaSelect');
+    if(sel) sel.value = String(mana);
+    document.getElementById('confirmArrowBarrageMana').onclick = ()=>{
+      const manaSpent = Math.max(1, Number(document.getElementById('arrowBarrageManaSelect')?.value || 0));
+      send('play-card', { index: selection.index, userSlot: selection.userSlot, targetSlot, manaSpent });
+      state.selection = null;
+      closeModal();
+      renderSelection();
+    };
+    document.getElementById('cancelArrowBarrageMana').onclick = ()=>{
+      state.selection = null;
+      closeModal();
+      renderSelection();
+      if(state.snapshot?.match) renderMatch(state.snapshot.match);
+    };
+  }
+
+  const beginPlay_v103 = beginPlay;
+  beginPlay = function(index){
+    const c = state.snapshot?.match?.you?.hand?.find(x=>x.index === index);
+    if(c && v103IsNoHeroItem(c)){
+      if(!phaseEligible(c) || !affordable(c)) return;
+      const userSlot = v103FirstUser(c);
+      send('play-card', { index, userSlot, targetSlot: userSlot });
+      state.selection = null;
+      closeModal();
+      renderSelection();
+      return;
+    }
+    return beginPlay_v103.apply(this, arguments);
+  };
+
+  const opponentHeroClicked_v103 = opponentHeroClicked;
+  opponentHeroClicked = function(lane){
+    const s = state.selection;
+    if(s && s.kind === 'play' && s.step === 'opponent' && (s.allowedTargets || []).includes(lane)){
+      const c = currentCard && currentCard();
+      if(c?.card_id === 'S1-ARC-010' || c?.card_name === 'Arrow Barrage'){
+        v103ChooseArrowBarrageMana(c, s, lane);
+        return;
+      }
+    }
+    return opponentHeroClicked_v103.apply(this, arguments);
+  };
+
+  function v103NoticeId(n){ return String(n?.id || `${n?.sourceSeat||0}-${n?.title||''}-${n?.card_id||n?.card_name||''}-${n?.message||''}`); }
+  function v103SkipNotice(n){
+    const t = String(n?.title || '').toLowerCase();
+    const m = String(n?.message || '').toLowerCase();
+    return /turn begins/.test(t) || /begins a new turn/.test(m);
+  }
+  function v103VisibleForViewer(n, own){
+    if(state.role === 'spectator') return true;
+    const src = Number(n?.sourceSeat || 0);
+    const tgt = n?.targetSeat === null || n?.targetSeat === undefined ? null : Number(n.targetSeat);
+    if(tgt !== null) return tgt === Number(own);
+    return src !== 0 && src !== Number(own);
+  }
+  v105DrainNotices = function(){
+    const s = state.snapshot; if(!s) return;
+    const m = s.match || {};
+    const own = Number(s.yourSeat || 0);
+    const bag = state.pvpActionSidecar || (state.pvpActionSidecar = {items:[], selectedId:null});
+    // Player-specific retention: keep opponent actions visible through your turn;
+    // clear only when your own End Phase is reached.
+    const clearKey = `${own}|${m.turnNumber||0}|${m.activeSeat||''}|${m.phase||''}`;
+    if(own && Number(m.activeSeat) === own && m.phase === 'End Phase' && bag.lastClearKey !== clearKey){
+      bag.items = [];
+      bag.selectedId = null;
+      bag.lastClearKey = clearKey;
+    }
+    for(const n of (s.cardNotices || [])){
+      const id = v103NoticeId(n);
+      if(state.seenCardNoticeIds.has(id)) continue;
+      if(v103SkipNotice(n)){ state.seenCardNoticeIds.add(id); continue; }
+      if(!v103VisibleForViewer(n, own)) continue;
+      state.seenCardNoticeIds.add(id);
+      const item = {...v105CardImageRecord(n), id, label:v105ActionLabel(n), sourceSeat:n.sourceSeat, title:n.title||'Match Update', message:n.message||'', card_name:n.card_name||'', card_id:n.card_id||''};
+      bag.items.push(item);
+      bag.selectedId = item.id;
+    }
+    if((bag.items||[]).length > 12) bag.items = bag.items.slice(-12);
+    if(state.lastModalKind === 'card-use-notice') closeModal();
+  };
+  pendingOpponentCardNotice = function(){ v105DrainNotices(); return null; };
+})();
