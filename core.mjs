@@ -1882,3 +1882,142 @@ export function qaV106RulesPatch(){
     return resolveChoice_v107(room,client,index);
   };
 })();
+
+// ============================================================
+// v1.0.8 Closed Alpha browser PvP fixes
+// - Normalize S1B2 DEF metadata so Dodge / Block from CSV strings actually resolve.
+// - Eyes of the Hawk chooses from face-down opponent hand cards; source does not learn the card name.
+// - Implement Wand of First Light legacy effect.
+// ============================================================
+(function(){
+  const V108_EYES='S1-ARC-004';
+  const V108_WAND_FIRST_LIGHT='S1-CLE-L002';
+  const V108_BACK_CARD={card_id:'GL-HIDDEN-HAND-CARD',card_name:'Face-down Hand Card',card_type:'Hidden',card_subtype:'Opponent Hand',mana_cost:0,effect_text:'Choose one face-down card from the opponent hand. The chosen card is shuffled into its owner deck.',image_url:'',thumbnail_url:'',local_thumbnail_path:'runtime_thumbnail_assets/ui/Back-of-Card.webp'};
+
+  function v108NormType(x){
+    const s=String(x||'').trim().toUpperCase();
+    if(/DODGE/.test(s)) return 'DODGE';
+    if(/BLOCK/.test(s)) return 'BLOCK';
+    if(/REDIRECT/.test(s)) return 'REDIRECT';
+    if(/NEGATE/.test(s)) return 'NEGATE';
+    if(/COUNTER/.test(s)) return 'COUNTER_RETURN';
+    if(/RETURN/.test(s)) return 'RETURN_ATTACK';
+    if(/PREVENT|IMMUNITY|IMMUNE/.test(s)) return 'PREVENT';
+    return s;
+  }
+  function v108NormTypes(v){
+    if(Array.isArray(v)) return [...new Set(v.map(v108NormType).filter(Boolean))];
+    if(v===null||v===undefined||v==='') return [];
+    return [...new Set(String(v).split(/[;,|/]+|\s+or\s+|\s+and\s+/i).map(v108NormType).filter(Boolean))];
+  }
+  function v108NormAttackReq(v){
+    const s=String(v||'ANY').trim().toUpperCase();
+    if(/NOT[_\s-]*AREA/.test(s)) return 'NOT_AREA';
+    if(/PHYSICAL/.test(s)&&!/MAGICAL/.test(s)) return 'PHYSICAL';
+    if(/MAGICAL/.test(s)&&!/PHYSICAL/.test(s)) return 'MAGICAL';
+    return 'ANY';
+  }
+  // CSV-synced Archer/Thief DEF rows can carry response_types as "Dodge" / "Block" strings.
+  // The runtime expects uppercase arrays, so normalize the mutable DEF map once at load.
+  try{
+    for(const meta of DEF.values()){
+      meta.response_types=v108NormTypes(meta.response_types || meta.defense_type || meta.counter_type);
+      meta.requires_attack_type=v108NormAttackReq(meta.requires_attack_type);
+    }
+  }catch(e){/* defensive no-op */}
+
+  function v108IsEyes(card){return card?.card_id===V108_EYES || card?.card_name==='Eyes of the Hawk'}
+  function v108HiddenHandOption(i){return {index:i,handIndex:i,card:{...V108_BACK_CARD,card_id:`GL-HIDDEN-HAND-${i}`,card_name:`Face-down Hand Card ${i+1}`}}}
+  function v108CardNoticeData(card){
+    return {card_id:card?.card_id||'',card_name:card?.card_name||'',image_url:card?.image_url||'',thumbnail_url:card?.thumbnail_url||card?.image_url||'',local_thumbnail_path:card?.local_thumbnail_path||''};
+  }
+
+  const executeNonAttackCard_v108=executeNonAttackCard;
+  executeNonAttackCard=function(room,seat,card,userSlot,targetSeat,targetSlot,script){
+    if(v108IsEyes(card)){
+      const m=room.match, opp=m.players[opponent(seat)];
+      if(!opp.hand.length) throw new Error('Eyes of the Hawk requires the opponent to have at least 1 card in hand.');
+      m.pendingChoice={
+        type:'V108_EYES_OF_THE_HAWK',
+        seat,
+        sourceSeat:seat,
+        targetSeat:opponent(seat),
+        card:v108CardNoticeData(card),
+        prompt:'Eyes of the Hawk: choose 1 face-down card from your opponent hand to shuffle into their deck.',
+        options:opp.hand.map((_,i)=>v108HiddenHandOption(i))
+      };
+      addLog(room,`Eyes of the Hawk: Player ${seat} chooses 1 face-down card from Player ${opponent(seat)} hand.`);
+      return;
+    }
+    return executeNonAttackCard_v108(room,seat,card,userSlot,targetSeat,targetSlot,script);
+  };
+
+  const useLegacy_v108=useLegacy;
+  useLegacy=function(room,client,slot){
+    const m=room.match,p=m.players[client.seat],h=p.board[slot];
+    if(h?.legacy && h.id===V108_WAND_FIRST_LIGHT){
+      if(h.legacyUsed) throw new Error('This Legacy Card has already been used this turn.');
+      if(!proactiveLegacyAllowed(m,client.seat,h) || m.phase!=='End Phase') throw new Error('Wand of First Light is available during End Phase.');
+      const options=handSkillOptions(p,'Cleric');
+      if(!options.length) throw new Error('Wand of First Light requires 1 Cleric Skill Card in hand.');
+      m.pendingChoice={type:'V108_WAND_FIRST_LIGHT_DISCARD',seat:client.seat,legacySlot:slot,options};
+      addLog(room,'Wand of First Light: choose 1 Cleric Skill Card to discard.');
+      return;
+    }
+    return useLegacy_v108(room,client,slot);
+  };
+
+  function v108WandHealOptions(p){
+    return LANES.map((slot,index)=>({slot,index,hero:p.board[slot]}))
+      .filter(x=>alive(x.hero))
+      .map((x,i)=>({index:i,targetSlot:x.slot,card:virtualChoiceCard(`WAND-HEAL-${x.slot}`,`${x.slot} / ${x.hero.name}`,`Heal this Hero by 20.`)}));
+  }
+
+  const resolveChoice_v108=resolveChoice;
+  resolveChoice=function(room,client,index){
+    const m=room.match,c=m.pendingChoice;
+    if(c?.type==='V108_EYES_OF_THE_HAWK'){
+      if(c.seat!==client.seat) throw new Error('This Eyes of the Hawk choice belongs to the other player.');
+      const opt=c.options[n(index,-1)]; if(!opt) throw new Error('Choose a face-down opponent hand card.');
+      const opp=m.players[c.targetSeat];
+      const idx=Math.max(0,Math.min(opp.hand.length-1,n(opt.handIndex,opt.index)));
+      const [picked]=opp.hand.splice(idx,1);
+      if(!picked) throw new Error('That card is no longer in opponent hand.');
+      opp.deck=shuffle(opp.deck.concat([picked]));
+      m.pendingChoice=null;
+      addLog(room,`Eyes of the Hawk shuffles 1 face-down card from Player ${c.targetSeat} hand into their deck.`);
+      // Only the owner of the chosen card receives the exact card name. The Eyes user sees only the public log.
+      pushNotice(room,{sourceSeat:c.sourceSeat,targetSeat:c.targetSeat,title:'Opponent Resolves Eyes of the Hawk',...c.card,message:`Player ${c.sourceSeat} chooses ${picked.card_name} from your hand and shuffles it into your deck.`});
+      return;
+    }
+    if(c?.type==='V108_WAND_FIRST_LIGHT_DISCARD'){
+      if(c.seat!==client.seat) throw new Error('This Wand of First Light choice belongs to the other player.');
+      const p=m.players[client.seat], opt=c.options[n(index,-1)]; if(!opt) throw new Error('Choose a Cleric Skill Card to discard.');
+      const [card]=p.hand.splice(opt.index,1); if(!card) throw new Error('That card is no longer in hand.');
+      p.discard.push(card);
+      const targets=v108WandHealOptions(p);
+      if(!targets.length){
+        const legacy=p.board[c.legacySlot]; if(legacy) legacy.legacyUsed=true;
+        m.pendingChoice=null;
+        addLog(room,`Wand of First Light discards ${card.card_name}, but there is no active Hero to heal.`);
+        return;
+      }
+      m.pendingChoice={type:'V108_WAND_FIRST_LIGHT_HEAL',seat:client.seat,legacySlot:c.legacySlot,discardedCardName:card.card_name,options:targets,prompt:'Wand of First Light: choose 1 of your Heroes to heal by 20.'};
+      addLog(room,`Wand of First Light discards ${card.card_name}. Choose 1 Hero to heal.`);
+      return;
+    }
+    if(c?.type==='V108_WAND_FIRST_LIGHT_HEAL'){
+      if(c.seat!==client.seat) throw new Error('This Wand of First Light choice belongs to the other player.');
+      const p=m.players[client.seat], opt=c.options[n(index,-1)]; if(!opt) throw new Error('Choose a Hero to heal.');
+      const legacy=p.board[c.legacySlot], target=p.board[opt.targetSlot];
+      if(!alive(target)) throw new Error('Choose an active Hero to heal.');
+      healHero(room,legacy||target,target,20,'Wand of First Light');
+      if(legacy) legacy.legacyUsed=true;
+      m.pendingChoice=null;
+      addLog(room,`Wand of First Light heals ${target.name} after discarding ${c.discardedCardName||'a Cleric Skill Card'}.`);
+      checkWin(room);
+      return;
+    }
+    return resolveChoice_v108(room,client,index);
+  };
+})();
