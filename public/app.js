@@ -11088,3 +11088,35 @@ renderMatch=function(m){const out=renderMatch_v105.apply(this,arguments);v105Dra
     return ownHeroClicked_v105Venom.apply(this, arguments);
   };
 })();
+
+// ============================================================
+// v1.0.6 Closed Alpha client rules polish
+// - all-heroes effects choose only the user, then resolve directly
+// - no-target support/tactical cards such as Eyes of the Hawk resolve after user selection
+// - Market Bargain display safety: force visible cost to 2 if stale data leaks through
+// ============================================================
+(function(){
+  const V106_MARKET_BARGAIN='S1-EVT-002';
+  function v106IsMarketBargain(c){return c?.card_id===V106_MARKET_BARGAIN||c?.card_name==='Market Bargain'}
+  function v106AllHeroesEffect(c){
+    const t=String([c?.target_type,c?.targeting_rule,c?.effect_text,c?.short_text,c?.full_description].filter(Boolean).join(' ')).toLowerCase();
+    return /all (your|allied|friendly|own|opponent|enemy|opposing)?\s*heroes|all active|global|each (allied|opponent|enemy|opposing) hero/.test(t);
+  }
+  function v106NoTargetCard(c){
+    if(!c) return false;
+    const t=String(c.target_type||'').toLowerCase();
+    if(v106AllHeroesEffect(c)) return true;
+    if(c.card_id==='S1-ARC-004'||c.card_name==='Eyes of the Hawk') return true;
+    return String(c.requires_target||'').toUpperCase()==='FALSE' && !/hero|legacy/.test(t);
+  }
+  const cardTile_v106=cardTile;
+  cardTile=function(c,opts={}){
+    if(v106IsMarketBargain(c)) c={...c,mana_cost:'2'};
+    return cardTile_v106(c,opts);
+  };
+  const targetMode_v106=targetMode;
+  targetMode=function(c){
+    if(v106NoTargetCard(c)) return 'self';
+    return targetMode_v106(c);
+  };
+})();
