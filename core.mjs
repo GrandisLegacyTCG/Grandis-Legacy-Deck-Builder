@@ -1156,3 +1156,142 @@ tryRank = function(room,seat,slot){
   announceCardUse(room,seat,nextHero,`Player ${seat}: ${msg}`,'Rank Up');
   return result;
 };
+
+// ============================================================
+// v1.0.3 Closed Alpha — browser PvP rules patch
+// - announce Tribute cards to opponent action history
+// - Arrow Barrage mana choice before Response Window
+// - Archer additional costs before Response Window
+// ============================================================
+const tribute_v103 = tribute;
+tribute = function(room,client,index,slot){
+  const p = room.match?.players?.[client.seat];
+  const card = p?.hand?.[n(index,-1)];
+  const r = tribute_v103(room,client,index,slot);
+  if(card) announceCardUse(room,client.seat,card,`Player ${client.seat} Tributes ${card.card_name} to ${slot} for ${n(card.exp_value,100)} EXP.`,'Tribute');
+  return r;
+};
+
+const playCard_v103 = playCard;
+function v103CardCostType(card){ return String(card?.cost_type || '').trim().toLowerCase(); }
+function v103CardCostValue(card,def=0){ return n(card?.cost_value,def); }
+function v103IsArcherAttackCost(card){
+  const id = String(card?.card_id || '');
+  return id === 'S1-ARC-008' || id === 'S1-ARC-018' || id === 'S1-ARC-016';
+}
+function v103DiscardCostNeeded(card){ return v103CardCostType(card).includes('discard') && v103CardCostValue(card,1) > 0; }
+function v103SelfDamageCostNeeded(card){ return v103CardCostType(card).includes('self damage') && v103CardCostValue(card,0) > 0; }
+function v103VirtualOption(id,name,text){ return virtualChoiceCard(id,name,text); }
+function v103OpenDiscardCostChoice(room,client,payload,card,amount){
+  const p = room.match.players[client.seat];
+  const originalIndex = n(payload.index,-1);
+  const options = p.hand.map((c,i)=>({index:i,card:c})).filter(o=>o.index !== originalIndex);
+  if(options.length < amount) throw new Error(`${card.card_name} requires discarding ${amount} other card(s) from hand before the Response Window opens.`);
+  room.match.pendingChoice = {type:'V103_ARCHER_DISCARD_COST',seat:client.seat,payload:{...payload},remaining:amount,discarded:[],options,prompt:`${card.card_name}: discard ${amount} other card(s) from hand as additional cost before the opponent Response Window opens.`};
+  addLog(room,`${card.card_name}: Player ${client.seat} must discard ${amount} card(s) as additional cost before the attack is declared.`);
+}
+function v103OpenArrowManaChoice(room,client,payload,card){
+  const p = room.match.players[client.seat];
+  const max = n(p.mana);
+  if(max <= 0) throw new Error('Arrow Barrage requires at least 1 Mana Shard to spend.');
+  room.match.pendingChoice = {type:'V103_ARROW_BARRAGE_MANA',seat:client.seat,payload:{...payload},options:Array.from({length:max},(_,i)=>{const mana=i+1;return {manaSpent:mana,card:v103VirtualOption(`ARROW-BARRAGE-${mana}`,`${mana} Mana`,`${card.card_name}: spend ${mana} Mana for ${mana*10} base damage.`)}}),prompt:'Arrow Barrage: choose how many Mana Shards to spend before the opponent Response Window opens.'};
+  addLog(room,`Arrow Barrage: Player ${client.seat} chooses Mana spent before the attack is declared.`);
+}
+function v103PlayArrowBarrage(room,client,payload,card){
+  const spent = n(payload.manaSpent,0);
+  const p = room.match.players[client.seat];
+  if(spent <= 0) return v103OpenArrowManaChoice(room,client,payload,card);
+  if(spent > n(p.mana)) throw new Error(`Arrow Barrage cannot spend ${spent} Mana; only ${p.mana} available.`);
+  const oldCost = card.mana_cost, oldBase = card.base_damage, oldText = card.effect_text;
+  let ok = false;
+  card.mana_cost = String(spent);
+  card.base_damage = String(spent * 10);
+  card.effect_text = `${oldText || card.full_description || ''} [Chosen Mana: ${spent}; base damage ${spent*10}.]`;
+  try{
+    const r = playCard_v103(room,client,payload);
+    ok = true;
+    addLog(room,`Arrow Barrage spends ${spent} Mana for ${spent*10} base damage before response modifiers.`);
+    return r;
+  }finally{
+    if(!ok){ card.mana_cost = oldCost; card.base_damage = oldBase; card.effect_text = oldText; }
+  }
+}
+function v103ApplySelfDamageCost(room,client,payload,card){
+  const p = room.match.players[client.seat];
+  const h = p.board?.[payload.userSlot];
+  const amount = v103CardCostValue(card,0);
+  if(!alive(h)) throw new Error(`${card.card_name} requires an active user.`);
+  if(hp(h) <= amount) throw new Error(`${card.card_name} requires more than ${amount} HP to pay its self-damage cost.`);
+  let ok=false;
+  h.damage = Math.min(h.maxHp,h.damage+amount);
+  try{
+    const r = playCard_v103(room,client,{...payload,__v103CostPaid:true});
+    ok=true;
+    addLog(room,`${h.name} pays ${amount} HP as additional cost for ${card.card_name}.`);
+    return r;
+  }finally{
+    if(!ok) h.damage = Math.max(0,h.damage-amount);
+  }
+}
+playCard = function(room,client,payload={}){
+  const m = assertActive(room,client), p = m.players[client.seat], card = p.hand[n(payload.index,-1)];
+  if(!card) throw new Error('Choose a valid card.');
+  if((card.card_id === 'S1-ARC-010' || card.card_name === 'Arrow Barrage') && !payload.__v103CostPaid){
+    return v103PlayArrowBarrage(room,client,payload,card);
+  }
+  if(v103IsArcherAttackCost(card) && !payload.__v103CostPaid){
+    if(v103DiscardCostNeeded(card)) return v103OpenDiscardCostChoice(room,client,payload,card,v103CardCostValue(card,1));
+    if(v103SelfDamageCostNeeded(card)) return v103ApplySelfDamageCost(room,client,payload,card);
+  }
+  return playCard_v103(room,client,payload);
+};
+
+const resolveChoice_v103 = resolveChoice;
+resolveChoice = function(room,client,index){
+  const m = room.match, c = m.pendingChoice, p = m.players?.[client.seat];
+  if(c?.type === 'V103_ARROW_BARRAGE_MANA'){
+    if(c.seat !== client.seat) throw new Error('This Arrow Barrage choice belongs to the other player.');
+    const opt = c.options[n(index,-1)];
+    if(!opt) throw new Error('Choose how much Mana Arrow Barrage spends.');
+    const payload = {...c.payload, manaSpent:n(opt.manaSpent,0), __v103CostPaid:true};
+    m.pendingChoice = null;
+    return v103PlayArrowBarrage(room,client,payload,p.hand[n(payload.index,-1)]);
+  }
+  if(c?.type === 'V103_ARCHER_DISCARD_COST'){
+    if(c.seat !== client.seat) throw new Error('This Archer cost choice belongs to the other player.');
+    const opt = c.options[n(index,-1)];
+    if(!opt) throw new Error('Choose a card to discard.');
+    const originalCardId = p.hand[n(c.payload.index,-1)]?.card_id;
+    const [discarded] = p.hand.splice(opt.index,1);
+    if(discarded) p.discard.push(discarded);
+    c.discarded.push(discarded);
+    if(opt.index < c.payload.index) c.payload.index--;
+    c.remaining--;
+    addLog(room,`Player ${client.seat} discards ${discarded?.card_name || 'a card'} as additional cost.`);
+    if(c.remaining > 0){
+      c.options = p.hand.map((card,i)=>({index:i,card})).filter(o=>o.card?.card_id !== originalCardId || o.index !== c.payload.index);
+      return;
+    }
+    const payload = {...c.payload,__v103CostPaid:true};
+    m.pendingChoice = null;
+    return playCard(room,client,payload);
+  }
+  return resolveChoice_v103(room,client,index);
+};
+
+export function qaV103ArrowBarrageChoice(){
+  const p1=v060QaPlayer([clone(MAIN.get('S1-ARC-010'))],{LEFT:makeHero('S1-ARC-H002')}),p2=v060QaPlayer([],{CENTER:makeHero('S1-WAR-H001')});
+  const room={id:'qa-v103-arrow',clients:new Map(),spectators:new Map(),seq:0,logs:[],match:v060QaMatch(p1,p2)};room.match.phase='Battle Phase';p1.mana=3;
+  playCard(room,{seat:1},{index:0,userSlot:'LEFT',targetSlot:'CENTER'});
+  const choice=room.match.pendingChoice?.type;
+  resolveChoice(room,{seat:1},1);
+  return {choice,manaAfter:p1.mana,pendingAttack:room.match.pendingAttack?.card?.card_name,damage:room.match.pendingAttack?.damage};
+}
+export function qaV103AmbushDiscardBeforeResponse(){
+  const p1=v060QaPlayer([clone(MAIN.get('S1-ARC-008')),clone(MAIN.get('S1-WAR-001'))],{LEFT:makeHero('S1-ARC-H001')}),p2=v060QaPlayer([],{CENTER:makeHero('S1-WAR-H001')});
+  const room={id:'qa-v103-ambush',clients:new Map(),spectators:new Map(),seq:0,logs:[],match:v060QaMatch(p1,p2)};room.match.phase='Battle Phase';p1.mana=10;
+  playCard(room,{seat:1},{index:0,userSlot:'LEFT',targetSlot:'CENTER'});
+  const before=room.match.pendingChoice?.type;
+  resolveChoice(room,{seat:1},0);
+  return {before,pendingAttack:room.match.pendingAttack?.card?.card_name,hand:p1.hand.map(c=>c.card_name),discard:p1.discard.map(c=>c.card_name)};
+}
