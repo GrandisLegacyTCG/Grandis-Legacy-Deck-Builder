@@ -1096,3 +1096,63 @@ export function qaV099FullEngineAudit(){
  const ren=makeHero('S1-THF-H003'),rog=makeHero('S1-THF-H002'),arch2=makeHero('S1-ARC-H002'),arch3=makeHero('S1-ARC-H003');
  return {version:VERSION,stunnedHpAfter:hp(stunned),stunnedStillStunned:n(stunned.status.Stun),healthPotionUsers:hintsBefore.playableUsersByCard?.['0']||[],renegadePoisonBonus:s1b2PoisonBonus(ren),roguePoisonBonus:s1b2PoisonBonus(rog),renegadePassiveAttackBonus:passiveAttackBonus(ren),marksmanSingleTargetAttackBonus:archerSingleTargetAttackBonus(arch2,MAIN.get('S1-ARC-001'),false),grandRangerSingleTargetAttackBonus:archerSingleTargetAttackBonus(arch3,MAIN.get('S1-ARC-001'),false),grandRangerAreaAttackBonus:archerSingleTargetAttackBonus(arch3,{card_id:'TEST-AOE',card_type:'Skill',card_subtype:'ATK',target_type:'All opponent Heroes',effect_text:'Area damage to all opponent Heroes'},true),nightshadeText:HERO['S1-THF-H003']?.ability_text,logs:room.logs.map(x=>x.message)}
 }
+
+// ============================================================
+// v1.0.1 Closed Alpha — safer Rank Up resolver
+// Some hosted starter presets use custom package slot ids. Rank Up should
+// still resolve from the player's own Legacy Deck by hero identity/lineage.
+// ============================================================
+const tryRank_v101_rankFallback = tryRank;
+function v101HeroLineageKeyById(heroId){
+  const h = HERO[heroId] || {};
+  return String(h.fixed_class_lineage_id || h.ultimate_tribute_lineage_id || h.fixed_class_lineage_path || h.evolution_path || h.package || '').trim().toLowerCase();
+}
+function v101FindNextHeroSideCard(p,h,nextRank){
+  const name = String(h?.name || '').trim().toLowerCase();
+  const key = v101HeroLineageKeyById(h?.id);
+  return (p.side || []).find(card=>{
+    if(String(card?.card_type || '') !== 'Hero') return false;
+    const meta = HERO[card.card_id] || {};
+    if(rankNum(meta.rank) !== nextRank) return false;
+    if(name && String(meta.name || card.card_name || '').trim().toLowerCase() === name) return true;
+    const k2 = v101HeroLineageKeyById(card.card_id);
+    return !!(key && k2 && key === k2);
+  }) || null;
+}
+tryRank = function(room,seat,slot){
+  const m = room.match, p = m?.players?.[seat], before = p?.board?.[slot];
+  const beforeId = before?.id, beforeRank = rankNum(before?.rank);
+  const result = tryRank_v101_rankFallback(room,seat,slot);
+  const afterBase = p?.board?.[slot];
+  if(!before || !afterBase || afterBase.id !== beforeId || rankNum(afterBase.rank) > beforeRank) return result;
+  const req = rankReq(before);
+  if(!req || before.exp < req || beforeRank >= 3) return result;
+  const nextSide = v101FindNextHeroSideCard(p,before,beforeRank+1);
+  if(!nextSide) {
+    addLog(room,`RANK UP BLOCKED: ${before.name} has ${before.exp} EXP, but no Rank ${beforeRank+1} Hero card was found in this player's Legacy Deck.`);
+    return result;
+  }
+  const sideCard = sideRemove(p,nextSide.card_id);
+  if(!sideCard) return result;
+  const nextHero = makeHero(sideCard.card_id);
+  Object.assign(nextHero,{
+    packageId: sideCard.package_id || before.packageId || nextHero.packageId,
+    damage: Math.min(nextHero.maxHp,before.damage),
+    exp: before.exp,
+    expCards: before.expCards,
+    exhausted: before.exhausted,
+    status: before.status,
+    tmp: before.tmp,
+    defeatedStack: before.defeatedStack,
+    actionZone: before.actionZone
+  });
+  p.board[slot] = nextHero;
+  p.regen = Math.min(6,p.regen+1);
+  draw(p,rankNum(nextHero.rank)===2?2:3,false);
+  p.discard.push(...before.expCards);
+  nextHero.expCards = [];
+  const msg = `${before.name} ranks up to ${nextHero.class}. Draw bonus and +1 Mana Regen applied.`;
+  addLog(room,msg);
+  announceCardUse(room,seat,nextHero,`Player ${seat}: ${msg}`,'Rank Up');
+  return result;
+};
