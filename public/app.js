@@ -11034,3 +11034,57 @@ renderMatch=function(m){const out=renderMatch_v105.apply(this,arguments);v105Dra
   };
   pendingOpponentCardNotice = function(){ v105DrainNotices(); return null; };
 })();
+
+// ============================================================
+// v1.0.4 Closed Alpha client polish
+// - legacy board image fallback
+// - provider prompt copy supports Blessing of Divinity as well as Holy Barrier
+// ============================================================
+(function(){
+  const runtimeImg_v104 = runtimeImg;
+  runtimeImg = function(rec, attrs=''){
+    if(rec?.legacy && rec?.id && !rec.local_thumbnail_path && !rec.thumbnail_url && !rec.image_url){
+      rec = {...rec, local_thumbnail_path:`runtime_thumbnail_assets/cards/${rec.id}.webp`};
+    }
+    return runtimeImg_v104(rec, attrs);
+  };
+  const chooseResponse_v104 = chooseResponse;
+  chooseResponse = function(index, opts){
+    const c = opts.find((x)=>x.index===index);
+    if(c?.providerSlots?.length){
+      const bod = c.card_id === 'S1-CLE-024' || c.card_name === 'Blessing of Divinity';
+      const copy = bod ? 'Select the legal Paladin or Crusader using Blessing of Divinity.' : 'Select the legal Priest or Saint providing Holy Barrier.';
+      openModal(`<h2>${esc(c.card_name)} — Choose Provider</h2><p>${esc(copy)}</p><select id=providerSlot>${c.providerSlots.map((x)=>`<option>${esc(x)}</option>`).join('')}</select>${c.responseNote?`<div class="notice small">${esc(c.responseNote)}</div>`:''}<div class=modal-footer><button id=confirmProvider class=primary>Confirm Provider</button><button id=cancelProvider>Back</button></div>`, true, 'provider');
+      $('confirmProvider').onclick = () => send('select-response', { index, providerSlot: $('providerSlot').value });
+      $('cancelProvider').onclick = () => renderMatch(state.snapshot.match);
+      return;
+    }
+    return chooseResponse_v104(index, opts);
+  };
+})();
+
+// ============================================================
+// v1.0.5 Closed Alpha browser PvP follow-up
+// - Venom Detonation: choose user Hero only, then resolve against all poisoned enemy Heroes.
+//   No opponent Hero target click is required.
+// ============================================================
+(function(){
+  const V105_VENOM_DETONATION = 'S1-THF-018';
+  function v105IsVenomDetonationCard(c){
+    return c?.card_id === V105_VENOM_DETONATION || c?.card_name === 'Venom Detonation';
+  }
+  const ownHeroClicked_v105Venom = ownHeroClicked;
+  ownHeroClicked = function(lane){
+    const s = state.selection;
+    const c = s && s.kind === 'play' ? (currentCard && currentCard()) : null;
+    if(s && s.kind === 'play' && s.step === 'user' && v105IsVenomDetonationCard(c)){
+      if(!(s.allowedUsers || []).includes(lane)) return;
+      send('play-card', { index: s.index, userSlot: lane, targetSlot: null });
+      state.selection = null;
+      closeModal();
+      renderSelection();
+      return;
+    }
+    return ownHeroClicked_v105Venom.apply(this, arguments);
+  };
+})();
