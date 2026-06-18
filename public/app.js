@@ -11120,3 +11120,66 @@ renderMatch=function(m){const out=renderMatch_v105.apply(this,arguments);v105Dra
     return targetMode_v106(c);
   };
 })();
+
+// ============================================================
+// v1.0.7 Closed Alpha browser PvP client polish
+// - Hide Play/Tribute buttons when it is not your active action window.
+// - Direct-play global/self/no-target effects when there is exactly one legal user.
+// - Make Blessing of Divinity response provider auto-select when only one provider is legal.
+// ============================================================
+(function(){
+  function v107IsActiveActionWindow(m){
+    return !!(m && m.hints && m.hints.active && !m.hints.responseFor && !m.hints.choice && !m.hints.waitingForOpponentResponse);
+  }
+  function v107AllHeroesOrNoTarget(c){
+    const t=String([c?.target_type,c?.targeting_rule,c?.effect_text,c?.short_text,c?.full_description].filter(Boolean).join(' ')).toLowerCase();
+    if(/all (your|allied|friendly|own|opponent|enemy|opposing)?\s*heroes|all active|global|each (allied|opponent|enemy|opposing) hero/.test(t)) return true;
+    if(String(c?.requires_target||'').toUpperCase()==='FALSE' && !/hero|legacy|opponent hand/.test(String(c?.target_type||'').toLowerCase())) return true;
+    return false;
+  }
+
+  const phaseEligible_v107=phaseEligible;
+  phaseEligible=function(c,m=state.snapshot?.match){
+    if(!v107IsActiveActionWindow(m)) return false;
+    return phaseEligible_v107(c,m);
+  };
+
+  const renderMatch_v107Client=renderMatch;
+  renderMatch=function(m){
+    const out=renderMatch_v107Client.apply(this,arguments);
+    if(!v107IsActiveActionWindow(m)){
+      document.querySelectorAll('#yourHand [data-play], #yourHand [data-tribute]').forEach(b=>b.remove());
+      document.querySelectorAll('#yourHand .visual-card.play').forEach(el=>el.classList.remove('play'));
+    }
+    return out;
+  };
+
+  const beginPlay_v107=beginPlay;
+  beginPlay=function(index){
+    const m=state.snapshot?.match;
+    if(!v107IsActiveActionWindow(m)){
+      local('It is not your active action window.', 'error-text');
+      return;
+    }
+    const c=m?.you?.hand?.find(x=>x.index===index);
+    const users=(m?.hints?.playableUsersByCard||{})[String(index)]||[];
+    if(c && v107AllHeroesOrNoTarget(c) && users.length===1 && phaseEligible(c,m) && affordable(c,m)){
+      send('play-card',{index,userSlot:users[0],targetSlot:users[0]});
+      state.selection=null;
+      closeModal();
+      renderSelection();
+      return;
+    }
+    return beginPlay_v107.apply(this,arguments);
+  };
+
+  const chooseResponse_v107=chooseResponse;
+  chooseResponse=function(index,opts){
+    const c=(opts||[]).find(x=>x.index===index);
+    if((c?.card_id==='S1-CLE-024'||c?.card_name==='Blessing of Divinity') && Array.isArray(c.providerSlots) && c.providerSlots.length===1){
+      send('select-response',{index,providerSlot:c.providerSlots[0]});
+      return;
+    }
+    return chooseResponse_v107.apply(this,arguments);
+  };
+})();
