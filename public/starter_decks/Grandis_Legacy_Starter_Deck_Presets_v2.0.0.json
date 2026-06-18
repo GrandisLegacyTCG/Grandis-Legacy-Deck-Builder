@@ -1025,8 +1025,8 @@
         "quantity": 1
       },
       {
-        "card_id": "S1-CLE-024",
-        "card_name": "Blessing of Divinity",
+        "card_id": "S1-WAR-018",
+        "card_name": "Execute",
         "quantity": 1
       },
       {
@@ -1201,7 +1201,7 @@
       "RIGHT": "S1-WAR-H001"
     },
     "source_database_version": "S1B1-v2.1.4 + S1B2-v0.2.2-archer-hero-sync",
-    "builder_version_note": "Clean replacement for the old Hybrid starter concept. Uses Crusader endpoint naming. 38 Skills plus 12 Item/Event cards.",
+    "builder_version_note": "Starter 02 ultimate cleanup: kept Saint ultimate Heaven's Fury as the single Cleric-color Ultimate, replaced Cleric-color Crusader Ultimate Blessing of Divinity with Warrior-color Conqueror Ultimate Execute.",
     "item_event_count": 12
   },
   {
@@ -2260,8 +2260,8 @@
         "quantity": 1
       },
       {
-        "card_id": "S1-CLE-018",
-        "card_name": "Heaven's Fury",
+        "card_id": "S1-CLE-010",
+        "card_name": "Holy Blast",
         "quantity": 1
       },
       {
@@ -2361,7 +2361,7 @@
       "RIGHT": "S1-CLE-H001"
     },
     "source_database_version": "S1B1-v2.1.4 + S1B2-v0.2.2-archer-hero-sync",
-    "builder_version_note": "Grand Ranger / Crusader / Saint starter. 40 Skills plus 10 Item/Event cards.",
+    "builder_version_note": "Starter 04 ultimate cleanup: kept Blessing of Divinity as the single Cleric-color Ultimate, kept Charged Shot as Archer Ultimate, replaced Heaven's Fury with non-Ultimate Holy Blast.",
     "item_event_count": 10
   },
   {
@@ -2936,7 +2936,7 @@
       "RIGHT": "S1-THF-H001"
     },
     "source_database_version": "S1B1-v2.1.4 + S1B2-v0.2.2-archer-hero-sync",
-    "builder_version_note": "Crusader-center attack starter. Renegade is attack-heavy; only Renegade DEF Skill is Rank II Elusive Escape.",
+    "builder_version_note": "Crusader-center attack starter. Renegade is attack-heavy; only Renegade DEF Skill is Rank II Elusive Escape. Starter 05 label normalized to slash-separated Rank III lineup.",
     "item_event_count": 12
   }
 ]

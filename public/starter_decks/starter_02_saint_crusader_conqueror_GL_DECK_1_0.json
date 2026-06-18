@@ -419,8 +419,8 @@
       "quantity": 1
     },
     {
-      "card_id": "S1-CLE-024",
-      "card_name": "Blessing of Divinity",
+      "card_id": "S1-WAR-018",
+      "card_name": "Execute",
       "quantity": 1
     },
     {
@@ -595,6 +595,6 @@
     "RIGHT": "S1-WAR-H001"
   },
   "source_database_version": "S1B1-v2.1.4 + S1B2-v0.2.2-archer-hero-sync",
-  "builder_version_note": "Clean replacement for the old Hybrid starter concept. Uses Crusader endpoint naming. 38 Skills plus 12 Item/Event cards.",
+  "builder_version_note": "Starter 02 ultimate cleanup: kept Saint ultimate Heaven's Fury as the single Cleric-color Ultimate, replaced Cleric-color Crusader Ultimate Blessing of Divinity with Warrior-color Conqueror Ultimate Execute.",
   "item_event_count": 12
 }
