@@ -11272,3 +11272,135 @@ renderMatch=function(m){const out=renderMatch_v105.apply(this,arguments);v105Dra
     return out;
   };
 })();
+
+// ============================================================
+// v1.0.10 Closed Alpha browser PvP client polish
+// - Opponent Played groups repeated response/chain entries into one clickable tile.
+// - Detail panel shows the list of events inside that action/response chain.
+// ============================================================
+(function(){
+  function v110NoticeId(n){
+    return String(n?.id || `${n?.sourceSeat||0}-${n?.targetSeat||''}-${n?.title||''}-${n?.card_id||n?.card_name||''}-${n?.message||''}`);
+  }
+  function v110SkipNotice(n){
+    const t=String(n?.title||'').toLowerCase();
+    const m=String(n?.message||'').toLowerCase();
+    return /turn begins/.test(t) || /begins a new turn/.test(m);
+  }
+  function v110VisibleForViewer(n, own){
+    if(state.role === 'spectator') return true;
+    const src=Number(n?.sourceSeat||0);
+    const tgt=n?.targetSeat===null||n?.targetSeat===undefined?null:Number(n.targetSeat);
+    if(tgt!==null) return tgt===Number(own);
+    return src!==0 && src!==Number(own);
+  }
+  function v110Kind(item){
+    const title=String(item?.title||'').toLowerCase();
+    const label=String(item?.label||'').toUpperCase();
+    const msg=String(item?.message||'').toLowerCase();
+    if(/response|def response|passes response|resolves.*response/.test(title) || label==='DEF') return 'response';
+    if(/declared attack|attack|area response/.test(title) || /^ATK/.test(label) || /incoming .*damage|opens .*response window/.test(msg)) return 'attack';
+    if(/racial/.test(title) || label==='RACIAL') return 'racial';
+    if(/tribute/.test(title) || label==='TRIBUTE') return 'tribute';
+    if(/rank up/.test(title) || label==='RANK UP') return 'rank';
+    if(/eyes of the hawk/.test(title) || /eyes of the hawk/.test(msg)) return 'eyes';
+    return label || 'action';
+  }
+  function v110ChainLabel(item){
+    const kind=v110Kind(item);
+    if(kind==='response') return 'DEF';
+    if(kind==='attack') return item.label || 'ATK';
+    if(kind==='eyes') return item.label || 'EVENT';
+    return item.label || 'ACTION';
+  }
+  function v110CanMerge(last, item, m){
+    if(!last) return false;
+    const lk=last.groupKind || v110Kind(last);
+    const ik=v110Kind(item);
+    // Keep repeated response windows/results as one reviewable chain tile.
+    if(lk==='response' && ik==='response') return Number(last.sourceSeat||0)===Number(item.sourceSeat||0);
+    // Area attacks can emit multiple notices for the same declared card; keep them together.
+    if(lk==='attack' && ik==='attack'){
+      return Number(last.sourceSeat||0)===Number(item.sourceSeat||0) && String(last.card_id||last.card_name||'')===String(item.card_id||item.card_name||'');
+    }
+    // Eyes of the Hawk can emit owner/public notices; keep them on a single tile.
+    if((lk==='eyes' || ik==='eyes') && String(last.card_id||'')===String(item.card_id||'')) return true;
+    return false;
+  }
+  function v110AppendEvent(group, item){
+    const ev={id:item.id,label:item.label||'ACTION',title:item.title||item.card_name||'Match Update',card_name:item.card_name||'',card_id:item.card_id||'',message:item.message||'',sourceSeat:item.sourceSeat,targetSeat:item.targetSeat,local_thumbnail_path:item.local_thumbnail_path||'',thumbnail_url:item.thumbnail_url||'',image_url:item.image_url||''};
+    group.events = Array.isArray(group.events) ? group.events : [{id:group.id,label:group.label||'ACTION',title:group.title||group.card_name||'Match Update',card_name:group.card_name||'',card_id:group.card_id||'',message:group.message||'',sourceSeat:group.sourceSeat,targetSeat:group.targetSeat,local_thumbnail_path:group.local_thumbnail_path||'',thumbnail_url:group.thumbnail_url||'',image_url:group.image_url||''}];
+    const key=String(ev.title)+'|'+String(ev.card_id||ev.card_name)+'|'+String(ev.message);
+    const exists=group.events.some(x=>String(x.title)+'|'+String(x.card_id||x.card_name)+'|'+String(x.message)===key);
+    if(!exists) group.events.push(ev);
+    group.message = group.events.map((x,i)=>`${i+1}. ${x.title}${x.card_name?` — ${x.card_name}`:''}: ${x.message}`).join('\n');
+    group.label = v110ChainLabel(group);
+    group.title = group.groupTitle || group.title || item.title || 'Action Chain';
+  }
+
+  v105DrainNotices = function(){
+    const s=state.snapshot; if(!s) return;
+    const m=s.match||{};
+    const own=Number(s.yourSeat||0);
+    const bag=state.pvpActionSidecar || (state.pvpActionSidecar={items:[],selectedId:null});
+    const clearKey=`${own}|${m.turnNumber||0}|${m.activeSeat||''}|${m.phase||''}`;
+    if(own && Number(m.activeSeat)===own && m.phase==='End Phase' && bag.lastClearKey!==clearKey){
+      bag.items=[]; bag.selectedId=null; bag.lastClearKey=clearKey;
+    }
+    for(const n of (s.cardNotices||[])){
+      const id=v110NoticeId(n);
+      if(state.seenCardNoticeIds.has(id)) continue;
+      if(v110SkipNotice(n)){ state.seenCardNoticeIds.add(id); continue; }
+      if(!v110VisibleForViewer(n, own)) continue;
+      state.seenCardNoticeIds.add(id);
+      const item={...v105CardImageRecord(n), id, label:v105ActionLabel(n), sourceSeat:n.sourceSeat, targetSeat:n.targetSeat, title:n.title||'Match Update', message:n.message||'', card_name:n.card_name||'', card_id:n.card_id||''};
+      item.groupKind=v110Kind(item);
+      item.groupTitle=item.groupKind==='response'?'Response Chain':(item.groupKind==='attack'?'Attack Chain':(item.title||'Action Chain'));
+      const last=(bag.items||[])[(bag.items||[]).length-1];
+      if(v110CanMerge(last,item,m)){
+        v110AppendEvent(last,item);
+        bag.selectedId=last.id;
+      }else{
+        item.events=[{id:item.id,label:item.label||'ACTION',title:item.title||item.card_name||'Match Update',card_name:item.card_name||'',card_id:item.card_id||'',message:item.message||'',sourceSeat:item.sourceSeat,targetSeat:item.targetSeat,local_thumbnail_path:item.local_thumbnail_path||'',thumbnail_url:item.thumbnail_url||'',image_url:item.image_url||''}];
+        bag.items.push(item);
+        bag.selectedId=item.id;
+      }
+    }
+    if((bag.items||[]).length>12) bag.items=bag.items.slice(-12);
+    if(state.lastModalKind==='card-use-notice') closeModal();
+  };
+
+  function v110EventListHtml(selected){
+    const events=Array.isArray(selected?.events)?selected.events:[];
+    if(events.length<=1) return esc(selected?.message||'Click an action tile to inspect it.');
+    return `<ol class="pvp-action-chain-list">${events.map(ev=>`<li><b>${esc(ev.label||'ACTION')}</b>${ev.card_name?` — ${esc(ev.card_name)}`:''}<br><span>${esc(ev.message||ev.title||'')}</span></li>`).join('')}</ol>`;
+  }
+  const v110OldRenderSidecar = v105RenderSidecar;
+  v105RenderSidecar = function(){
+    const el=v105EnsureSidecar(); if(!el) return;
+    const bag=state.pvpActionSidecar || (state.pvpActionSidecar={items:[],selectedId:null,lastRound:null});
+    const items=bag.items||[];
+    const selected=items.find(x=>x.id===bag.selectedId)||items[items.length-1]||null;
+    const title=state.role==='spectator'?'MATCH PLAYED':'OPPONENT PLAYED';
+    const tiles=items.length?items.map((it)=>{
+      const active=it.id===selected?.id?' active':'';
+      const count=Array.isArray(it.events)&&it.events.length>1?`<span class="pvp-action-count">${it.events.length}</span>`:'';
+      const label=it.groupKind==='response'?'DEF':(it.label||'ACTION');
+      if(String(label).toUpperCase()==='RESOLVE' || (!it.card_name && !it.card_id)){
+        const raw=String(it?.message||it?.title||'status update').replace(/\s+/g,' ').trim();
+        const short=raw.length>54?raw.slice(0,51)+'…':raw;
+        return `<button class="pvp-action-tile pvp-action-resolve-tile${active}" data-pvp-action="${esc(it.id)}" title="${esc(short)}"><span class="pvp-action-label">${esc(label)}</span><span class="pvp-action-resolve-summary">${esc(short)}</span>${count}</button>`;
+      }
+      const rec=v105CardImageRecord(it);
+      return `<button class="pvp-action-tile${active}" data-pvp-action="${esc(it.id)}" title="${esc(it.card_name||it.title||'Action')}">${runtimeImg(rec,`alt="${esc(it.card_name||label||'Action')}"`)}<span class="pvp-action-label">${esc(label)}</span>${count}</button>`;
+    }).join(''):`<div class="pvp-action-empty">No opponent action yet.</div>`;
+    const detail=selected?`<div class="pvp-action-detail"><b>${esc((selected.groupKind==='response'?'DEF':(selected.label||'ACTION')))} — ${esc(selected.card_name||selected.title||'Action Chain')}</b><br>${v110EventListHtml(selected)}${selected.card_name?`<br><button data-pvp-review="${esc(selected.id)}">Review Card</button>`:''}</div>`:'';
+    el.innerHTML=`<div class="pvp-action-head"><div class="pvp-action-title">${title}<small>non-blocking</small></div></div><div class="pvp-action-grid">${tiles}</div>${detail}`;
+    el.querySelectorAll('[data-pvp-action]').forEach(b=>b.onclick=()=>{bag.selectedId=b.dataset.pvpAction;v105RenderSidecar();});
+    el.querySelectorAll('[data-pvp-review]').forEach(b=>b.onclick=()=>v105PreviewNoticeCard(items.find(x=>x.id===b.dataset.pvpReview)));
+  };
+
+  const css=document.createElement('style');
+  css.textContent='.pvp-action-count{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#e3c066;color:#05070a;font-size:10px;font-weight:900;margin-top:2px}.pvp-action-chain-list{margin:6px 0 0 18px;padding:0}.pvp-action-chain-list li{margin:0 0 6px 0}.pvp-action-chain-list span{color:#d7cfbd}';
+  document.head.appendChild(css);
+})();
