@@ -11204,3 +11204,71 @@ renderMatch=function(m){const out=renderMatch_v105.apply(this,arguments);v105Dra
     document.querySelectorAll('[data-choice]').forEach((b)=>b.onclick=()=>send('resolve-choice',{index:+b.dataset.choice}));
   };
 })();
+
+// ============================================================
+// v1.0.9 Closed Alpha browser PvP client fixes
+// - Do not let Response Window consume the incoming attack notice before Opponent Played can show it.
+// - More tolerant local WebP path resolution for cards/heroes/legacy/racial notices.
+// - Preview modals can use local_thumbnail_path when hosted image URLs are absent.
+// ============================================================
+(function(){
+  const imageSrc_v109 = imageSrc;
+  imageSrc = function(v){
+    if(!v) return '';
+    let s=String(v).replace(/^\/+/, '');
+    if(s.startsWith('public/')) s=s.slice(7);
+    if(s.startsWith('runtime_thumbnail_assets/')) return '/' + s;
+    if(s.startsWith('cards/')) return '/runtime_thumbnail_assets/' + s;
+    return imageSrc_v109(v);
+  };
+
+  const previewImg_v109 = previewImg;
+  previewImg = function(rec, attrs=''){
+    const local = rec?.local_thumbnail_path || '';
+    if(local && !rec?.image_url && !rec?.thumbnail_url){
+      return `<img ${attrs} decoding="async" src="${esc(imageSrc(local))}">`;
+    }
+    return previewImg_v109(rec, attrs);
+  };
+
+  const runtimeImg_v109 = runtimeImg;
+  runtimeImg = function(rec, attrs=''){
+    if(rec){
+      const cid=String(rec.card_id||rec.id||'').trim();
+      if(cid && !rec.local_thumbnail_path && !rec.thumbnail_url && !rec.image_url){
+        rec={...rec,local_thumbnail_path:`runtime_thumbnail_assets/cards/${cid}.webp`};
+      }
+      if(rec.local_thumbnail_path && String(rec.local_thumbnail_path).startsWith('public/')){
+        rec={...rec,local_thumbnail_path:String(rec.local_thumbnail_path).slice(7)};
+      }
+    }
+    return runtimeImg_v109(rec, attrs);
+  };
+
+  if(typeof v105CardImageRecord === 'function'){
+    const v105CardImageRecord_v109 = v105CardImageRecord;
+    v105CardImageRecord = function(n){
+      const rec = v105CardImageRecord_v109(n||{});
+      const cid=String(rec.card_id||rec.id||'').trim();
+      if(cid && !rec.local_thumbnail_path) rec.local_thumbnail_path=`runtime_thumbnail_assets/cards/${cid}.webp`;
+      if(rec.local_thumbnail_path && String(rec.local_thumbnail_path).startsWith('public/')) rec.local_thumbnail_path=String(rec.local_thumbnail_path).slice(7);
+      return rec;
+    };
+  }
+
+  const responseModal_v109 = responseModal;
+  responseModal = function(h){
+    const before = new Set(state.seenCardNoticeIds || []);
+    const out = responseModal_v109.apply(this, arguments);
+    // The base modal marks the incoming attack notice as seen to suppress the old blocking popup.
+    // Put that notice back into the non-blocking sidecar flow so Opponent Played remains reviewable.
+    const notices = state.snapshot?.cardNotices || [];
+    for(const n of notices){
+      if(Number(n.sourceSeat) === Number(h?.attacker?.seat) && String(n.card_name||'') === String(h?.card_name||'') && !before.has(n.id)){
+        state.seenCardNoticeIds.delete(n.id);
+      }
+    }
+    try{ v105DrainNotices(); v105RenderSidecar(); }catch(e){}
+    return out;
+  };
+})();
