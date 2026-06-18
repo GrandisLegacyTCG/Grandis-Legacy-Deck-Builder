@@ -9871,6 +9871,22 @@ function targetMode(c) {
   if (alliedTargetNames.has(c.card_name) || String(c.heal ?? "").trim() !== "" || c.card_type === "Skill" && c.card_subtype === "SUPPORT" && String(c.target_type || "").toLowerCase().includes("one of your heroes")) return "allied";
   return "self";
 }
+
+// v1.0.2 Closed Alpha: Item cards that target player/deck/hand/mana pool
+// resolve directly from the Play button. Hero-targeting Items still require
+// clicking a legal allied Hero.
+function directNoHeroItem(c) {
+  if (!c || c.card_type !== "Item") return false;
+  const t = String(c.target_type || "").toLowerCase();
+  if (t.includes("hero") || t.includes("legacy") || t.includes("opponent event")) return false;
+  if (String(c.heal || "").trim() !== "") return false;
+  return true;
+}
+function firstLegalUserForCard(c) {
+  const mapped = hintedUsers(c) || [];
+  return mapped[0] || activeSlots(state.snapshot?.match?.you)[0] || "CENTER";
+}
+
 function selectionText() {
   const s = state.selection;
   if (!s) return "";
@@ -9906,6 +9922,18 @@ function beginPlay(index) {
     state.selection = { kind: "legacy-direct", index, cardName: c.card_name };
     renderSelection();
     renderMatch(state.snapshot.match);
+    return;
+  }
+  if (directNoHeroItem(c)) {
+    const userSlot = firstLegalUserForCard(c);
+    if (!userSlot) {
+      local(`${c.card_name}: no legal user is available.`, "error-text");
+      return;
+    }
+    send("play-card", { index, userSlot, targetSlot: userSlot });
+    state.selection = null;
+    closeModal();
+    renderSelection();
     return;
   }
   state.selection = { kind: "play", index, cardName: c.card_name, step: "user", allowedUsers: hintedUsers(c) };
@@ -10815,15 +10843,15 @@ function v105DrainNotices(){
   if(state.lastModalKind==='card-use-notice')closeModal();
 }
 function v105EnsureSidecar(){
-  const host=document.querySelector('.hand-controls');
+  const host=document.querySelector('.hand-workspace') || document.querySelector('.hand-controls');
   if(!host)return null;
   let el=document.getElementById('pvpActionSidecar');
   if(!el){
     el=document.createElement('section');
     el.id='pvpActionSidecar';
     el.className='pvp-action-sidecar';
-    host.insertBefore(el,host.firstChild);
   }
+  if(el.parentElement!==host)host.appendChild(el);
   return el;
 }
 function v105PreviewNoticeCard(item){
