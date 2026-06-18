@@ -1295,3 +1295,228 @@ export function qaV103AmbushDiscardBeforeResponse(){
   resolveChoice(room,{seat:1},0);
   return {before,pendingAttack:room.match.pendingAttack?.card?.card_name,hand:p1.hand.map(c=>c.card_name),discard:p1.discard.map(c=>c.card_name)};
 }
+
+// ============================================================
+// v1.0.4 Closed Alpha browser PvP rules/visibility fixes
+// - suppress delayed Casting re-announcement in Opponent Played
+// - Sacred Stormblade cannot offer Dodge responses
+// - Venom Detonation enters Opponent Played and allows Blessing of Divinity response
+// - Final Grit accepts the latest eligible defeated Gladiator/Conqueror stack
+// - enrich Legacy replacement image paths for board display
+// ============================================================
+(function(){
+  const V104_SACRED_STORMBLADE = 'S1-WAR-021';
+  const V104_BLESSING_DIVINITY = 'S1-CLE-024';
+  const V104_VENOM_DETONATION = 'S1-THF-018';
+
+  function v104IsAliveHero(h){ return !!(h && !h.legacy && n(h.maxHp) > 0 && hp(h) > 0); }
+  function v104DivinityProviders(p, card){
+    return LANES.filter(slot=>{
+      const h=p?.board?.[slot];
+      if(!v104IsAliveHero(h) || h.status?.Stun) return false;
+      if(!['Paladin','Crusader'].includes(String(h.class||''))) return false;
+      return n(p?.mana) >= v104DivinityCost(card,h);
+    });
+  }
+  function v104DivinityCost(card,h){
+    const base=n(card?.mana_cost);
+    return String(h?.class||'') === String(card?.ultimate_rank2_class||'Paladin') ? base+n(card?.ultimate_rank2_extra_mana,2) : base;
+  }
+  function v104SnapshotDivinityState(p){
+    return LANES.map(slot=>{
+      const h=p?.board?.[slot];
+      return h?{slot,damage:h.damage,exhausted:h.exhausted,tmp:clone(h.tmp||{})}:null;
+    }).filter(Boolean);
+  }
+  function v104RestoreDivinityState(p, snapshots){
+    for(const s of snapshots||[]){
+      const h=p?.board?.[s.slot];
+      if(!h) continue;
+      h.damage=s.damage;
+      h.exhausted=s.exhausted;
+      h.tmp=clone(s.tmp||{});
+    }
+  }
+  function v104ApplyDivinityResponse(room, seat, card, providerSlot){
+    const m=room.match, p=m.players[seat], user=p.board[providerSlot];
+    for(const h of Object.values(p.board||{})){
+      if(!v104IsAliveHero(h)) continue;
+      h.tmp=h.tmp||{};
+      h.tmp.divinityImmune=true;
+      h.tmp.divinityImmuneExpiresAtStartOf=seat;
+      if(user?.class==='Crusader') healHero(room,user,h,20,'Blessing of Divinity');
+    }
+  }
+  function v104LegacyMeta(id){ return LEGACY?.[id] || {}; }
+  function v104EnrichLegacyHero(h){
+    if(!h?.legacy) return h;
+    const meta=v104LegacyMeta(h.id);
+    if(meta){
+      h.image_url=h.image_url||meta.image_url||meta.artwork_url||'';
+      h.thumbnail_url=h.thumbnail_url||meta.thumbnail_url||meta.image_url||h.image_url||'';
+      h.local_thumbnail_path=h.local_thumbnail_path||meta.local_thumbnail_path||`runtime_thumbnail_assets/cards/${h.id}.webp`;
+      h.legacyEffectText=h.legacyEffectText||meta.effect_text||meta.effect_description||'';
+    }else if(h.id){
+      h.local_thumbnail_path=h.local_thumbnail_path||`runtime_thumbnail_assets/cards/${h.id}.webp`;
+    }
+    return h;
+  }
+
+  const pushNotice_v104 = pushNotice;
+  pushNotice = function(room, notice={}){
+    const title=String(notice?.title||'');
+    if(room?.match?.v104SuppressCastingOpponentPlayed && (/Casting Attack Resolves/i.test(title) || /Opponent Declared Attack/i.test(title))){
+      return;
+    }
+    return pushNotice_v104(room, notice);
+  };
+
+  const resolveCasting_v104 = resolveCasting;
+  resolveCasting = function(room, seat){
+    if(room?.match) room.match.v104SuppressCastingOpponentPlayed = true;
+    try { return resolveCasting_v104(room, seat); }
+    finally { if(room?.match) delete room.match.v104SuppressCastingOpponentPlayed; }
+  };
+
+  const defLegal_v104 = defLegal;
+  defLegal = function(p,card,a,currentSlot){
+    const types=(DEF.get(card?.card_id)||{}).response_types||[];
+    if(String(a?.card?.card_id||'')===V104_SACRED_STORMBLADE && types.includes('DODGE')) return false;
+    if(card?.card_id===V104_BLESSING_DIVINITY && a?.poisonBurst) return v104DivinityProviders(p,card).length>0;
+    return defLegal_v104(p,card,a,currentSlot);
+  };
+
+  const legalResponseList_v104 = legalResponseList;
+  legalResponseList = function(m,seat){
+    const out=legalResponseList_v104(m,seat), a=m?.pendingAttack, p=m?.players?.[seat];
+    if(a?.targetSeat===seat && a.poisonBurst){
+      for(const [index,card] of (p?.hand||[]).entries()){
+        if(card?.card_id===V104_BLESSING_DIVINITY && defLegal(p,card,a,a.slots?.[a.index])){
+          if(!out.some(x=>x.index===index && x.card_id===V104_BLESSING_DIVINITY)){
+            out.push({...publicCard(card,index), providerSlots:v104DivinityProviders(p,card), responseNote:'Blessing of Divinity may be used against Venom Detonation.'});
+          }else{
+            const row=out.find(x=>x.index===index && x.card_id===V104_BLESSING_DIVINITY);
+            row.providerSlots=v104DivinityProviders(p,card);
+          }
+        }
+      }
+    }
+    return out;
+  };
+
+  const selectResponse_v104 = selectResponse;
+  selectResponse = function(room,client,index,targetSlot=null,providerSlot=null){
+    const m=room.match, a=m.pendingAttack, p=m.players?.[client.seat], card=p?.hand?.[n(index,-1)];
+    if(card?.card_id!==V104_BLESSING_DIVINITY || !a?.poisonBurst) return selectResponse_v104(room,client,index,targetSlot,providerSlot);
+    if(!a || a.targetSeat!==client.seat || a.selected) throw new Error('No open Venom Detonation response is waiting for Blessing of Divinity.');
+    const providers=v104DivinityProviders(p,card);
+    if(!providers.length) throw new Error('No legal Paladin or Crusader can use Blessing of Divinity now.');
+    const chosen=providers.includes(String(providerSlot||''))?String(providerSlot):providers[0];
+    const user=p.board[chosen], cost=v104DivinityCost(card,user);
+    if(p.mana<cost) throw new Error(`Not enough mana. Blessing of Divinity costs ${cost} for ${user.class}.`);
+    const before=v104SnapshotDivinityState(p);
+    p.mana-=cost;
+    p.hand.splice(n(index),1);
+    user.exhausted=true;
+    v104ApplyDivinityResponse(room, client.seat, card, chosen);
+    a.selected={card,cost,index,providerSlot:chosen,special:'V104_DIVINITY_RESPONSE',before};
+    announceCardUse(room,client.seat,card,`${user.name} declares Blessing of Divinity against Venom Detonation. Allied Heroes cannot take damage during this resolution.${user.class==='Crusader'?' Allied Heroes are healed by 20.':''}`,'Opponent Selects DEF Response');
+    addLog(room,`${user.name} uses Blessing of Divinity as a response to Venom Detonation.`);
+  };
+
+  const cancelResponse_v104 = cancelResponse;
+  cancelResponse = function(room,client){
+    const a=room.match?.pendingAttack, s=a?.selected;
+    if(s?.special==='V104_DIVINITY_RESPONSE'){
+      const p=room.match.players[client.seat];
+      p.mana+=n(s.cost);
+      p.hand.splice(Math.min(n(s.index),p.hand.length),0,s.card);
+      v104RestoreDivinityState(p,s.before);
+      a.selected=null;
+      addLog(room,`Player ${client.seat} cancels Blessing of Divinity response.`);
+      return;
+    }
+    return cancelResponse_v104(room,client);
+  };
+
+  const resolveResponseMath_v104 = resolveResponseMath;
+  resolveResponseMath = function(room,a,slot){
+    if(a?.selected?.special==='V104_DIVINITY_RESPONSE'){
+      const p=room.match.players[a.targetSeat], h=p.board[slot], card=a.selected.card;
+      p.discard.push(card);
+      addLog(room,`Blessing of Divinity protects ${h?.name||slot} from Venom Detonation damage.`);
+      return {slot,dmg:n(a.damageBySlot?.[slot],a.damage),avoid:false,negate:false,returnAttack:false,statusApplies:true,fixedFinal:0,redirectTarget:null};
+    }
+    return resolveResponseMath_v104(room,a,slot);
+  };
+
+  if(typeof s1b2OpenPoisonBurst === 'function'){
+    const s1b2OpenPoisonBurst_v104 = s1b2OpenPoisonBurst;
+    s1b2OpenPoisonBurst = function(room,seat,index,userSlot){
+      const p=room.match.players[seat], card=p.hand[index], user=p.board[userSlot];
+      const r=s1b2OpenPoisonBurst_v104(room,seat,index,userSlot);
+      announceCardUse(room,seat,card,`${user?.name||'Hero'} uses Venom Detonation. Poisoned opponent Heroes open individual Magical Response Windows.`,'Opponent Declared Attack');
+      return r;
+    };
+  }
+
+  const finalGrit_v104 = finalGrit;
+  finalGrit = function(room,seat,index,targetSlot){
+    const m=room.match,p=m.players[seat],card=p.hand[index],legacy=p.board[targetSlot];
+    if(!legacy?.legacy || !Array.isArray(legacy.defeatedStack)) return finalGrit_v104(room,seat,index,targetSlot);
+    const topEligible=[...legacy.defeatedStack].reverse().find(id=>['Gladiator','Conqueror'].includes(HERO[id]?.class));
+    const topActual=legacy.defeatedStack[legacy.defeatedStack.length-1];
+    if(!topEligible || topEligible===topActual) return finalGrit_v104(room,seat,index,targetSlot);
+    const newStack=legacy.defeatedStack.filter(id=>id!==topEligible).concat(topEligible);
+    const oldStack=legacy.defeatedStack;
+    legacy.defeatedStack=newStack;
+    try { return finalGrit_v104(room,seat,index,targetSlot); }
+    finally { if(p.board[targetSlot]===legacy) legacy.defeatedStack=oldStack; }
+  };
+
+  const publicHero_v104 = publicHero;
+  publicHero = function(h){
+    v104EnrichLegacyHero(h);
+    const x=publicHero_v104(h);
+    if(x?.legacy){
+      const meta=v104LegacyMeta(x.id);
+      x.image_url=x.image_url||meta.image_url||meta.artwork_url||'';
+      x.thumbnail_url=x.thumbnail_url||meta.thumbnail_url||meta.image_url||x.image_url||'';
+      x.local_thumbnail_path=x.local_thumbnail_path||meta.local_thumbnail_path||`runtime_thumbnail_assets/cards/${x.id}.webp`;
+      x.legacyEffectText=x.legacyEffectText||meta.effect_text||meta.effect_description||'';
+    }
+    return x;
+  };
+
+  const resolveChoice_v104 = resolveChoice;
+  resolveChoice = function(room,client,index){
+    const before=room.match?.pendingChoice;
+    const r=resolveChoice_v104(room,client,index);
+    if(before?.type==='LEGACY'){
+      const h=room.match.players?.[client.seat]?.board?.[before.slot];
+      v104EnrichLegacyHero(h);
+    }
+    return r;
+  };
+})();
+
+// ============================================================
+// v1.0.5 Closed Alpha server follow-up
+// - Delayed Casting should appear in Opponent Played when declared, and again when it resolves.
+//   v1.0.4 suppressed the resolve notice; this bypasses that suppression without changing attack math.
+// - Venom Detonation remains non-targeted: after choosing the user, it resolves against all poisoned opponent Heroes.
+// ============================================================
+(function(){
+  const pushNotice_v105CastingResolve = pushNotice;
+  pushNotice = function(room, notice={}){
+    const title = String(notice?.title || '');
+    const bypassCastingResolveSuppression = !!(room?.match?.v104SuppressCastingOpponentPlayed && (/Casting Attack Resolves/i.test(title) || /Opponent Declared Attack/i.test(title)));
+    if(bypassCastingResolveSuppression){
+      const old = room.match.v104SuppressCastingOpponentPlayed;
+      delete room.match.v104SuppressCastingOpponentPlayed;
+      try { return pushNotice_v105CastingResolve(room, notice); }
+      finally { room.match.v104SuppressCastingOpponentPlayed = old; }
+    }
+    return pushNotice_v105CastingResolve(room, notice);
+  };
+})();
