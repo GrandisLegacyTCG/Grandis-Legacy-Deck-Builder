@@ -2021,3 +2021,90 @@ export function qaV106RulesPatch(){
     return resolveChoice_v108(room,client,index);
   };
 })();
+
+// ============================================================
+// v1.0.9 Closed Alpha browser PvP fixes
+// - Keep attack/response notices visible in Opponent Played even while a Response Window opens.
+// - Second Chance only triggers from Dodge, not Block.
+// - Casting attacks exhaust the caster when the delayed attack resolves.
+// - Sacred Bulwark area block applies to every affected Hero, including earlier area windows.
+// - Harden local WebP notice paths for Racial / Legacy / Hero action tiles.
+// ============================================================
+(function(){
+  function v109CardLike(card){
+    if(!card) return card;
+    const cid=String(card.card_id||card.id||'').trim();
+    const out={...card};
+    if(cid && !out.local_thumbnail_path) out.local_thumbnail_path=`runtime_thumbnail_assets/cards/${cid}.webp`;
+    if(!out.thumbnail_url && !out.image_url && out.local_thumbnail_path) out.thumbnail_url='';
+    return out;
+  }
+
+  const announceCardUse_v109=announceCardUse;
+  announceCardUse=function(room,seat,card,message='',title='Opponent Card Played'){
+    return announceCardUse_v109(room,seat,v109CardLike(card),message,title);
+  };
+
+  const resolveCasting_v109=resolveCasting;
+  resolveCasting=function(room,seat){
+    const p=room.match?.players?.[seat];
+    const readySlots=new Set((p?.casting||[]).filter(x=>n(x.remaining)<=1).map(x=>x.slot));
+    const r=resolveCasting_v109(room,seat);
+    for(const slot of readySlots){
+      const h=p?.board?.[slot];
+      if(alive(h) && !h.legacy){
+        h.exhausted=true;
+        addLog(room,`${h.name} becomes Exhausted after resolving Casting.`);
+      }
+    }
+    return r;
+  };
+
+  const resolveResponseMath_v109=resolveResponseMath;
+  resolveResponseMath=function(room,a,slot){
+    const selectedName=String(a?.selected?.card?.card_name||'');
+    const selectedId=String(a?.selected?.card?.card_id||'');
+    const isSacredBulwark=selectedName==='Sacred Bulwark'||selectedId==='S1-CLE-023';
+    const beforeGlobal=n(a?.globalBlock);
+    const r=resolveResponseMath_v109(room,a,slot);
+    if(isSacredBulwark){
+      const meta=DEF.get(a.selected.card.card_id)||{};
+      const amount=n(meta.block_amount,20) || 20;
+      a.v109SacredBulwarkBlock=Math.max(n(a.v109SacredBulwarkBlock),amount,beforeGlobal,n(a.globalBlock));
+      // Disable the old forward-only globalBlock path; v1.0.9 applies the block to every recorded area result at hit time.
+      a.globalBlock=0;
+      r.v109SacredBulwarkApplied=true;
+      addLog(room,`Sacred Bulwark is armed as an Area DEF: reduce this Area attack by ${a.v109SacredBulwarkBlock} for every affected Hero.`);
+    }
+    return r;
+  };
+
+  const applyRecordedHit_v109=applyRecordedHit;
+  applyRecordedHit=function(room,a,r){
+    const block=n(a?.v109SacredBulwarkBlock);
+    if(block>0 && a?.aoe && r && !r.v109SacredBulwarkApplied && !r.avoid && !r.negate){
+      r={...r,dmg:Math.max(0,n(r.dmg)-block),v109SacredBulwarkApplied:true};
+      const h=room.match.players[a.targetSeat]?.board?.[r.slot];
+      addLog(room,`Sacred Bulwark reduces ${a.card?.card_name||'Area attack'} by ${block} for ${r.slot}${h?` / ${h.name}`:''}.`);
+    }
+    return applyRecordedHit_v109(room,a,r);
+  };
+
+  const resolveCurrent_v109=resolveCurrent;
+  resolveCurrent=function(room,pass=false){
+    const a=room.match?.pendingAttack;
+    const sel=a?.selected;
+    let selectedWasDodge=false;
+    if(sel?.card){
+      const types=sel.special==='DRAGON_SCALE'?['BLOCK']:(DEF.get(sel.card.card_id)||{}).response_types||[];
+      selectedWasDodge=types.includes('DODGE') && !sel.bindingLightCanceledDodge;
+    }
+    const r=resolveCurrent_v109(room,pass);
+    const c=room.match?.pendingChoice;
+    if(c?.type==='S1B2_SECOND_CHANCE' && !selectedWasDodge){
+      room.match.pendingChoice=null;
+      addLog(room,'Second Chance does not trigger because the attack was Blocked / reduced, not Dodged.');
+    }
+    return r;
+  };
+})();
