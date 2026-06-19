@@ -2269,3 +2269,259 @@ export function qaV106RulesPatch(){
     return r;
   };
 })();
+
+// ============================================================
+// v1.0.12 Closed Alpha browser PvP rules + queue fixes
+// - Magic Scope is a close-only review, not a card selection.
+// - Eyes of the Hawk shuffles the opponent hand before offering face-down choices;
+//   the Eyes user never learns the chosen card name.
+// - Required Choice payloads include local WebP fallbacks.
+// - Korvak / Beastman Primal Strike targets opponent injured active Heroes only.
+// - Thief/Rogue/Renegade lineage inheritance is explicit for legality checks.
+// - Venom Sovereign / Rage Blast bonus damage is a separate unblockable layer;
+//   Dodge cancels the whole package, Block reduces only base damage.
+// - Auto-center remains blocked until all legacy replacement choices finish.
+// ============================================================
+(function(){
+  const V112_EYES='S1-ARC-004';
+  const V112_MAGIC_SCOPE='S1-ITM-006';
+  const V112_BACK_CARD={card_id:'GL-HIDDEN-HAND-CARD',card_name:'Face-down Hand Card',card_type:'Hidden',card_subtype:'Opponent Hand',mana_cost:0,effect_text:'Choose one hidden opponent hand card. The chosen card is shuffled into its owner deck.',image_url:'',thumbnail_url:'',local_thumbnail_path:'runtime_thumbnail_assets/ui/Back-of-Card.webp'};
+
+  function v112CardNoticeData(card){
+    const cid=String(card?.card_id||card?.id||'').trim();
+    return {card_id:cid,card_name:card?.card_name||card?.name||'',image_url:card?.image_url||'',thumbnail_url:card?.thumbnail_url||card?.image_url||'',local_thumbnail_path:card?.local_thumbnail_path||(cid?`runtime_thumbnail_assets/cards/${cid}.webp`:'')};
+  }
+  function v112IsEyes(card){return !!card && (String(card.card_id||'')===V112_EYES || String(card.card_name||'')==='Eyes of the Hawk')}
+  function v112IsMagicScope(card){return !!card && (String(card.card_id||'')===V112_MAGIC_SCOPE || String(card.card_name||'')==='Magic Scope')}
+  function v112HiddenOption(i){return {index:i,handIndex:i,card:{...V112_BACK_CARD,card_id:`GL-HIDDEN-HAND-${i}`,card_name:`Face-down Hand Card ${i+1}`}}}
+  function v112ClassLine(h){
+    const cls=String(h?.class||'').trim().toLowerCase();
+    const lines=[['warrior','gladiator','conqueror'],['warrior','paladin','crusader'],['mage','elementalist','elemental lord'],['cleric','priest','saint'],['archer','marksman','grand ranger'],['thief','rogue','renegade']];
+    const line=lines.find(x=>x.includes(cls));
+    if(!line)return [cls,String(h?.baseFamily||'').trim().toLowerCase()].filter(Boolean);
+    const idx=line.indexOf(cls);
+    return line.slice(0,idx+1);
+  }
+  function v112TargetHp(m,seat,slot){const h=m.players?.[seat]?.board?.[slot]; return alive(h)?hp(h):0;}
+  function v112ExtraFor(card,user,target){
+    const name=String(card?.card_name||'');
+    if(name==='Venom Sovereign' && target && n(target.status?.Poison)>0){
+      return String(user?.class||'')==='Renegade'?60:(String(user?.class||'')==='Rogue'?40:0);
+    }
+    if(name==='Rage Blast' && target && n(target.status?.Bleed)>0) return 20;
+    return 0;
+  }
+
+  // Add local image fallback to every public card payload, including Required Choice options.
+  const publicCard_v112=publicCard;
+  publicCard=function(c,index){
+    const x=publicCard_v112(c,index);
+    const cid=String(c?.card_id||x?.card_id||'').trim();
+    if(x){
+      if(c?.local_thumbnail_path && !x.local_thumbnail_path) x.local_thumbnail_path=c.local_thumbnail_path;
+      if(cid && !x.local_thumbnail_path) x.local_thumbnail_path=`runtime_thumbnail_assets/cards/${cid}.webp`;
+      if(!x.thumbnail_url && !x.image_url && x.local_thumbnail_path) x.thumbnail_url='';
+    }
+    return x;
+  };
+
+  // Explicit Thief-line inheritance: Renegade can use Rogue and Thief cards; Rogue can use Thief cards.
+  const classAllowed_v112=classAllowed;
+  classAllowed=function(card,h){
+    const restriction=String(card?.class_restriction||card?.class_family||'').toLowerCase();
+    const tokens=restriction.split(/[;,]|or/i).map(x=>x.trim()).filter(Boolean);
+    const line=v112ClassLine(h);
+    if(card?.card_type==='Skill' && tokens.some(t=>['thief','rogue','renegade'].includes(t))){
+      if(tokens.some(t=>line.includes(t))) return true;
+    }
+    return classAllowed_v112(card,h);
+  };
+
+  // Override direct non-attack effects that need hidden-info / close-only behavior.
+  const executeNonAttackCard_v112=executeNonAttackCard;
+  executeNonAttackCard=function(room,seat,card,userSlot,targetSeat,targetSlot,script){
+    const m=room.match, p=m.players[seat], oppSeat=opponent(seat), opp=m.players[oppSeat], user=p.board[userSlot];
+    if(v112IsMagicScope(card)){
+      if(!opp.hand.length){addLog(room,'Magic Scope reveals that the opponent hand is empty.');return;}
+      m.pendingChoice={
+        type:'V112_MAGIC_SCOPE_REVIEW',
+        seat,
+        sourceSeat:seat,
+        targetSeat:oppSeat,
+        card:v112CardNoticeData(card),
+        prompt:'Magic Scope: review opponent hand, then close the popup. No card is moved.',
+        options:[{index:0,card:virtualChoiceCard('MAGIC-SCOPE-DONE','Done — close review','Close the Magic Scope review. No card is moved.')}],
+        revealedHand:opp.hand.map((c,i)=>({index:i,card:c}))
+      };
+      addLog(room,`${user?.name||'Hero'} uses Magic Scope: Player ${seat} reviews Player ${oppSeat} hand.`);
+      pushNotice(room,{sourceSeat:seat,title:'Opponent Uses Item',...v112CardNoticeData(card),message:`Player ${seat} uses Magic Scope to review Player ${oppSeat} hand.`});
+      return;
+    }
+    if(v112IsEyes(card)){
+      if(!opp.hand.length) throw new Error('Eyes of the Hawk requires the opponent to have at least 1 card in hand.');
+      opp.hand=shuffle(opp.hand); // hide remembered hand order before face-down selection
+      m.pendingChoice={
+        type:'V112_EYES_OF_THE_HAWK',
+        seat,
+        sourceSeat:seat,
+        targetSeat:oppSeat,
+        card:v112CardNoticeData(card),
+        prompt:'Eyes of the Hawk: the opponent hand was shuffled. Choose 1 face-down card to return to their deck.',
+        options:opp.hand.map((_,i)=>v112HiddenOption(i))
+      };
+      addLog(room,`Eyes of the Hawk: Player ${seat} shuffles Player ${oppSeat} hand order, then chooses 1 hidden card.`);
+      return;
+    }
+    return executeNonAttackCard_v112(room,seat,card,userSlot,targetSeat,targetSlot,script);
+  };
+
+  // Beastman/Korvak target list: opponent injured active Heroes only, with real Hero images in the choice cards.
+  const useRacial_v112=useRacial;
+  useRacial=function(room,client,slot){
+    const m=assertActive(room,client), p=m.players[client.seat], h=p.board[slot];
+    if(alive(h) && h.race==='Beastman'){
+      if(m.phase!=='Deploy Phase') throw new Error('Primal Strike is used during Deploy Phase.');
+      if(h.status.Stun || p.racial<=0 || p.racialUsedTurn || h.racialUsed) throw new Error('Primal Strike is not available.');
+      const oppSeat=opponent(client.seat);
+      const targets=LANES.map(l=>({slot:l,hero:m.players[oppSeat].board[l]})).filter(x=>alive(x.hero)&&n(x.hero.damage)>0);
+      if(!targets.length) throw new Error('Primal Strike requires an injured opponent active Hero.');
+      m.pendingChoice={
+        type:'V112_BEASTMAN_PRIMAL_STRIKE',
+        seat:client.seat,
+        userSlot:slot,
+        prompt:`${h.name} / Primal Strike: choose 1 injured opponent Hero to take 20 damage.`,
+        options:targets.map((x,i)=>({index:i,targetSeat:oppSeat,targetSlot:x.slot,card:{card_id:x.hero.id,card_name:`Player ${oppSeat} ${x.slot} / ${x.hero.name}`,card_type:'Choice',card_subtype:'Racial Target',mana_cost:0,effect_text:`Deal 20 damage to injured opponent Hero. Current HP ${hp(x.hero)} / ${x.hero.maxHp}.`,image_url:x.hero.image_url||'',thumbnail_url:x.hero.thumbnail_url||x.hero.image_url||'',local_thumbnail_path:x.hero.local_thumbnail_path||`runtime_thumbnail_assets/cards/${x.hero.id}.webp`}}))
+      };
+      addLog(room,`PRIMAL STRIKE WINDOW: ${h.name} may spend 1 Racial Token to damage an injured opponent Hero.`);
+      return;
+    }
+    return useRacial_v112(room,client,slot);
+  };
+
+  const resolveChoice_v112=resolveChoice;
+  resolveChoice=function(room,client,index){
+    const m=room.match, c=m.pendingChoice;
+    if(c?.type==='V112_MAGIC_SCOPE_REVIEW'){
+      if(c.seat!==client.seat) throw new Error('This Magic Scope review belongs to the other player.');
+      m.pendingChoice=null;
+      addLog(room,'Magic Scope review closes. No card is moved.');
+      return;
+    }
+    if(c?.type==='V112_EYES_OF_THE_HAWK'){
+      if(c.seat!==client.seat) throw new Error('This Eyes of the Hawk choice belongs to the other player.');
+      const opt=c.options[n(index,-1)]; if(!opt) throw new Error('Choose a face-down opponent hand card.');
+      const opp=m.players[c.targetSeat];
+      const idx=Math.max(0,Math.min(opp.hand.length-1,n(opt.handIndex,opt.index)));
+      const [picked]=opp.hand.splice(idx,1);
+      if(!picked) throw new Error('That card is no longer in opponent hand.');
+      opp.deck=shuffle(opp.deck.concat([picked]));
+      m.pendingChoice=null;
+      addLog(room,`Eyes of the Hawk shuffles 1 hidden card from Player ${c.targetSeat} hand into their deck.`);
+      // The source player gets no card name. The owner gets exact information.
+      pushNotice(room,{sourceSeat:c.sourceSeat,title:'Opponent Resolves Eyes of the Hawk',...c.card,message:`Eyes of the Hawk returns 1 hidden card from Player ${c.targetSeat} hand to their deck.`});
+      pushNotice(room,{sourceSeat:c.sourceSeat,targetSeat:c.targetSeat,title:'Opponent Resolves Eyes of the Hawk',...c.card,message:`Player ${c.sourceSeat} returned ${picked.card_name} from your hand to your deck.`});
+      return;
+    }
+    if(c?.type==='V112_BEASTMAN_PRIMAL_STRIKE'){
+      if(c.seat!==client.seat) throw new Error('This Primal Strike choice belongs to the other player.');
+      const opt=c.options[n(index,-1)]; if(!opt) throw new Error('Choose an injured opponent Hero.');
+      const p=m.players[client.seat], user=p.board[c.userSlot], target=m.players[opt.targetSeat]?.board?.[opt.targetSlot];
+      if(opt.targetSeat===client.seat) throw new Error('Primal Strike can only target an opponent Hero.');
+      if(!alive(user) || user.race!=='Beastman') throw new Error('Primal Strike user is no longer available.');
+      if(!alive(target) || n(target.damage)<=0) throw new Error('Primal Strike target must be an injured opponent active Hero.');
+      if(p.racial<=0 || p.racialUsedTurn || user.racialUsed) throw new Error('Primal Strike is already spent this turn.');
+      p.racial--; p.racialUsedTurn=true; user.racialUsed=true;
+      const before=hp(target);
+      target.damage=Math.min(target.maxHp,n(target.damage)+20);
+      addLog(room,`${user.name} uses Primal Strike: ${target.name} takes 20 damage (HP ${before} -> ${hp(target)}).`);
+      announceCardUse(room,client.seat,{card_id:user.id,card_name:'Primal Strike',image_url:user.image_url,thumbnail_url:user.thumbnail_url,local_thumbnail_path:user.local_thumbnail_path},`${user.name} spends 1 Racial Token to deal 20 damage to Player ${opt.targetSeat} ${opt.targetSlot} / ${target.name}.`,'Opponent Uses Racial Trait');
+      if(hp(target)<=0) defeat(room,opt.targetSeat,opt.targetSlot);
+      m.pendingChoice=null;
+      openNextLegacyChoice(room);
+      checkWin(room);
+      return;
+    }
+    const beforeType=c?.type;
+    const r=resolveChoice_v112(room,client,index);
+    // After the player finishes a Legacy choice, resolve any remaining legacy choices first.
+    // Only when all replacement queues are settled may auto-center run.
+    if(beforeType==='LEGACY'){
+      if(!room.match.pendingChoice && !(Array.isArray(room.match.legacyQueue)&&room.match.legacyQueue.length)){
+        autoCenter1v1(room);
+      }
+    }
+    return r;
+  };
+
+  // Make Primal Strike hint appear only when an opponent injured Hero exists.
+  const actionHints_v112=actionHints;
+  actionHints=function(m,seat){
+    const out=actionHints_v112(m,seat); if(!out||m.status!=='active')return out;
+    const p=m.players?.[seat]; if(!p)return out;
+    const oppSeat=opponent(seat);
+    const oppInjured=LANES.some(l=>{const h=m.players?.[oppSeat]?.board?.[l]; return alive(h)&&n(h.damage)>0;});
+    if(out.racialSlots){
+      out.racialSlots=(out.racialSlots||[]).filter(slot=>{
+        const h=p.board?.[slot];
+        if(h?.race==='Beastman') return oppInjured;
+        return true;
+      });
+    }
+    return out;
+  };
+
+  // Split unblockable conditional bonus damage out of base damage for Block math.
+  const openAttack_v112=openAttack;
+  openAttack=function(room,seat,card,userSlot,targetSeat,targetSlot,fromCasting=false){
+    const beforeSeq=room.seq;
+    const r=openAttack_v112(room,seat,card,userSlot,targetSeat,targetSlot,fromCasting);
+    const a=room.match?.pendingAttack;
+    if(r!==false && a && a.sourceSeat===seat && a.userSlot===userSlot && String(a.card?.card_id||'')===String(card?.card_id||'')){
+      const user=room.match.players[seat]?.board?.[userSlot];
+      const bySlot={};
+      for(const slot of (a.slots||[])){
+        const target=room.match.players[targetSeat]?.board?.[slot];
+        const extra=v112ExtraFor(card,user,target);
+        if(extra>0) bySlot[slot]=extra;
+      }
+      const firstExtra=n(bySlot[a.slots?.[0]]);
+      if(firstExtra>0){
+        a.damage=Math.max(0,n(a.damage)-firstExtra);
+        a.extraUnblockableBySlot=bySlot;
+        a.extraUnblockableReason=card.card_name;
+        addLog(room,`${card.card_name} separates ${firstExtra} conditional extra damage from base damage. Block reduces base damage only; Dodge avoids the whole package.`);
+      }
+    }
+    return r;
+  };
+
+  const applyRecordedHit_v112=applyRecordedHit;
+  applyRecordedHit=function(room,a,r){
+    const p=room.match.players[a.targetSeat], h=p.board[r.slot];
+    const extra=n(a?.extraUnblockableBySlot?.[r.slot]);
+    const beforeHp=alive(h)?hp(h):0;
+    applyRecordedHit_v112(room,a,r);
+    const afterBase=alive(h)?hp(h):0;
+    if(extra>0 && alive(h) && !r.avoid && !h.tmp?.divinityImmune){
+      const before=hp(h);
+      h.damage=Math.min(h.maxHp,n(h.damage)+extra);
+      addLog(room,`${a.card.card_name} conditional extra damage: ${extra} unblockable damage to Player ${a.targetSeat} ${r.slot} / ${h.name} (HP ${before} -> ${hp(h)}).`);
+      if(hp(h)<=0) defeat(room,a.targetSeat,r.slot);
+    }else if(extra>0 && r.avoid){
+      addLog(room,`${a.card.card_name} conditional extra damage is avoided because the attack was Dodged.`);
+    }
+  };
+})();
+
+// v1.0.12b: expose Magic Scope revealed hand only to the reviewing player in Required Choice payload.
+(function(){
+  const actionHints_v112b=actionHints;
+  actionHints=function(m,seat){
+    const out=actionHints_v112b(m,seat);
+    const c=m?.pendingChoice;
+    if(out?.choice && c?.type==='V112_MAGIC_SCOPE_REVIEW' && c.seat===seat){
+      out.choice.revealedHand=(c.revealedHand||[]).map((o,i)=>({index:i,card:publicCard(o.card,i)}));
+    }
+    return out;
+  };
+})();
