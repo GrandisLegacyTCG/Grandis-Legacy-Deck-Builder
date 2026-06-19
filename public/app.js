@@ -11404,3 +11404,42 @@ renderMatch=function(m){const out=renderMatch_v105.apply(this,arguments);v105Dra
   css.textContent='.pvp-action-count{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#e3c066;color:#05070a;font-size:10px;font-weight:900;margin-top:2px}.pvp-action-chain-list{margin:6px 0 0 18px;padding:0}.pvp-action-chain-list li{margin:0 0 6px 0}.pvp-action-chain-list span{color:#d7cfbd}';
   document.head.appendChild(css);
 })();
+
+
+// ============================================================
+// v1.0.11 Closed Alpha client helpers
+// - Add a quick Reset Match button for repeated browser tests.
+// - Label Magic Scope review choices clearly when shown face-up.
+// ============================================================
+(function(){
+  function v111EnsureResetButton(){
+    const row=document.querySelector('#controlsSection .buttons');
+    if(!row || document.getElementById('resetMatchButton')) return;
+    const btn=document.createElement('button');
+    btn.id='resetMatchButton';
+    btn.type='button';
+    btn.textContent='Reset Match';
+    btn.title='Player 1 only: reset this room back to setup lobby.';
+    btn.onclick=()=>{
+      if(confirm('Reset this room back to setup lobby? Player 1 only.')) send('reset-match');
+    };
+    row.appendChild(btn);
+  }
+  const renderMatch_v111=renderMatch;
+  renderMatch=function(m){
+    const r=renderMatch_v111.apply(this,arguments);
+    try{v111EnsureResetButton();}catch(e){}
+    return r;
+  };
+
+  const choiceModal_v111=choiceModal;
+  choiceModal=function(choice){
+    const type=String(choice?.type||'');
+    if(type==='V111_MAGIC_SCOPE_REVIEW'){
+      openModal(`<h2>Magic Scope</h2><p>${esc(choice.prompt||'Review opponent hand.')}</p><div class=notice><b>Opponent hand is revealed to you only.</b><br><span class=small>Choose any shown card to close. No card is moved.</span></div><div class=choice-grid>${choice.options.map((o)=>cardTile({...o.card,index:o.index},{choice:true})).join('')}</div>`, false, 'choice');
+      document.querySelectorAll('[data-choice]').forEach((b)=>b.onclick=()=>send('resolve-choice',{index:+b.dataset.choice}));
+      return;
+    }
+    return choiceModal_v111.apply(this,arguments);
+  };
+})();
