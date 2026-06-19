@@ -2138,3 +2138,134 @@ export function qaV106RulesPatch(){
     return resolveChoice_v110(room,client,index);
   };
 })();
+
+
+// ============================================================
+// v1.0.11 Closed Alpha browser PvP fixes
+// - Poison Mist is Rogue/Renegade minimum, not Rank I Thief.
+// - Magic Scope opens a visible opponent-hand review choice without moving cards.
+// - Beastman/Korvak racial appears in hints when any active Hero is injured.
+// - Poison End Phase ticks are announced to Opponent Played as RESOLVE.
+// - Auto-center waits until legacy replacement choices are finished.
+// ============================================================
+(function(){
+  const V111_POISON_MIST='S1-THF-012';
+  const V111_MAGIC_SCOPE='S1-ITM-006';
+
+  function v111IsPoisonMist(card){return !!card && (String(card.card_id||'')===V111_POISON_MIST || String(card.card_name||'')==='Poison Mist')}
+  function v111PoisonMistUserOk(h){return alive(h) && ['Rogue','Renegade'].includes(String(h.class||''));}
+  function v111IsMagicScope(card){return !!card && (String(card.card_id||'')===V111_MAGIC_SCOPE || String(card.card_name||'')==='Magic Scope')}
+  function v111CardNoticeData(card){return {card_id:card?.card_id||'',card_name:card?.card_name||'',image_url:card?.image_url||'',thumbnail_url:card?.thumbnail_url||card?.image_url||'',local_thumbnail_path:card?.local_thumbnail_path||''}}
+  function v111AnyInjuredHero(m){
+    for(const seat of [1,2]) for(const slot of LANES){const h=m.players?.[seat]?.board?.[slot]; if(alive(h)&&n(h.damage)>0) return true;}
+    return false;
+  }
+
+  const canUser_v111=canUser;
+  canUser=function(card,h,m=null,seat=null,slot=null){
+    if(v111IsPoisonMist(card)) return v111PoisonMistUserOk(h) && !h.exhausted && !h.actionZone && !h.status?.Stun;
+    return canUser_v111(card,h,m,seat,slot);
+  };
+
+  const playCard_v111=playCard;
+  playCard=function(room,client,args={}){
+    const p=room.match?.players?.[client.seat], card=p?.hand?.[n(args?.index,-1)], user=p?.board?.[args?.userSlot];
+    if(v111IsPoisonMist(card) && !v111PoisonMistUserOk(user)) throw new Error('Poison Mist requires Rogue or Renegade. Rank I Thief cannot use it.');
+    return playCard_v111(room,client,args);
+  };
+
+  const executeNonAttackCard_v111=executeNonAttackCard;
+  executeNonAttackCard=function(room,seat,card,userSlot,targetSeat,targetSlot,script){
+    const m=room.match, p=m.players[seat], oppSeat=opponent(seat), opp=m.players[oppSeat], user=p.board[userSlot];
+    if(v111IsMagicScope(card)){
+      if(!opp.hand.length){addLog(room,'Magic Scope reveals that the opponent hand is empty.');return;}
+      m.pendingChoice={
+        type:'V111_MAGIC_SCOPE_REVIEW',
+        seat,
+        sourceSeat:seat,
+        targetSeat:oppSeat,
+        card:v111CardNoticeData(card),
+        prompt:'Magic Scope: review opponent hand. Choose any revealed card to close this review. No card is moved.',
+        options:opp.hand.map((c,i)=>({index:i,handIndex:i,card:c}))
+      };
+      addLog(room,`${user?.name||'Hero'} uses Magic Scope: Player ${seat} reviews Player ${oppSeat} hand.`);
+      pushNotice(room,{sourceSeat:seat,title:'Opponent Uses Item',...v111CardNoticeData(card),message:`Player ${seat} uses Magic Scope to review Player ${oppSeat} hand.`});
+      return;
+    }
+    return executeNonAttackCard_v111(room,seat,card,userSlot,targetSeat,targetSlot,script);
+  };
+
+  const resolveChoice_v111=resolveChoice;
+  resolveChoice=function(room,client,index){
+    const m=room.match, c=m.pendingChoice;
+    if(c?.type==='V111_MAGIC_SCOPE_REVIEW'){
+      if(c.seat!==client.seat) throw new Error('This Magic Scope review belongs to the other player.');
+      const opt=c.options[n(index,-1)];
+      const cardName=opt?.card?.card_name||'opponent hand';
+      addLog(room,`Magic Scope review closes after inspecting ${cardName}. No card is moved.`);
+      m.pendingChoice=null;
+      return;
+    }
+    return resolveChoice_v111(room,client,index);
+  };
+
+  const actionHints_v111=actionHints;
+  actionHints=function(m,seat){
+    const out=actionHints_v111(m,seat); if(!out||m.status!=='active')return out;
+    const p=m.players?.[seat]; if(!p)return out;
+
+    // Remove Poison Mist from playable list when only Rank I Thief is available.
+    const mapped={...(out.playableUsersByCard||{})};
+    const allowed=[];
+    for(const index of out.playableCardIndexes||[]){
+      const card=p.hand?.[index];
+      if(v111IsPoisonMist(card)){
+        const users=(mapped[String(index)]||[]).filter(slot=>v111PoisonMistUserOk(p.board?.[slot]));
+        mapped[String(index)]=users;
+        if(users.length) allowed.push(index);
+      }else allowed.push(index);
+    }
+    out.playableCardIndexes=allowed;
+    out.playableUsersByCard=mapped;
+
+    // v0.5.6 only exposed Human/Elf; add Beastman/Korvak when Primal Strike has targets.
+    if(m.activeSeat===seat && m.phase==='Deploy Phase' && n(p.racial)>0 && !p.racialUsedTurn && v111AnyInjuredHero(m)){
+      const slots=new Set(out.racialSlots||[]);
+      for(const slot of LANES){const h=p.board?.[slot]; if(alive(h)&&h.race==='Beastman'&&!h.status?.Stun&&!h.racialUsed) slots.add(slot);}
+      out.racialSlots=[...slots];
+    }
+    return out;
+  };
+
+  // Delay auto-center while any Legacy replacement choice is still pending.
+  const autoCenter1v1_v111=autoCenter1v1;
+  autoCenter1v1=function(room){
+    const m=room.match;
+    if(m?.pendingChoice || (Array.isArray(m?.legacyQueue)&&m.legacyQueue.length)) return;
+    return autoCenter1v1_v111(room);
+  };
+
+  const checkWin_v111=checkWin;
+  checkWin=function(room){
+    const m=room.match;
+    if(m?.status==='active' && (m.pendingChoice || (Array.isArray(m.legacyQueue)&&m.legacyQueue.length))){
+      for(const seat of [1,2]){
+        const any=LANES.some(l=>alive(m.players[seat].board[l]));
+        if(!any&&!m.pendingChoice){finish(room,opponent(seat),`Player ${seat} has no active hero remaining.`);return;}
+      }
+      return;
+    }
+    return checkWin_v111(room);
+  };
+
+  const cleanupEnd_v111=cleanupEnd;
+  cleanupEnd=function(room,p){
+    const beforeSeq=room.seq;
+    const r=cleanupEnd_v111(room,p);
+    const lines=(room.logs||[]).filter(x=>x.seq>beforeSeq && /POISON TICK|STATUS TICK: .*Poison|STATUS EXPIRED: .*Poison/i.test(String(x.message||''))).map(x=>x.message);
+    if(lines.length){
+      pushNotice(room,{sourceSeat:p.seat,title:'End Phase Status Resolve',card_name:'',card_id:'RESOLVE-POISON',message:lines.join('\n')});
+    }
+    return r;
+  };
+})();
