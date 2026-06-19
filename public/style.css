@@ -251,3 +251,19 @@
   .visual-card{flex-basis:90px!important}
   .visual-card img{height:126px!important}
 }
+
+/* ============================================================
+   v1.0.14 mobile resource rail visibility
+   - keep Mana / Legacy Deck / Racial Token / Discard / Main Deck visible on phones
+   ============================================================ */
+@media (max-width: 760px){
+  .field-row{display:flex!important;flex-direction:column!important;gap:6px!important;padding:7px!important;overflow:hidden!important}
+  .field-rail{display:flex!important;flex-direction:row!important;gap:5px!important;justify-content:stretch!important;align-items:stretch!important;order:1!important;width:100%!important;overflow-x:auto!important;padding-bottom:2px!important;-webkit-overflow-scrolling:touch!important}
+  .field-grid{order:2!important;width:100%!important}
+  .field-row > .field-rail:last-child{order:3!important}
+  .field-rail-zone{flex:1 0 74px!important;min-width:74px!important;min-height:54px!important;padding:5px 4px!important;font-size:9px!important;line-height:1.15!important;border-radius:7px!important}
+  .field-rail-zone.stack-card{min-height:70px!important}
+  .field-rail-zone button{display:block!important;margin:3px auto 0!important;padding:2px 5px!important;font-size:9px!important}
+  .stack-card:before{width:32px!important;height:45px!important;margin-bottom:2px!important}
+  .stack-card .pile-count{font-size:12px!important}
+}
