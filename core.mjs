@@ -2525,3 +2525,185 @@ export function qaV106RulesPatch(){
     return out;
   };
 })();
+
+// ============================================================
+// v1.0.14 Closed Alpha browser PvP fixes
+// - Dual Arrow requires two opponent Hero targets when two are available.
+// - Final Grit accepts any defeated Gladiator/Conqueror in the Legacy stack.
+// - Archer Legacy Cards implemented: Golden Arrows + Falconer's Whistle.
+// ============================================================
+(function(){
+  const V114_DUAL_ARROW='S1-ARC-017';
+  const V114_GOLDEN='S1-ARC-L001';
+  const V114_FALCON='S1-ARC-L002';
+
+  function v114CardData(card){
+    const cid=String(card?.card_id||card?.id||'').trim();
+    return {card_id:cid,card_name:card?.card_name||card?.name||'',image_url:card?.image_url||'',thumbnail_url:card?.thumbnail_url||card?.image_url||'',local_thumbnail_path:card?.local_thumbnail_path||(cid?`runtime_thumbnail_assets/cards/${cid}.webp`:'')};
+  }
+  function v114IsDualArrow(card){return String(card?.card_id||'')===V114_DUAL_ARROW || String(card?.card_name||'')==='Dual Arrow'}
+  function v114IsArcherSkill(card){return !!card && card.card_type==='Skill' && skillFamilyMatches(card,'Archer')}
+  function v114ArcherSkillOptions(p){return p.hand.map((card,index)=>({index,card})).filter(x=>v114IsArcherSkill(x.card))}
+  function v114EligibleFinalGritHeroId(legacy,p){
+    const stack=Array.isArray(legacy?.defeatedStack)?legacy.defeatedStack:[];
+    for(let i=stack.length-1;i>=0;i--){
+      const id=stack[i], meta=HERO[id];
+      if(meta && ['Gladiator','Conqueror'].includes(meta.class) && !p?.finalGritUsedHeroes?.[id]) return id;
+    }
+    return null;
+  }
+  function v114EligibleFinalGritSlots(p){
+    return LANES.filter(slot=>{const h=p?.board?.[slot]; return h?.legacy && !!v114EligibleFinalGritHeroId(h,p);});
+  }
+  function v114ReturnLegacyToSide(p,legacy){
+    const card={card_id:legacy.id,card_name:legacy.name,card_type:'Legacy',package_id:legacy.packageId||'',image_url:legacy.image_url||'',thumbnail_url:legacy.thumbnail_url||legacy.image_url||'',local_thumbnail_path:legacy.local_thumbnail_path||`runtime_thumbnail_assets/cards/${legacy.id}.webp`};
+    if(typeof v052EnrichSideCard==='function') p.side.push(v052EnrichSideCard(card)); else p.side.push(card);
+  }
+  function v114OpenDualArrowAttack(room,seat,card,userSlot,firstSlot,secondSlot){
+    const m=room.match, p=m.players[seat], user=p.board[userSlot], targetSeat=opponent(seat);
+    const slots=[firstSlot,secondSlot].filter((x,i,a)=>x&&a.indexOf(x)===i&&alive(m.players[targetSeat]?.board?.[x]));
+    if(!slots.length){addLog(room,'Dual Arrow has no legal target.');p.discard.push(card);return false;}
+    const info=cardAttackInfo(card,user);
+    const targetHero=m.players[targetSeat].board[slots[0]];
+    const dmg=outgoingAttack(p,user,card,info.base,false,targetHero);
+    m.pendingAttack={
+      attackId:`${m.turnNumber}-${room.seq+1}-${seat}-${card.card_id}-${userSlot}-DUAL-${slots.join('-')}`,
+      sourceSeat:seat,targetSeat,card,userSlot,damage:dmg,attackType:info.attackType,
+      aoe:true,dualArrow:true,slots,index:0,results:{},selected:null,statuses:info.statuses,
+      fromCasting:false,execute:false,unblockable:false,tornadoResidual:false,redirected:false,chainStep:1,dualCastingAttack:false
+    };
+    announceCardUse(room,seat,card,`${user.name} uses Dual Arrow from ${userSlot} -> ${slots.map(s=>`${s} / ${m.players[targetSeat].board[s]?.name||'-'}`).join(' + ')}. Incoming ${dmg} ${info.attackType} damage to each selected Hero.`, 'Opponent Declared Attack');
+    addLog(room,`Dual Arrow opens a two-target Response Window. ${user.name} (${userSlot}) -> ${slots.map(s=>`${s} / ${m.players[targetSeat].board[s]?.name||'-'}`).join(' + ')}. Incoming ${dmg} ${info.attackType} damage each.`);
+    return true;
+  }
+
+  const playCard_v114=playCard;
+  playCard=function(room,client,args={}){
+    const m=assertActive(room,client), p=m.players[client.seat], index=n(args.index,-1), card=p.hand[index], user=p.board[args.userSlot];
+    if(v114IsDualArrow(card)){
+      if(m.phase!=='Battle Phase') throw new Error('Dual Arrow is used during Battle Phase.');
+      if(!canUser(card,user,m,client.seat,args.userSlot)) throw new Error('Choose a legal Archer-line user for Dual Arrow.');
+      const legal=attackTargets(m,client.seat,args.userSlot);
+      const first=String(args.targetSlot||'');
+      if(!legal.includes(first)) throw new Error('Choose a legal first opponent Hero target for Dual Arrow.');
+      const remaining=legal.filter(s=>s!==first);
+      if(legal.length>=2){
+        m.pendingChoice={
+          type:'V114_DUAL_ARROW_SECOND_TARGET',seat:client.seat,index,userSlot:args.userSlot,firstTargetSlot:first,
+          prompt:'Dual Arrow: choose the second different opponent Hero target.',
+          options:remaining.map((slot,i)=>{const h=m.players[opponent(client.seat)].board[slot];return{index:i,targetSlot:slot,card:{card_id:h.id,card_name:`${slot} / ${h.name}`,card_type:'Choice',card_subtype:'Dual Arrow Target',mana_cost:0,effect_text:'Choose as the second Dual Arrow target.',image_url:h.image_url||'',thumbnail_url:h.thumbnail_url||h.image_url||'',local_thumbnail_path:h.local_thumbnail_path||`runtime_thumbnail_assets/cards/${h.id}.webp`}}})
+        };
+        addLog(room,`Dual Arrow requires a second target because ${legal.length} legal opponent Heroes are available.`);
+        return;
+      }
+      const cost=n(card.mana_cost); if(p.mana<cost) throw new Error('Not enough mana.');
+      p.mana-=cost; p.hand.splice(index,1); user.exhausted=true;
+      return v114OpenDualArrowAttack(room,client.seat,card,args.userSlot,first,null);
+    }
+    return playCard_v114(room,client,args);
+  };
+
+  const finalGrit_v114=finalGrit;
+  finalGrit=function(room,seat,index,targetSlot){
+    const m=room.match,p=m.players[seat],card=p.hand[index];
+    if(!card || card.card_name!=='Final Grit') return finalGrit_v114(room,seat,index,targetSlot);
+    if(m.phase!=='Deploy Phase') throw new Error('Final Grit is used during Deploy Phase.');
+    let slot=targetSlot;
+    const eligibleSlots=v114EligibleFinalGritSlots(p);
+    if(!p.board?.[slot]?.legacy && eligibleSlots.length===1) slot=eligibleSlots[0];
+    const legacy=p.board?.[slot], heroId=v114EligibleFinalGritHeroId(legacy,p), meta=HERO[heroId];
+    if(!legacy?.legacy || !heroId || !meta) throw new Error('Final Grit requires a Legacy replacement stacked with a defeated Gladiator or Conqueror.');
+    const cost=n(card.mana_cost); if(p.mana<cost) throw new Error('Not enough mana.');
+    p.mana-=cost; p.hand.splice(index,1); p.discard.push(card);
+    v114ReturnLegacyToSide(p,legacy);
+    const oldStack=Array.isArray(legacy.defeatedStack)?legacy.defeatedStack.slice():[];
+    const removeAt=oldStack.lastIndexOf(heroId);
+    if(removeAt>=0) oldStack.splice(removeAt,1);
+    const revived=makeHero(heroId);
+    revived.damage=Math.max(0,revived.maxHp-10);
+    revived.exp=revivedBaselineExp(heroId);
+    revived.exhausted=true;
+    revived.defeatedStack=oldStack;
+    revived.stonebloodUsed=typeof v052StonebloodWasUsed==='function'?v052StonebloodWasUsed(p,revived):false;
+    p.finalGritUsedHeroes=p.finalGritUsedHeroes||{};
+    p.finalGritUsedHeroes[heroId]=true;
+    p.board[slot]=revived;
+    addLog(room,`Final Grit returns ${legacy.name} to Legacy Deck and revives ${revived.name} / ${revived.class} with 10 HP Exhausted and baseline EXP ${revived.exp}.`);
+  };
+
+  const useLegacy_v114=useLegacy;
+  useLegacy=function(room,client,slot){
+    const m=room.match,p=m.players[client.seat],h=p.board[slot],id=h?.id;
+    if(id===V114_GOLDEN || id===V114_FALCON){
+      if(!h?.legacy) throw new Error('No Archer Legacy Card is available in that slot.');
+      if(h.legacyUsed) throw new Error('This Legacy Card has already been used this turn.');
+      const needPhase=id===V114_GOLDEN?'Battle Phase':'End Phase';
+      if(m.activeSeat!==client.seat || m.pendingAttack || m.pendingChoice || m.phase!==needPhase) throw new Error(`${h.name} is available during your ${needPhase}.`);
+      const options=v114ArcherSkillOptions(p);
+      if(options.length<2) throw new Error(`${h.name} requires 2 Archer Skill Cards in hand.`);
+      m.pendingChoice={type:'V114_ARCHER_LEGACY_DISCARD',seat:client.seat,legacySlot:slot,legacyId:id,remaining:2,discarded:[],options,prompt:`${h.name}: choose 2 Archer Skill Cards to discard.`};
+      addLog(room,`${h.name}: choose 2 Archer Skill Cards to discard.`);
+      return;
+    }
+    return useLegacy_v114(room,client,slot);
+  };
+
+  const resolveChoice_v114=resolveChoice;
+  resolveChoice=function(room,client,index){
+    const m=room.match,c=m.pendingChoice;
+    if(c?.type==='V114_DUAL_ARROW_SECOND_TARGET'){
+      if(c.seat!==client.seat) throw new Error('This Dual Arrow choice belongs to the other player.');
+      const p=m.players[client.seat], card=p.hand[c.index], user=p.board[c.userSlot], opt=c.options[n(index,-1)];
+      if(!card || !v114IsDualArrow(card)) throw new Error('Dual Arrow is no longer in hand.');
+      if(!opt?.targetSlot || opt.targetSlot===c.firstTargetSlot) throw new Error('Choose a different second target.');
+      if(!alive(m.players[opponent(client.seat)]?.board?.[opt.targetSlot])) throw new Error('Second target is no longer an active Hero.');
+      const cost=n(card.mana_cost); if(p.mana<cost) throw new Error('Not enough mana.');
+      p.mana-=cost; p.hand.splice(c.index,1); user.exhausted=true; m.pendingChoice=null;
+      return v114OpenDualArrowAttack(room,client.seat,card,c.userSlot,c.firstTargetSlot,opt.targetSlot);
+    }
+    if(c?.type==='V114_ARCHER_LEGACY_DISCARD'){
+      if(c.seat!==client.seat) throw new Error('This Archer Legacy choice belongs to the other player.');
+      const p=m.players[client.seat], h=p.board[c.legacySlot], opt=c.options[n(index,-1)];
+      if(!h?.legacy) throw new Error('Archer Legacy is no longer available.');
+      const [card]=p.hand.splice(opt.index,1);
+      if(!card || !v114IsArcherSkill(card)) throw new Error('Choose an Archer Skill Card.');
+      p.discard.push(card); c.discarded.push(card.card_name); c.remaining--;
+      addLog(room,`${h.name} discards ${card.card_name}. ${c.remaining} more required.`);
+      if(c.remaining>0){c.options=v114ArcherSkillOptions(p); c.prompt=`${h.name}: choose ${c.remaining} more Archer Skill Card${c.remaining===1?'':'s'} to discard.`; return;}
+      if(c.legacyId===V114_GOLDEN){
+        const opp=m.players[opponent(client.seat)], before=n(opp.mana); opp.mana=Math.max(0,before-1); h.legacyUsed=true;
+        addLog(room,`Golden Arrows discards 2 Archer Skill Cards. Player ${opponent(client.seat)} loses 1 Mana (${before} -> ${opp.mana}).`);
+        announceCardUse(room,client.seat,{...v114CardData(h),card_name:h.name},`${h.name} discards 2 Archer Skill Cards; opponent loses 1 Mana.`,'Opponent Uses Legacy');
+      }else{
+        draw(p,2,false); h.legacyUsed=true;
+        addLog(room,`Falconer's Whistle discards 2 Archer Skill Cards and draws 2 cards.`);
+        announceCardUse(room,client.seat,{...v114CardData(h),card_name:h.name},`${h.name} discards 2 Archer Skill Cards and draws 2 cards.`,'Opponent Uses Legacy');
+      }
+      m.pendingChoice=null;
+      return checkWin(room);
+    }
+    return resolveChoice_v114(room,client,index);
+  };
+
+  const actionHints_v114=actionHints;
+  actionHints=function(m,seat){
+    const out=actionHints_v114(m,seat); if(!out||m.status!=='active') return out;
+    const p=m.players?.[seat]; if(!p) return out;
+    // Final Grit direct targets should include any Legacy stack containing an unused Gladiator/Conqueror, not only the top stack card.
+    const direct={...(out.directLegacyTargetsByCard||{})};
+    for(const [index,card] of (p.hand||[]).entries()){
+      if(card?.card_name==='Final Grit'){
+        const targets=v114EligibleFinalGritSlots(p);
+        direct[String(index)]=targets;
+        const active=m.activeSeat===seat&&!m.pendingAttack&&!m.pendingChoice;
+        const legal=active&&m.phase==='Deploy Phase'&&n(p.mana)>=n(card.mana_cost)&&targets.length>0;
+        const set=new Set(out.playableCardIndexes||[]);
+        if(legal)set.add(index); else set.delete(index);
+        out.playableCardIndexes=[...set].sort((a,b)=>a-b);
+      }
+    }
+    out.directLegacyTargetsByCard=direct;
+    return out;
+  };
+
+})();
