@@ -11443,3 +11443,55 @@ renderMatch=function(m){const out=renderMatch_v105.apply(this,arguments);v105Dra
     return choiceModal_v111.apply(this,arguments);
   };
 })();
+
+// ============================================================
+// v1.0.12 Closed Alpha client polish
+// - Magic Scope is a close-only revealed-hand review.
+// - Required Choice images use the same local WebP fallback as field/hand cards.
+// - Eyes of the Hawk remains hidden; card backs only.
+// ============================================================
+(function(){
+  function v112CardWithFallback(c){
+    if(!c) return c;
+    const cid=String(c.card_id||c.id||'').trim();
+    const out={...c};
+    if(cid && !out.local_thumbnail_path && !out.thumbnail_url && !out.image_url){
+      out.local_thumbnail_path=`runtime_thumbnail_assets/cards/${cid}.webp`;
+    }
+    if(out.local_thumbnail_path && String(out.local_thumbnail_path).startsWith('public/')){
+      out.local_thumbnail_path=String(out.local_thumbnail_path).slice(7);
+    }
+    return out;
+  }
+  function v112ChoiceTile(o, opts={}){
+    return cardTile(v112CardWithFallback({...o.card,index:o.index}), opts);
+  }
+
+  const choiceModal_v112=choiceModal;
+  choiceModal=function(choice){
+    const type=String(choice?.type||'');
+    if(type==='V112_MAGIC_SCOPE_REVIEW' || type==='V111_MAGIC_SCOPE_REVIEW'){
+      const cards=(choice.revealedHand && choice.revealedHand.length ? choice.revealedHand : choice.options||[]);
+      openModal(`<h2>Magic Scope</h2><p>${esc(choice.prompt||'Review opponent hand, then close this popup. No card is moved.')}</p><div class=notice><b>Opponent hand is revealed to you only.</b><br><span class=small>Click X when finished. No card is selected or moved.</span></div><div class=choice-grid>${cards.map((o)=>cardTile(v112CardWithFallback({...o.card,index:o.index}))).join('')||'<p class=small>Opponent hand is empty.</p>'}</div>`, true, 'choice');
+      const oldClose=$('modalClose').onclick;
+      $('modalClose').onclick=()=>{ send('resolve-choice',{index:0}); closeModal(); $('modalClose').onclick=oldClose||closeModal; };
+      return;
+    }
+    // Keep Eyes hidden even if the server includes exact cards internally.
+    if(/EYES_OF_THE_HAWK/i.test(type)){
+      const options=choice?.options||[];
+      const back='runtime_thumbnail_assets/ui/Back-of-Card.webp';
+      const tiles=options.map((o,i)=>{
+        const idx=Number(o.index??i);
+        const c={index:idx,card_id:`GL-HIDDEN-HAND-${idx}`,card_name:`Face-down Hand Card ${idx+1}`,card_type:'Hidden',card_subtype:'Opponent Hand',mana_cost:0,effect_text:'Choose this hidden opponent hand card.',local_thumbnail_path:back,thumbnail_url:'',image_url:''};
+        return cardTile(c,{choice:true});
+      }).join('')||'<p class=small>No legal options.</p>';
+      openModal(`<h2>Eyes of the Hawk</h2><p>${choice.prompt?esc(choice.prompt):'Choose one face-down card from the opponent hand.'}</p><div class=notice><b>Hidden choice.</b><br><span class=small>The hand order is shuffled before this choice. You do not learn which card is returned.</span></div><div class=choice-grid>${tiles}</div>`,false,'choice');
+      document.querySelectorAll('[data-choice]').forEach((b)=>b.onclick=()=>send('resolve-choice',{index:+b.dataset.choice}));
+      return;
+    }
+    // Generic Required Choice fallback with better image resolution.
+    openModal(`<h2>Required Choice</h2><p>${choice.prompt ? esc(choice.prompt) : `Resolve ${choice.type}${choice.remaining ? ` · ${choice.remaining} remaining` : ''} before continuing.`}</p><div class=notice><b>Review before choosing.</b><br><span class=small>Click any card artwork to preview it, then press Choose when ready.</span></div><div class=choice-grid>${(choice.options||[]).map((o)=>v112ChoiceTile(o,{choice:true})).join('') || '<p class=small>No legal options.</p>'}</div>`, false, 'choice');
+    document.querySelectorAll('[data-choice]').forEach((b)=>b.onclick=()=>send('resolve-choice',{index:+b.dataset.choice}));
+  };
+})();
