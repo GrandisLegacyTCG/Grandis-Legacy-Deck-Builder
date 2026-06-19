@@ -192,3 +192,62 @@
   .pvp-action-sidecar{width:100%!important;max-height:190px!important;min-height:90px!important}
   .visual-hand{overflow-x:auto!important;overflow-y:visible!important}
 }
+
+/* ============================================================
+   v1.0.13 Closed Alpha mobile board layout
+   - fixes mobile hero field compression caused by conflicting
+     earlier responsive field-row rules
+   - makes each hero lane a horizontal card carousel on phones
+   ============================================================ */
+@media (max-width: 760px){
+  html,body{width:100%;max-width:100%;overflow-x:hidden!important}
+  .topbar{padding:10px 12px!important}
+  .topbar h1{font-size:26px!important;line-height:1.04!important}
+  .topbar .sub{font-size:11px!important}
+  .toolbar{gap:5px!important}
+  .toolbar button{padding:6px 8px!important;font-size:12px!important}
+  .app-shell{padding:6px!important;overflow-x:hidden!important}
+  .battle-field-shell{border-radius:10px!important;overflow:hidden!important}
+  .field-side-header{display:block!important;padding:7px 8px!important;min-height:0!important}
+  .player-header{display:block!important;text-align:left!important}
+  .inline-phase.phase-centered{display:inline-flex!important;margin:6px auto 0!important;max-width:100%!important;font-size:12px!important;padding:6px 10px!important}
+  .inline-phase.phase-centered b{font-size:13px!important}
+  .inline-phase.phase-centered small{font-size:11px!important}
+  .field-row{display:block!important;grid-template-columns:none!important;padding:7px!important;overflow:hidden!important}
+  .field-rail{display:none!important}
+  .field-grid{display:flex!important;grid-template-columns:none!important;gap:8px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:2px 2px 8px!important;-webkit-overflow-scrolling:touch!important;scroll-snap-type:x proximity!important}
+  .field-hero-zone{flex:0 0 min(76vw,260px)!important;width:min(76vw,260px)!important;min-width:min(76vw,260px)!important;max-width:min(76vw,260px)!important;min-height:0!important;height:auto!important;padding:7px!important;overflow:visible!important;scroll-snap-align:start!important}
+  .field-hero-zone.center{border-width:2px!important}
+  .field-position{position:static!important;display:inline-block!important;margin-bottom:4px!important;font-size:10px!important}
+  .hero-card-visual{height:128px!important;margin:3px 0 6px!important;width:100%!important;max-width:100%!important}
+  .hero-meta strong{font-size:15px!important;line-height:1.1!important;word-break:break-word!important}
+  .hero-meta .small,.hero-meta{font-size:11px!important;line-height:1.25!important}
+  .hp{height:7px!important;margin:4px 0!important}
+  .tags{gap:2px!important}
+  .tag{font-size:9px!important;padding:1px 4px!important}
+  .attachment-slots{gap:3px!important;margin-top:4px!important}
+  .attachment-slot{font-size:8px!important;padding:2px 3px!important;min-height:16px!important}
+  .hero-actions button{font-size:10px!important;padding:4px 5px!important}
+  .field-center-strip{padding:7px!important}
+  .field-center-strip b{font-size:13px!important}
+  .field-center-strip span{font-size:10px!important}
+  .your-hand-panel{margin-top:6px!important}
+  .hand-head h3{font-size:18px!important}
+  .hand-workspace{grid-template-columns:1fr!important;grid-template-areas:"controls" "played" "cards"!important;gap:5px!important}
+  .hand-controls{min-height:0!important;padding:5px!important;gap:5px!important}
+  .hand-controls .vertical-buttons button{min-width:76px!important;padding:5px 7px!important;font-size:12px!important}
+  .visual-card{flex-basis:96px!important}
+  .visual-card img{height:135px!important}
+  .visual-card-body{min-height:68px!important;font-size:10px!important;padding:4px!important}
+  .visual-card-body b{font-size:12px!important}
+  .visual-card .small{font-size:10px!important}
+  .pvp-action-sidecar{min-height:82px!important;max-height:150px!important}
+}
+
+@media (max-width: 420px){
+  .field-hero-zone{flex-basis:82vw!important;width:82vw!important;min-width:82vw!important;max-width:82vw!important}
+  .hero-card-visual{height:116px!important}
+  .topbar h1{font-size:23px!important}
+  .visual-card{flex-basis:90px!important}
+  .visual-card img{height:126px!important}
+}
