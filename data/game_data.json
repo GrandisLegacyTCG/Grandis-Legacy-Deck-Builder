@@ -9861,7 +9861,7 @@
     {
       "card_id": "S1-EVT-010",
       "card_number": "S1-EVT-010",
-      "card_name": "Déjà vu",
+      "card_name": "D\u00e9j\u00e0 vu",
       "card_type": "Event",
       "card_subtype": "Event",
       "class_family": "All Classes",
@@ -13745,6 +13745,184 @@
       "legacy_internal_id": "S1-THF-018",
       "ultimate_class_lineage_id": "THF-RENEGADE",
       "ultimate_tribute_rule": "Can only be tributed to a Hero in this Skill Card class lineage."
+    },
+    {
+      "card_id": "S1-MAG-019",
+      "card_number": "S1-MAG-019",
+      "card_name": "Flame Dragon's Wrath",
+      "card_type": "Skill",
+      "card_subtype": "ATK",
+      "class_family": "Mage",
+      "class_rank": "Elementalist Rank II; Elemental Lord Rank III",
+      "evolution_path": "Human Mage > Human Elementalist > Human Elemental Lord",
+      "mana_cost": "8",
+      "exp_value": "200",
+      "is_ultimate": "True",
+      "attack_type": "Magical Attack",
+      "base_damage": "Elementalist 30; Elemental Lord 50",
+      "defense_type": "",
+      "block_value": "",
+      "target_type": "Area Coverage",
+      "usage_phase": "Battle Phase",
+      "mechanic_tags": "ATK;Magical Attack;Area;Burn;Ultimate;Class Lineage Tribute",
+      "counter_type": "",
+      "casting_time": "",
+      "requires_target": "FALSE",
+      "exhaust_required": "True",
+      "once_per_turn": "",
+      "burn": "Elementalist 1; Elemental Lord 2",
+      "freeze": "",
+      "stun": "",
+      "bleed": "",
+      "curse": "",
+      "heal": "",
+      "shield": "",
+      "buff_type": "",
+      "buff_value": "",
+      "buff_duration": "",
+      "revive_hp": "",
+      "mana_gain": "",
+      "attack_restriction": "",
+      "damage_immunity": "",
+      "immunity_duration": "",
+      "self_status": "",
+      "self_status_duration": "",
+      "cost_type": "",
+      "cost_value": "",
+      "draw_value": "",
+      "damage_reduction": "",
+      "negate": "",
+      "return_to_hand": "",
+      "remove_status_count": "",
+      "untargetable_duration": "",
+      "conditional_requirement": "",
+      "kill_condition": "",
+      "kill_effect": "",
+      "targeting_rule": "",
+      "targeting_override": "",
+      "compatible_classes": "Elementalist;Elemental Lord",
+      "compatible_ranks": "Lineage-derived",
+      "restricted_to": "Ultimate Skill",
+      "short_text": "Elementalist: Deal 30 Area Magical damage. Inflict Burn for 1 turn. Elemental Lord: Deal 50 Area Magical damage. Inflict Burn for 2 turns.",
+      "full_description": "Elementalist: Deal 30 Area Magical damage. Inflict Burn for 1 turn. Elemental Lord: Deal 50 Area Magical damage. Inflict Burn for 2 turns. You may only Tribute this card to a Hero in its Class Lineage.",
+      "flavor_text": "",
+      "artwork_url": "https://i.ibb.co/n8mYCcSP/S1-MAG-019-Flame-Dragon-s-Wrath.jpg",
+      "thumbnail_url": "https://i.ibb.co/x8G2DZBZ/S1-MAG-019-Flame-Dragon-s-Wrath.webp",
+      "artist_name": "",
+      "frame_variant": "",
+      "asset_status": "Local WebP thumbnail packaged for PvP.",
+      "power_score": "",
+      "combo_risk": "",
+      "status": "Active",
+      "version": "v3.20-pvp-sync",
+      "last_updated": "2026-07-01",
+      "design_notes": "Inserted from Local AI v3.20 static-data to align starter deck IDs.",
+      "requires_mana": "True",
+      "class_restriction": "Elementalist;Elemental Lord",
+      "lineage_match_classes": "Elementalist;Elemental Lord",
+      "lineage_compatible_active_classes": "Elementalist;Elemental Lord",
+      "explicit_rank_gate": "Rank II;Rank III",
+      "copy_limit": "1",
+      "base_skill_class": "Mage",
+      "gallery_category": "Mage",
+      "area_attack_damage_reduction": "",
+      "max_uses_per_area_attack": "",
+      "legacy_internal_id": "S1-MAG-019",
+      "source_card_id": "S1-MAG-019",
+      "card_color": "Mage",
+      "timing": "Battle Phase",
+      "effect_text": "Elementalist: Deal 30 Area Magical damage. Inflict Burn for 1 turn. Elemental Lord: Deal 50 Area Magical damage. Inflict Burn for 2 turns.",
+      "image_url": "https://i.ibb.co/n8mYCcSP/S1-MAG-019-Flame-Dragon-s-Wrath.jpg",
+      "local_thumbnail_path": "/runtime_thumbnail_assets/cards/S1-MAG-019.webp"
+    },
+    {
+      "card_id": "S1-CLE-025",
+      "card_number": "S1-CLE-025",
+      "card_name": "Divine Punishment",
+      "card_type": "Skill",
+      "card_subtype": "ATK",
+      "class_family": "Cleric",
+      "class_rank": "Priest Rank II; Saint Rank III",
+      "evolution_path": "Cleric > Priest > Saint",
+      "mana_cost": "7",
+      "exp_value": "200",
+      "is_ultimate": "True",
+      "attack_type": "Magical Attack",
+      "base_damage": "Priest 20; Saint 30",
+      "defense_type": "",
+      "block_value": "",
+      "target_type": "Area Coverage",
+      "usage_phase": "Battle Phase",
+      "mechanic_tags": "ATK;Magical Attack;Area;Stun;Ultimate;Class Lineage Tribute",
+      "counter_type": "",
+      "casting_time": "",
+      "requires_target": "FALSE",
+      "exhaust_required": "True",
+      "once_per_turn": "",
+      "burn": "",
+      "freeze": "",
+      "stun": "Priest 1; Saint 1",
+      "bleed": "",
+      "curse": "",
+      "heal": "",
+      "shield": "",
+      "buff_type": "",
+      "buff_value": "",
+      "buff_duration": "",
+      "revive_hp": "",
+      "mana_gain": "",
+      "attack_restriction": "",
+      "damage_immunity": "",
+      "immunity_duration": "",
+      "self_status": "",
+      "self_status_duration": "",
+      "cost_type": "",
+      "cost_value": "",
+      "draw_value": "",
+      "damage_reduction": "",
+      "negate": "",
+      "return_to_hand": "",
+      "remove_status_count": "",
+      "untargetable_duration": "",
+      "conditional_requirement": "",
+      "kill_condition": "",
+      "kill_effect": "",
+      "targeting_rule": "",
+      "targeting_override": "",
+      "compatible_classes": "Priest;Saint",
+      "compatible_ranks": "Lineage-derived",
+      "restricted_to": "Ultimate Skill",
+      "short_text": "Priest: Deal 20 Area Magical damage and inflict Stun for 1 turn. Saint: Deal 30 Area Magical damage and inflict Stun for 1 turn.",
+      "full_description": "Priest: Deal 20 Area Magical damage and inflict Stun for 1 turn. Saint: Deal 30 Area Magical damage and inflict Stun for 1 turn. You may only Tribute this card to a Hero in its Class Lineage.",
+      "flavor_text": "",
+      "artwork_url": "https://i.ibb.co/9mZ78prg/S1-CLE-025-Divine-Punishment.jpg",
+      "thumbnail_url": "https://i.ibb.co/zVhnc83v/S1-CLE-025-Divine-Punishment.webp",
+      "artist_name": "",
+      "frame_variant": "",
+      "asset_status": "Local WebP thumbnail packaged for PvP.",
+      "power_score": "",
+      "combo_risk": "",
+      "status": "Active",
+      "version": "v3.20-pvp-sync",
+      "last_updated": "2026-07-01",
+      "design_notes": "Inserted from Local AI v3.20 static-data to align starter deck IDs.",
+      "requires_mana": "True",
+      "class_restriction": "Priest;Saint",
+      "lineage_match_classes": "Priest;Saint",
+      "lineage_compatible_active_classes": "Priest;Saint",
+      "explicit_rank_gate": "Rank II;Rank III",
+      "copy_limit": "1",
+      "base_skill_class": "Cleric",
+      "gallery_category": "Cleric",
+      "area_attack_damage_reduction": "",
+      "max_uses_per_area_attack": "",
+      "legacy_internal_id": "S1-CLE-025",
+      "source_card_id": "S1-CLE-025",
+      "card_color": "Cleric",
+      "timing": "Battle Phase",
+      "effect_text": "Priest: Deal 20 Area Magical damage and inflict Stun for 1 turn. Saint: Deal 30 Area Magical damage and inflict Stun for 1 turn.",
+      "image_url": "https://i.ibb.co/9mZ78prg/S1-CLE-025-Divine-Punishment.jpg",
+      "local_thumbnail_path": "/runtime_thumbnail_assets/cards/S1-CLE-025.webp"
     }
   ],
   "scripts": [
@@ -25673,7 +25851,7 @@
     {
       "script_id": "SCR-S1-EVT-010",
       "card_id": "S1-EVT-010",
-      "card_name": "Déjà vu",
+      "card_name": "D\u00e9j\u00e0 vu",
       "card_type": "Event",
       "card_subtype": "Event",
       "mana_cost": "2",
@@ -32873,7 +33051,7 @@
   "sidePackages": [
     {
       "package_id": "PKG-WAR-DRAXEN",
-      "package_name": "Draxen Blacksand — Warrior;Gladiator;Conqueror",
+      "package_name": "Draxen Blacksand \u2014 Warrior;Gladiator;Conqueror",
       "class_family": "Warrior",
       "cards": [
         {
@@ -33125,7 +33303,7 @@
     },
     {
       "package_id": "PKG-WAR-AUREX",
-      "package_name": "Aurex Sunsworn — Warrior;Paladin;Crusader",
+      "package_name": "Aurex Sunsworn \u2014 Warrior;Paladin;Crusader",
       "class_family": "Warrior",
       "cards": [
         {
@@ -33377,7 +33555,7 @@
     },
     {
       "package_id": "PKG-MAG-VAELIS",
-      "package_name": "Vaelis Stormweave — Mage;Elementalist;Elemental Lord",
+      "package_name": "Vaelis Stormweave \u2014 Mage;Elementalist;Elemental Lord",
       "class_family": "Mage",
       "cards": [
         {
@@ -33629,7 +33807,7 @@
     },
     {
       "package_id": "PKG-MAG-ALDRIC",
-      "package_name": "Aldric Ashford — Mage;Elementalist;Elemental Lord",
+      "package_name": "Aldric Ashford \u2014 Mage;Elementalist;Elemental Lord",
       "class_family": "Mage",
       "cards": [
         {
@@ -33881,7 +34059,7 @@
     },
     {
       "package_id": "PKG-CLE-ELARA",
-      "package_name": "Elara Heavens — Cleric;Priest;Saint",
+      "package_name": "Elara Heavens \u2014 Cleric;Priest;Saint",
       "class_family": "Cleric",
       "cards": [
         {
@@ -34133,7 +34311,7 @@
     },
     {
       "package_id": "PKG-CLE-THRAIN",
-      "package_name": "Thrain Sunborn — Cleric;Priest;Saint",
+      "package_name": "Thrain Sunborn \u2014 Cleric;Priest;Saint",
       "class_family": "Cleric",
       "cards": [
         {
@@ -34385,7 +34563,7 @@
     },
     {
       "package_id": "PKG-THF-FINNIAN-STASH",
-      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Stash",
+      "package_name": "Finnian Copperpot \u2014 Thief;Rogue;Renegade + Hidden Stash",
       "class_family": "Thief",
       "cards": [
         "S1-THF-H001",
@@ -34397,7 +34575,7 @@
     },
     {
       "package_id": "PKG-THF-FINNIAN-ARCHIVES",
-      "package_name": "Finnian Copperpot — Thief;Rogue;Renegade + Hidden Archives",
+      "package_name": "Finnian Copperpot \u2014 Thief;Rogue;Renegade + Hidden Archives",
       "class_family": "Thief",
       "cards": [
         "S1-THF-H001",
@@ -34409,7 +34587,7 @@
     },
     {
       "package_id": "PKG-ARC-KORVAK-GOLDEN",
-      "package_name": "Korvak Ironfang — Archer;Marksman;Grand Ranger + Golden Arrows",
+      "package_name": "Korvak Ironfang \u2014 Archer;Marksman;Grand Ranger + Golden Arrows",
       "class_family": "Archer",
       "cards": [
         "S1-ARC-H001",
@@ -34421,7 +34599,7 @@
     },
     {
       "package_id": "PKG-ARC-KORVAK-FALCONER",
-      "package_name": "Korvak Ironfang — Archer;Marksman;Grand Ranger + Falconer's Whistle",
+      "package_name": "Korvak Ironfang \u2014 Archer;Marksman;Grand Ranger + Falconer's Whistle",
       "class_family": "Archer",
       "cards": [
         "S1-ARC-H001",
@@ -34438,7 +34616,7 @@
     "packages": [
       {
         "package_id": "PKG-WAR-PALADIN",
-        "package_name": "Paladin Package — Dragonborn",
+        "package_name": "Paladin Package \u2014 Dragonborn",
         "class_family": "Warrior",
         "suggested_position_for_ai_only": "CENTER",
         "rank_progression": [
@@ -34652,7 +34830,7 @@
       },
       {
         "package_id": "PKG-WAR-CONQUEROR",
-        "package_name": "Conqueror Package — Human",
+        "package_name": "Conqueror Package \u2014 Human",
         "class_family": "Warrior",
         "suggested_position_for_ai_only": "CENTER",
         "rank_progression": [
@@ -34866,7 +35044,7 @@
       },
       {
         "package_id": "PKG-CLE-SAINT",
-        "package_name": "Saint Package — Elf",
+        "package_name": "Saint Package \u2014 Elf",
         "class_family": "Cleric",
         "suggested_position_for_ai_only": "RIGHT",
         "rank_progression": [
@@ -35080,7 +35258,7 @@
       },
       {
         "package_id": "PKG-MAG-VAELIS",
-        "package_name": "Elemental Lord Package 1 — Elf",
+        "package_name": "Elemental Lord Package 1 \u2014 Elf",
         "class_family": "Mage",
         "suggested_position_for_ai_only": "LEFT",
         "rank_progression": [
@@ -35294,7 +35472,7 @@
       },
       {
         "package_id": "PKG-MAG-ALDRIC",
-        "package_name": "Elemental Lord Package 2 — Human",
+        "package_name": "Elemental Lord Package 2 \u2014 Human",
         "class_family": "Mage",
         "suggested_position_for_ai_only": "LEFT",
         "rank_progression": [
@@ -35508,7 +35686,7 @@
       },
       {
         "package_id": "PKG-THF-FINNIAN-STASH",
-        "package_name": "Thief Package — Finnian / Hidden Stash",
+        "package_name": "Thief Package \u2014 Finnian / Hidden Stash",
         "class_family": "Thief",
         "suggested_position_for_ai_only": "LEFT",
         "rank_progression": [
@@ -35625,7 +35803,7 @@
       },
       {
         "package_id": "PKG-THF-FINNIAN-ARCHIVES",
-        "package_name": "Thief Package — Finnian / Hidden Archives",
+        "package_name": "Thief Package \u2014 Finnian / Hidden Archives",
         "class_family": "Thief",
         "suggested_position_for_ai_only": "LEFT",
         "rank_progression": [
@@ -40114,7 +40292,7 @@
       "rule_id": "DR-031",
       "rule_name": "Ultimate Skill Normal Interactions and Tribute Restriction",
       "rule_value": "Matching Class Lineage only; no Racial Token cost",
-      "description": "Ultimate Skill Cards may be Tributed during Reform Phase for 200 EXP only to a Hero in that card's Class Lineage. This Tribute does not cost a Racial Token. Relentless Leveling and Déjà vu still exclude Ultimate Skill Cards as printed anti-snowball exceptions.",
+      "description": "Ultimate Skill Cards may be Tributed during Reform Phase for 200 EXP only to a Hero in that card's Class Lineage. This Tribute does not cost a Racial Token. Relentless Leveling and D\u00e9j\u00e0 vu still exclude Ultimate Skill Cards as printed anti-snowball exceptions.",
       "mode": "Main Mode;Quick Mode",
       "status": "Active",
       "version": "v2.1.3"
@@ -40491,5 +40669,5 @@
     "source_database_version": "S1B1-v2.1.4 + S1B2-v0.2.2-archer-hero-sync"
   },
   "source_database_version": "S1B1-v2.1.4 + S1B2-v0.2.3-source-hygiene",
-  "runtime_version": "0.10.5-rc"
+  "runtime_version": "PvP Railway v0.1 + Local AI v3.20 starter data sync"
 }
