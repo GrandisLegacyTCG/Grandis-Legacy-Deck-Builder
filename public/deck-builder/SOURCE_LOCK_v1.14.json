@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.14",
+  "public_deck_builder": "v1.14",
+  "one_source_authority": "v1.4",
+  "canonical_registry_hash": "5812e107dbe82cef660975e091388eae1ad5a852c7be066c7443a5a321188bab",
+  "card_count": 198,
+  "starter60_csv_lock": "v1.2",
+  "theme_background": "runtime_thumbnail_assets/ui/Grandis-Background.webp",
+  "theme_solid_fallback": "#151F32",
+  "revised_artworks": [
+    "S1-CLE-012",
+    "S1-CLE-015"
+  ],
+  "embedded_pvp_shared_card_asset_path": "../assets/cards/thumbs/{card_id}.webp",
+  "embedded_duplicate_card_assets_removed": true,
+  "ui_fix": "Removed stale Deck Tools validation renderer dependency; initial, starter, reset, autosave, and imported deck renders now complete Legacy Deck and Formation.",
+  "version": "v1.14",
+  "runtime_data": "v0.12.5",
+  "date": "2026-07-20",
+  "one_source_patch": "v1.4.1",
+  "data_change": "No card, legality, runtime, Starter60, or artwork changes.",
+  "ui_change": "No layout changes from v1.13. Fixes render interruption after Deck Tools removal and separates JSON parse errors from deck apply/render errors.",
+  "import_compatibility": "Legacy JSON schemas are normalized by card number to current v1.14 card data, copy limits, packages, and formation. Valid parsed JSON is no longer mislabeled invalid when a render/apply error occurs."
+}

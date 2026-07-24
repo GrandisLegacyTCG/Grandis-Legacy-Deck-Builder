@@ -1,21 +1,48 @@
 {
-  "name": "grandis-legacy-discord-pvp-closed-alpha",
-  "version": "1.0.0",
+  "name": "grandis-legacy-pvp",
+  "version": "2.5.16",
   "private": true,
   "type": "module",
+  "description": "Grandis Legacy PvP v2.5.16 — browser title branding cleanup; gameplay and networking unchanged.",
   "scripts": {
     "start": "node server.js",
-    "build": "esbuild src/app.js --bundle --format=esm --platform=browser --outfile=public/app.js",
-    "check": "node --check server.js && node --check core.mjs",
-    "qa": "node --check server.js && node --check core.mjs && node --check src/app.js && node --check public/app.js && node QA_RUNTIME_TEST.mjs"
+    "check": "node --check server.js && node --check public/js/app.bundle.js && node --check public/js/static-data.js && node --check public/js/runtime-authority.js && node --check public/js/pvp-network.js && node --check runtime/pvp/draw-review-runtime.mjs && node sync/runtime-sync-verifier.mjs --self-test",
+    "test:package": "node tests/run-package-check.cjs",
+    "test:bridge": "node tests/run-runtime-bridge-test.cjs",
+    "test:ui": "node tests/run-ui-contract-test.cjs",
+    "test:server": "node tests/run-server-health-test.cjs",
+    "test:room": "node tests/run-pvp-room-sync-test.cjs",
+    "test": "npm run check && node tests/run-arcane-duelist-legality.cjs && node tests/run-card-played-audit.cjs && npm run test:package && npm run test:bridge && npm run test:ui && npm run test:server && npm run test:room && node tests/run-attachment-slot-parity.cjs"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "dependencies": {
-    "dotenv": "^16.4.7",
     "ws": "^8.18.0"
   },
-  "devDependencies": {
-    "@discord/embedded-app-sdk": "^2.0.0",
-    "esbuild": "^0.25.0"
+  "grandisLegacySourceStack": {
+    "behaviorReference": "Local AI v5.33 (approved shared gameplay/UI source)",
+    "oneSourceAuthority": "1.4",
+    "runtimeData": "0.12.5",
+    "effectCheckpoint": "0.11.4",
+    "effectRecipe": "0.11.5",
+    "runtimeCore": "0.41",
+    "runtimeFoundation": "1.73",
+    "uiLock": "2.26",
+    "sharedManual": "1.30",
+    "starter60": "1.2",
+    "rankUp": "0.3",
+    "deckBuilder": "1.14",
+    "previousPvPReference": "2.4.0 / 1.41.0 networking reference",
+    "applicationRuntimeSync": "2.23",
+    "localAI": "5.33",
+    "oneSourcePatch": "1.4.1"
   },
-  "description": "Grandis Legacy Discord PvP v1.0.0 Closed Alpha deployment prep bundle."
+  "railwayDeployment": {
+    "builder": "DOCKERFILE",
+    "dockerfile": "Dockerfile",
+    "startCommand": "node server.js",
+    "healthcheckPath": "/health",
+    "healthcheckTimeoutSeconds": 120
+  }
 }

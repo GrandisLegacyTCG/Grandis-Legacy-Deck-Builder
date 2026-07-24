@@ -1,0 +1,167 @@
+{
+  "version": "v2.23",
+  "policy": "RUNTIME_FIRST_FAIL_CLOSED_SYNC",
+  "application": "PvP v2.5.16",
+  "local_ai_reference": "v5.33",
+  "authorityStatement": "Grandis Legacy PvP v2.5.16 changes public browser branding only; gameplay/runtime authority remains unchanged from PvP v2.5.15.",
+  "requiredSourceStack": {
+    "behaviorReference": "Local AI v5.33 (approved shared gameplay/UI source)",
+    "oneSourceAuthority": "1.4",
+    "oneSourcePatch": "1.4.1",
+    "runtimeData": "0.12.5",
+    "effectCheckpoint": "0.11.4",
+    "effectRecipe": "0.11.5",
+    "runtimeCore": "0.41",
+    "runtimeFoundation": "1.73",
+    "uiLock": "2.26",
+    "sharedManual": "1.30",
+    "starter60": "1.2",
+    "rankUp": "0.3",
+    "deckBuilder": "1.14",
+    "previousPvPReference": "2.4.0 / 1.41.0 networking reference",
+    "applicationRuntimeSync": "2.23",
+    "localAI": "5.33"
+  },
+  "runtimeFiles": [
+    {
+      "path": "package.json",
+      "sha256": "d1a3587ad0bd7a874598b11cd2c3e9f2b15f7b5b96df9524993b3c3f740a6dc1"
+    },
+    {
+      "path": "server.js",
+      "sha256": "0208a336617277f7e46e6d21951f896742538510f31dc306f99d5d3465835206"
+    },
+    {
+      "path": "public/index.html",
+      "sha256": "b132927ce2ad5ca66ae89fb66fe4fb1f5e6972772a54219f9d2df520cb0372a8"
+    },
+    {
+      "path": "public/css/app.css",
+      "sha256": "485e8620d24f286a8ff4f571a327111082fa7216a58d9e442b578d9170e3b501"
+    },
+    {
+      "path": "public/js/app.bundle.js",
+      "sha256": "a662ec5af02f5183c57da9ca1af82a61b44a930ab0e5de69c401e31dd75024a2"
+    },
+    {
+      "path": "public/js/static-data.js",
+      "sha256": "9682f421aaf92ee631853eb7541d1151ce90aec9e0fba041b7ae5dbad4d590bc"
+    },
+    {
+      "path": "public/js/runtime-authority.js",
+      "sha256": "22a0dbea64f596c279242a66c386ae4122ca93f3ca102d87d5c96736205934a7"
+    },
+    {
+      "path": "public/js/pvp-network.js",
+      "sha256": "d15dd1e3a63dc4d7f9779b5db6a561e26f026e14a1f232022146382a3ba593c5"
+    },
+    {
+      "path": "data/config/active-runtime-source-stack.v1.73.json",
+      "sha256": "afedf6df0b8ee7bd692bd4d28d9fbfd5750e154c4e225d4996d28e1f33048cb2"
+    },
+    {
+      "path": "data/season1/cards.runtime.v0.12.5.json",
+      "sha256": "1414a5c2a95fd224398dd3ffdb4ae2fa2d9d36b4ee0dd2781f72c12f7bd78251"
+    },
+    {
+      "path": "data/season1/effect-recipes.runtime.v0.11.5.json",
+      "sha256": "a95c063f6e4d185a49e47fb2675a55f2a1d7919388a1f9c131c428d4a01b113c"
+    },
+    {
+      "path": "data/season1/legality-map.runtime.v0.11.4.json",
+      "sha256": "47c14515649f0a8b83b0f77429946e4625beb688e4aec91362759eefe1d5011d"
+    },
+    {
+      "path": "runtime/browser/runtime-authority.browser.js",
+      "sha256": "981e68500afd9fdca602dc4f150bcdb2f2b61d94efae7b39422d6a250ad6dee7"
+    },
+    {
+      "path": "runtime/core/reducer.js",
+      "sha256": "29fd5635d8f0580bd8aa08ac5c9012a609657dbc5f9e8d0b10e40f8fd462a7b1"
+    },
+    {
+      "path": "runtime/engines/casting-engine.js",
+      "sha256": "f4af4fbf06c124a310acc4a341d52bb5c0081d840a075ae5e9888eaa2cc794b7"
+    },
+    {
+      "path": "public/deck-builder/index.html",
+      "sha256": "62f4559f44fa3b8f0e34112cf57c9bc1a71eb770c25bb7646a55dd7561e62062"
+    },
+    {
+      "path": "public/deck-builder/js/deck-import-compat.js",
+      "sha256": "b1723dd5beb24b609560ac35ac9403cba934803ba71d04468e40f70e79b28bca"
+    },
+    {
+      "path": "public/deck-builder/SOURCE_LOCK_v1.14.json",
+      "sha256": "a043699a4e92337a40d827632386f745b3c54b90da32835fe260a56849b1b02d"
+    }
+  ],
+  "authorityVerified": true,
+  "legacyBridgeSynchronized": true,
+  "fullIntentOnlyMigrationComplete": false,
+  "schema_version": "2.23",
+  "application_runtime_sync": "v2.23",
+  "ui_lock": "v2.26",
+  "pvp_railway": "v2.5.16",
+  "deck_builder": "v1.14",
+  "pvp_shared_gameplay_sha256": "a662ec5af02f5183c57da9ca1af82a61b44a930ab0e5de69c401e31dd75024a2",
+  "pvp_static_data_sha256": "9682f421aaf92ee631853eb7541d1151ce90aec9e0fba041b7ae5dbad4d590bc",
+  "pvp_network_sha256": "d15dd1e3a63dc4d7f9779b5db6a561e26f026e14a1f232022146382a3ba593c5",
+  "pvp_server_sha256": "0208a336617277f7e46e6d21951f896742538510f31dc306f99d5d3465835206",
+  "embedded_deck_builder_adapter_sha256": "a102d25cc8c404fa3f9c5ddec6d531167da77a89afc856dbd7c8c498abe059da",
+  "embedded_deck_builder_import_compat_sha256": "b1723dd5beb24b609560ac35ac9403cba934803ba71d04468e40f70e79b28bca",
+  "embedded_deck_builder_source_lock_sha256": "a043699a4e92337a40d827632386f745b3c54b90da32835fe260a56849b1b02d",
+  "embedded_deck_builder_index_sha256": "62f4559f44fa3b8f0e34112cf57c9bc1a71eb770c25bb7646a55dd7561e62062",
+  "locks": {
+    "arcane_duelist_lineage_only": true,
+    "legality_before_effect_row_fallback": true,
+    "card_played_audit_sections": true,
+    "hp_offset_global": {
+      "x_px": -4,
+      "y_px_from_v5_29": 5
+    },
+    "pvp_playtest_badge": "lobby_only",
+    "visible_reset_match_controls": false,
+    "coin_animation_alternates_both_faces": true,
+    "coin_final_face_authoritative": true,
+    "coin_final_hold_ms": 1000,
+    "round_definition": "first player Draw through second player End",
+    "authorized_observer": {
+      "normal_spectator_hands": "masked",
+      "authorized_hands": "both current hands visible",
+      "main_deck_order": "masked",
+      "legacy_private_zones": "masked",
+      "private_pending_and_response_choices": "masked",
+      "read_only": true,
+      "default_password": "GLObserver",
+      "railway_override": "GL_OBSERVER_PASSWORD",
+      "mid_match_join": true
+    },
+    "embedded_deck_builder_ui": "v1.14 approved v1.13 layout with restored Legacy/Formation rendering and separated JSON parse/apply errors",
+    "lobby_deck_privacy": {
+      "setup_public_status": "Deck locked in",
+      "deck_identity_masked_for_other_players": true,
+      "deck_identity_masked_for_spectators": true,
+      "owner_local_identity_available": true,
+      "revealed_after_setup": true,
+      "server_authoritative": true
+    },
+    "legacy_attachment_slot_parity": {
+      "desktop_attachment_height_px": 35,
+      "mobile_attachment_height_px": 34,
+      "legacy_follows_hero": true,
+      "class_specific_offsets": false
+    },
+    "browser_branding": {
+      "title": "Grandis Legacy PvP",
+      "provider_name_visible": false,
+      "version_visible_in_browser_title": false
+    }
+  },
+  "shared_gameplay_sha256": "a662ec5af02f5183c57da9ca1af82a61b44a930ab0e5de69c401e31dd75024a2",
+  "runtime_authority_sha256": "22a0dbea64f596c279242a66c386ae4122ca93f3ca102d87d5c96736205934a7",
+  "runtime_source_browser_sha256": "981e68500afd9fdca602dc4f150bcdb2f2b61d94efae7b39422d6a250ad6dee7",
+  "static_data_sha256": "9682f421aaf92ee631853eb7541d1151ce90aec9e0fba041b7ae5dbad4d590bc",
+  "shared_ui_css_sha256": "485e8620d24f286a8ff4f571a327111082fa7216a58d9e442b578d9170e3b501",
+  "local_ai": "v5.33"
+}

@@ -1,149 +1,25 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Grandis Legacy — Discord PvP v1.0.0 Closed Alpha</title>
-<link rel="stylesheet" href="/style.css">
-<script src="/config.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Grandis Legacy PvP</title>
+  <link rel="stylesheet" href="css/app.css?v=gl-pvp-2.5.16">
+  <style>body.pvp-booting #app{display:none!important}</style>
 </head>
-<body>
-<header class="topbar">
-  <div>
-    <p class="eyebrow">GRANDIS LEGACY · DISCORD PvP ALPHA</p>
-    <h1>Discord PvP — Playable Board Workspace</h1>
-    <p class="sub">Authoritative two-player Activity build · Discord PvP v0.8.4 RC · CSV v2.1.3 · Deck Builder v0.4.3 · Starter Presets v1.9.3 · current S1B1 visual map · S1B2 excluded</p>
-  </div>
-  <div class="toolbar">
-    <button id="openSetupButton">⚙ Deck + Setup</button>
-    <button id="openRoomButton">Activity Room</button>
-    <button id="openCastingButton">Casting Queue <span id="castingCount" class="count-badge">0</span></button>
-    <button id="openLogButton">Battle Log <span id="logCount" class="count-badge">0</span></button>
-    <span id="connectionBadge" class="badge connecting">Starting</span>
-  </div>
-</header>
-
-<main class="app-shell">
-  <section id="lobbyPanel" class="panel lobby-panel">
-    <div>
-      <p class="eyebrow">WAITING ROOM</p>
-      <h2>Prepare the Discord Activity Match</h2>
-      <p class="sub">Load a Deck Builder JSON file or a bundled preset, confirm Ready, then Player 1 starts the match. Additional room participants join as read-only Spectators. Deck + Setup remains available from the top toolbar.</p>
-    </div>
-    <div id="bothReady" class="ready-banner">Waiting for two players.</div>
-    <div id="players" class="players-grid"></div>
-    <div id="spectatorSummary" class="spectator-summary"></div>
-    <div class="buttons">
-      <button id="lobbySetupButton" class="primary">Open Deck + Setup</button>
-      <button id="roleSwitchButton">Host / Watch Only</button>
-      <button id="inviteButton">Invite Friend</button>
-      <button id="reconnectButton">Reconnect</button>
-    </div>
-  </section>
-
-  <section id="matchPanel" class="hidden">
-    <section class="hand-panel opponent-hand-panel panel-lite">
-      <div class="hand-head"><div><p class="eyebrow">OPPONENT HAND</p><h3>Hidden Cards <span id="opponentHandCount"></span></h3></div><button id="openOpponentDiscardButton">Opponent Discard</button></div>
-      <div id="opponentHand" class="hidden-hand"></div>
-    </section>
-
-    <section class="battle-layout">
-      <section class="battle-stage">
-        <div class="battle-field-shell">
-          <div class="field-overlay"></div>
-          <div class="field-side-header">
-            <div><p class="eyebrow">OPPONENT</p><h3 id="opponentName">Player —</h3></div>
-            
-          </div>
-          <div class="field-row enemy-side">
-            <div class="field-rail">
-              <div class="field-rail-zone resource-art-zone discard-art-zone"><img id="opponentDiscardArt" class="field-resource-art hidden" src="/runtime_thumbnail_assets/ui/Back-of-Card.webp" alt="Opponent discard pile"><div class="field-resource-overlay">Discard Pile<br><span id="opponentDiscardPile" class="pile-count">0</span><button id="fieldOpponentDiscardButton">View</button></div></div>
-              <div class="field-rail-zone stack-card stack-main">Main Deck<br><span id="opponentDeckPile" class="pile-count">0</span></div>
-            </div>
-            <div id="opponentField" class="field-grid"></div>
-            <div class="field-rail">
-              <div class="field-rail-zone stack-card stack-legacy">Legacy Deck<br><span id="opponentLegacyPile" class="pile-count">0</span></div>
-              <div class="field-rail-zone resource-art-zone mana-art-zone"><img class="field-resource-art" src="/runtime_thumbnail_assets/ui/Mana-Shard-Thumb.webp" alt="Mana Shard"><div class="field-resource-overlay"><small>Regen +<span id="opponentManaRegen">1</span></small><br>Mana Pool<br><span id="opponentManaPile" class="pile-count">0</span></div></div>
-              <div class="field-rail-zone">Racial Token<br><span id="opponentRacialPile" class="pile-count">0</span></div>
-            </div>
-          </div>
-          <div class="field-center-strip">
-            <div><b id="centerStatus">Battle Zone</b><span id="centerHint">Waiting for the match.</span></div>
-          </div>
-          <div class="field-row player-side">
-            <div class="field-rail">
-              <div class="field-rail-zone resource-art-zone mana-art-zone"><img class="field-resource-art" src="/runtime_thumbnail_assets/ui/Mana-Shard-Thumb.webp" alt="Mana Shard"><div class="field-resource-overlay"><small>Regen +<span id="yourManaRegen">1</span></small><br>Mana Pool<br><span id="yourManaPile" class="pile-count">0</span></div></div>
-              <div class="field-rail-zone stack-card stack-legacy">Legacy Deck<br><span id="yourLegacyPile" class="pile-count">0</span></div>
-              <div class="field-rail-zone">Racial Token<br><span id="yourRacialPile" class="pile-count">0</span></div>
-            </div>
-            <div id="yourField" class="field-grid"></div>
-            <div class="field-rail">
-              <div class="field-rail-zone resource-art-zone discard-art-zone"><img id="yourDiscardArt" class="field-resource-art hidden" src="/runtime_thumbnail_assets/ui/Back-of-Card.webp" alt="Your discard pile"><div class="field-resource-overlay">Discard Pile<br><span id="yourDiscardPile" class="pile-count">0</span><button id="fieldYourDiscardButton">View</button></div></div>
-              <div class="field-rail-zone stack-card stack-main">Main Deck<br><span id="yourDeckPile" class="pile-count">0</span></div>
-            </div>
-          </div>
-          <div class="field-side-header player-header">
-            <div class="player-identity"><div><p class="eyebrow">YOU</p><h3 id="yourName">Player —</h3></div></div><div class="inline-phase phase-centered"><span id="roundValue">Round —</span><b id="phaseValue">Waiting</b><small id="activeValue">Active: —</small></div><div class="player-header-spacer"></div>
-            
-          </div>
-        </div>
-        <div id="selectionBar" class="selection-bar hidden"><span id="selectionText"></span><button id="cancelSelectionButton">Cancel Selection</button></div>
-        <div id="waitingBanner" class="notice hidden"></div>
-
-        <section class="hand-panel your-hand-panel panel-lite">
-          <div class="hand-head"><div><p class="eyebrow">YOUR HAND</p><h3>Cards in Hand <span id="yourHandCount" class="count-badge">(0)</span></h3></div><button id="openYourDiscardButton">Your Discard</button></div>
-          <div class="hand-workspace">
-            <aside class="hand-workspace-side hand-match-state">
-              <p class="eyebrow">MATCH STATE</p>
-              <div id="matchMode" class="setup-summary"></div>
-              <div id="connectionSummary" class="setup-summary"></div>
-            </aside>
-            <div class="hand-workspace-center">
-              <p class="small hand-help">Playable actions glow green. Cards blocked only by insufficient Mana glow red. Choose Play / Tribute, then click a highlighted Hero directly.</p>
-              <div id="yourHand" class="visual-hand"></div>
-            </div>
-            <aside class="hand-workspace-side hand-controls">
-              <div class="action-tabs">
-                <button id="showControlsButton" class="tab-button active-tab">Controls</button>
-                <button id="showRepositionButton" class="tab-button">Reposition</button>
-              </div>
-              <div id="controlsSection" class="action-section">
-                <div class="buttons vertical-buttons">
-                  <button id="nextPhaseButton" class="primary">Next Phase</button>
-                  <button id="endTurnButton">End Turn</button>
-                  <button id="surrenderButton" class="danger">Surrender</button>
-                </div>
-              </div>
-              <div id="repositionSection" class="action-section hidden">
-                <p class="small">Main Mode · Deploy or Reform Phase.</p>
-                <div class="buttons vertical-buttons">
-                  <button data-swap="LEFT,CENTER">LEFT ↔ CENTER</button>
-                  <button data-swap="CENTER,RIGHT">CENTER ↔ RIGHT</button>
-                </div>
-                <div id="repositionHint" class="small"></div>
-              </div>
-              <div id="dualCastingBanner" class="notice hidden"></div>
-            </aside>
-          </div>
-        </section>
-      </section>
-
-    </section>
-    <section class="bottom-log-bar panel-lite">
-      <div class="bottom-log-copy"><p class="eyebrow">LATEST MATCH UPDATE</p><div id="latestLogText" class="latest-log-text">Waiting for match activity.</div></div>
-      <div class="buttons bottom-log-actions"><button id="expandLogButton">Open Battle Log</button><button id="openDiagnosticsButton">Diagnostics</button></div>
-    </section>
-  </section>
-</main>
-
-<aside id="logDrawer" class="drawer bottom-drawer">
-  <div class="drawer-head"><div><p class="eyebrow">AUDIT TRAIL</p><h2 id="drawerTitle">Battle Log</h2></div><button id="closeLogButton">Close</button></div>
-  <div class="drawer-tabs"><button id="showBattleLogTab" class="active-tab">Battle Log</button><button id="showDiagnosticsTab">Diagnostics</button></div>
-  <section id="battleLogTab" class="drawer-tab"><div id="serverLog" class="server-log"></div></section>
-  <section id="diagnosticsTab" class="drawer-tab hidden"><p class="small">Local client-side connection and validation messages. Useful when an authoritative target check rejects a choice.</p><div id="localLog" class="local-log drawer-local-log"></div></section>
-</aside>
-
-<div id="modal" class="modal hidden"><div class="modal-card"><button id="modalClose" class="x">×</button><div id="modalBody"></div></div></div>
-<script type="module" src="/app.js"></script>
+<body class="pvp-booting">
+  <div id="app" aria-live="polite"><noscript>Grandis Legacy PvP requires JavaScript enabled.</noscript></div>
+  <div id="choiceOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Card Choice"><section class="choice-panel"><header class="choice-head"><h2 id="choiceTitle">Choice</h2><button id="choiceClose" type="button">Close</button></header><div id="choiceBody" class="choice-body"></div><footer class="choice-foot"><button id="choiceConfirm" type="button">Confirm</button></footer></section></div>
+  <div id="infoOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Information"><section class="info-panel"><header class="info-head"><h2 id="infoTitle">Info</h2><button id="infoClose" type="button">Close</button></header><div id="infoBody" class="info-body"></div></section></div>
+  <div id="responseOverlay" class="modal-overlay response-overlay" role="dialog" aria-modal="true" aria-label="Response Window"><section class="response-panel"><header class="response-head"><h2>Response Window</h2><button id="responseClose" type="button">Close</button></header><div id="responseBody" class="response-body"></div><footer id="responseFooter" class="response-foot"></footer></section></div>
+  <div id="previewOverlay" class="overlay" role="dialog" aria-modal="true" aria-label="Card Preview"><section class="preview-panel"><header class="preview-head"><h2>Card Preview</h2><button id="previewClose" type="button">Close</button></header><div id="previewBody" class="preview-body"></div></section></div>
+  <div id="hoverCardZoom" class="hover-card-zoom" hidden aria-hidden="true"><img id="hoverCardZoomImage" src="" alt="Card zoom"></div>
+  <div id="glAnimationLayer" class="gl-animation-layer" aria-hidden="true"></div>
+  <script>window.GL_APP_MODE="PVP";</script>
+  <script src="/config.js"></script>
+  <script src="js/static-data.js?v=gl-pvp-2.5.16"></script>
+  <script src="js/runtime-authority.js?v=gl-pvp-2.5.16"></script>
+  <script src="js/app.bundle.js?v=gl-pvp-2.5.16"></script>
+  <script src="js/pvp-network.js?v=gl-pvp-2.5.16"></script>
 </body>
 </html>

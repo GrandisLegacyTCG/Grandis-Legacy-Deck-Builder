@@ -1,0 +1,128 @@
+{
+  "version": "v2.20",
+  "policy": "RUNTIME_FIRST_FAIL_CLOSED_SYNC",
+  "application": "PvP Railway v2.5.12",
+  "local_ai_reference": "v5.32",
+  "authorityStatement": "Local AI v5.32 and PvP v2.5.12 share authoritative round-pair counting and smooth final-authoritative coin presentation.",
+  "requiredSourceStack": {
+    "behaviorReference": "Local AI v5.32 (approved shared gameplay/UI source)",
+    "oneSourceAuthority": "1.4",
+    "oneSourcePatch": "1.4.1",
+    "runtimeData": "0.12.5",
+    "effectCheckpoint": "0.11.4",
+    "effectRecipe": "0.11.5",
+    "runtimeCore": "0.41",
+    "runtimeFoundation": "1.73",
+    "uiLock": "2.23",
+    "sharedManual": "1.30",
+    "starter60": "1.2",
+    "rankUp": "0.3",
+    "deckBuilder": "1.12",
+    "previousPvPReference": "2.4.0 / 1.41.0 networking reference",
+    "applicationRuntimeSync": "2.20",
+    "localAI": "5.32"
+  },
+  "runtimeFiles": [
+    {
+      "path": "package.json",
+      "sha256": "6f989a29cdac313eb3d5c6302f44270f63d3f171b1129f6e154a28f29be748b5"
+    },
+    {
+      "path": "server.js",
+      "sha256": "7ef873c905e9fa3bd8c982729bf871d4e8440a77c5ea6977bb4f36cfdc5ef649"
+    },
+    {
+      "path": "public/index.html",
+      "sha256": "a74d10cec99a44c26feecf5a33292d68d5dea9a5e1cc0babcf5fc2593ca4e9f1"
+    },
+    {
+      "path": "public/css/app.css",
+      "sha256": "c463eaff94d54ced678788130df8884a546c136e728342281ed23fbc1a46689a"
+    },
+    {
+      "path": "public/js/app.bundle.js",
+      "sha256": "67ccf6c19dd126940c65f65123c72a80d8ef7565caf7be60ab0bb645c337d09b"
+    },
+    {
+      "path": "public/js/static-data.js",
+      "sha256": "1a421c1f61b14b8482685e6d6e3119d4961a6f4e9bc50355015e42e06070514a"
+    },
+    {
+      "path": "public/js/runtime-authority.js",
+      "sha256": "22a0dbea64f596c279242a66c386ae4122ca93f3ca102d87d5c96736205934a7"
+    },
+    {
+      "path": "public/js/pvp-network.js",
+      "sha256": "9c17e80a366bec0aaa86f9ab7b1920d05ee88d75ecba8e5e18fd54c53da0bc24"
+    },
+    {
+      "path": "data/config/active-runtime-source-stack.v1.73.json",
+      "sha256": "a2f6d4df3326f2c7600217ce5912a5ac0a7ffa3b40301fbb35687c2c7ae0ecd4"
+    },
+    {
+      "path": "data/season1/cards.runtime.v0.12.5.json",
+      "sha256": "1414a5c2a95fd224398dd3ffdb4ae2fa2d9d36b4ee0dd2781f72c12f7bd78251"
+    },
+    {
+      "path": "data/season1/effect-recipes.runtime.v0.11.5.json",
+      "sha256": "a95c063f6e4d185a49e47fb2675a55f2a1d7919388a1f9c131c428d4a01b113c"
+    },
+    {
+      "path": "data/season1/legality-map.runtime.v0.11.4.json",
+      "sha256": "47c14515649f0a8b83b0f77429946e4625beb688e4aec91362759eefe1d5011d"
+    },
+    {
+      "path": "runtime/browser/runtime-authority.browser.js",
+      "sha256": "981e68500afd9fdca602dc4f150bcdb2f2b61d94efae7b39422d6a250ad6dee7"
+    },
+    {
+      "path": "runtime/core/reducer.js",
+      "sha256": "29fd5635d8f0580bd8aa08ac5c9012a609657dbc5f9e8d0b10e40f8fd462a7b1"
+    },
+    {
+      "path": "runtime/engines/casting-engine.js",
+      "sha256": "f4af4fbf06c124a310acc4a341d52bb5c0081d840a075ae5e9888eaa2cc794b7"
+    }
+  ],
+  "authorityVerified": true,
+  "legacyBridgeSynchronized": true,
+  "fullIntentOnlyMigrationComplete": false,
+  "schema_version": "2.20",
+  "application_runtime_sync": "v2.20",
+  "ui_lock": "v2.23",
+  "pvp_railway": "v2.5.12",
+  "deck_builder": "v1.12",
+  "pvp_shared_gameplay_sha256": "67ccf6c19dd126940c65f65123c72a80d8ef7565caf7be60ab0bb645c337d09b",
+  "pvp_static_data_sha256": "1a421c1f61b14b8482685e6d6e3119d4961a6f4e9bc50355015e42e06070514a",
+  "pvp_network_sha256": "9c17e80a366bec0aaa86f9ab7b1920d05ee88d75ecba8e5e18fd54c53da0bc24",
+  "pvp_server_sha256": "7ef873c905e9fa3bd8c982729bf871d4e8440a77c5ea6977bb4f36cfdc5ef649",
+  "embedded_deck_builder_adapter_sha256": "a102d25cc8c404fa3f9c5ddec6d531167da77a89afc856dbd7c8c498abe059da",
+  "embedded_deck_builder_source_lock_sha256": "44f1149dfaf22339ec296e36e1b4b17e32c8423d3b6a873a66ff9abbe6ccdf27",
+  "embedded_deck_builder_index_sha256": "96f5e31abe14cacb4ec6c7e8b2714de1a8b4b766c70f61e864b2aab6813d1943",
+  "locks": {
+    "arcane_duelist_lineage_only": true,
+    "legality_before_effect_row_fallback": true,
+    "card_played_audit_sections": true,
+    "hp_offset_global": {
+      "x_px": -4,
+      "y_px_from_v5_29": 5
+    },
+    "pvp_playtest_badge": "lobby_only",
+    "visible_reset_match_controls": false,
+    "coin_animation_alternates_both_faces": true,
+    "coin_final_face_authoritative": true,
+    "deck_setup_full_width": true,
+    "local_turn_banner": "local_player_draw_phase_only",
+    "opponent_turn_banner": false,
+    "embedded_deck_builder_ui": "v1.12 artwork-only Your Deck and confirmed reset flow",
+    "coin_animation_edge_swap": true,
+    "coin_color_filter": "none",
+    "coin_final_hold_ms": 1000,
+    "round_definition": "first player Draw through second player End"
+  },
+  "shared_gameplay_sha256": "67ccf6c19dd126940c65f65123c72a80d8ef7565caf7be60ab0bb645c337d09b",
+  "runtime_authority_sha256": "22a0dbea64f596c279242a66c386ae4122ca93f3ca102d87d5c96736205934a7",
+  "runtime_source_browser_sha256": "981e68500afd9fdca602dc4f150bcdb2f2b61d94efae7b39422d6a250ad6dee7",
+  "static_data_sha256": "1a421c1f61b14b8482685e6d6e3119d4961a6f4e9bc50355015e42e06070514a",
+  "shared_ui_css_sha256": "c463eaff94d54ced678788130df8884a546c136e728342281ed23fbc1a46689a"
+}
