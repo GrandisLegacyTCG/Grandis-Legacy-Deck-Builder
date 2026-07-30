@@ -1,0 +1,22 @@
+{
+  "package": "Grandis Legacy Public Deck Builder",
+  "version": "2.8",
+  "date": "2026-07-30",
+  "branch_identity": "v2.1 classic two-tab workflow developed as a separate alternative; v3.12 remains the latest main Deck Builder line",
+  "active_ui_source": {
+    "html": "index.html",
+    "css": "css/app.css",
+    "javascript": "js/app.js"
+  },
+  "generated_data": "js/data.js",
+  "source_database": "One Source Authority v1.4",
+  "main_deck_sort": "Skill, Event, Item; Card ID ascending within each family",
+  "theme_reference": "Public Deck Builder v3.12 dark gray, gold, cyan, Card Review hierarchy, and exact Deck Builder tagline",
+  "legacy_deck_layout": "One-page desktop split with enlarged matching gray Hero/Legacy frames, position labels below Hero cards, centered SVG swap controls, and frame-aligned Rank/Legacy controls",
+  "filter_layout": "Top row unchanged; lower row keeps Mana Cost first with compact range allocation, then All Cards, Available Cards, and complete Reset button",
+  "card_review": "v3.12-aligned metrics and hierarchy with Hero-only right-detail scrolling",
+  "runtime_gameplay_changed": false,
+  "card_definitions_changed": false,
+  "starter_deck_data_changed": false,
+  "mobile_status": "responsive fallback included; desktop is the locked target"
+}
