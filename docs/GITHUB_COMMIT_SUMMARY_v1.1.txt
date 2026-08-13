@@ -1,0 +1,9 @@
+Deck Builder v1.1
+
+- Style 1 updated to v3.13; Style 2 updated to v2.9.
+- Style switch badge now reads CHANGE TO STYLE 2 / CHANGE TO STYLE 1 so the control is clearly actionable.
+- Style 2 Legacy Deck adds VIEW HERO & LEGACY.
+- New Hero & Legacy Library is display-only, responsive, unfiltered, and undimmed; it shows all Hero cards first and Legacy cards second.
+- Existing Card Review remains available from the reference library.
+- Added GA4 G-TG5921Z2EL to both Deck Builder styles.
+- Deck schema, canonical card data, starter data, copy limits, and export compatibility are unchanged.

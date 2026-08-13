@@ -472,7 +472,7 @@ img,a,button,select,.subsection-heading strong,.quantity-badge,.head-count,.larg
 }
 
 
-/* Public Deck Builder v2.8 — optical centering, family-first deck order, and compact filter fit. */
+/* Public Deck Builder v2.9 — optical centering, family-first deck order, compact filter fit, and Hero/Legacy reference library. */
 
 /* Use geometry-based SVG icons so arrows are centered by their visual axis, not a font baseline. */
 .position-swap svg,
@@ -578,3 +578,19 @@ img,a,button,select,.subsection-heading strong,.quantity-badge,.head-count,.larg
 .global-nav-link--blue{min-width:118px;background:#075b86;border-color:#075b86}
 @media(max-width:900px){.global-nav-link{padding:0 10px;font-size:8px}.global-nav-link--blue{min-width:90px}}
 @media(max-width:760px){.topbar{flex-direction:row!important;flex-wrap:wrap!important;align-items:center!important}.brand-block{flex:1}.global-nav{width:100%;justify-content:flex-end}.brand-copy{display:block}.brand-copy p{display:none}}
+
+
+/* Deck Builder v2.9 — display-only Hero & Legacy reference library. */
+.legacy-heading{grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center}
+.legacy-reference-open{min-height:30px;padding:5px 11px;border:1px solid rgba(230,184,43,.78);border-radius:7px;background:rgba(230,184,43,.08);color:#f3d36f;font:800 10px/1 var(--font-ui,Arial,sans-serif);letter-spacing:.05em;white-space:nowrap;cursor:pointer}
+.legacy-reference-open:hover,.legacy-reference-open:focus-visible{background:rgba(230,184,43,.16);border-color:#e6b82b;outline:none}
+.legacy-reference-dialog{padding:0}
+.legacy-reference-card{width:min(1180px,calc(100vw - 28px));max-width:none;height:min(820px,calc(100vh - 28px));max-height:calc(100vh - 28px);display:flex;flex-direction:column;overflow:hidden}
+.legacy-reference-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding-right:38px}
+.legacy-reference-head h2{margin:.2rem 0 0}
+.legacy-reference-note{margin:6px 0 12px;color:var(--muted,#8f97a8);font-size:12px}
+.legacy-reference-grid{min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));align-content:start;gap:12px;padding:4px 6px 10px 2px}
+.legacy-reference-grid .library-card{opacity:1!important;filter:none!important;cursor:default;pointer-events:auto}
+.legacy-reference-grid .library-card img{opacity:1!important;filter:none!important}
+.legacy-reference-grid .library-card:hover{transform:none}
+@media(max-width:760px){.legacy-heading{grid-template-columns:minmax(0,1fr) auto}.legacy-heading .legacy-reference-open{grid-row:2;grid-column:1/-1;justify-self:start}.legacy-reference-card{width:calc(100vw - 16px);height:calc(100dvh - 16px);max-height:calc(100dvh - 16px)}.legacy-reference-grid{grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:9px}}

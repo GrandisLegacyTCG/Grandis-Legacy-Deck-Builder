@@ -1,9 +1,9 @@
 {
   "name": "grandis-legacy-deck-builder",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "Grandis Legacy Deck Builder GitHub Pages repository with locked Style 1 v3.12 and Style 2 v2.8.",
+  "description": "Grandis Legacy Deck Builder v1.1 GitHub Pages repository with Style 1 v3.13 and Style 2 v2.9 UI/UX updates, GA4, and display-only Hero & Legacy reference library.",
   "scripts": {
-    "check": "node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app.js"
+    "check": "node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app.js && node tests/run-v11-ui-contract.cjs"
   }
 }

@@ -1,7 +1,7 @@
 {
   "package": "Grandis Legacy Public Deck Builder",
-  "version": "3.12",
-  "date": "2026-07-30",
+  "version": "3.13",
+  "date": "2026-08-14",
   "active_ui_source": {
     "html": "index.html",
     "css": "css/app.css",
@@ -26,6 +26,7 @@
   "card_definitions_changed": false,
   "starter_deck_data_changed": false,
   "card_review": "Skill Card Review keeps the approved compact Class/Rank and metric/Skill Effect structure. DAMAGE and BLOCK values show Physical, Magical, or Physical / Magical beneath the number. Metric wording is not repeated in Skill Effect. Ultimate values remain white; labels remain gold.",
-  "header_guidance": "Build your Legacy Deck first, then complete your Main Deck.",
-  "filter_state": "Independent per-tab filter state for Heroes, Legacies, Skills, Events, and Items. Skill Class filters never affect Event or Item results."
+  "header_guidance": "Build your Legacy Deck first, then complete your Main Deck. Style switch is explicitly labeled as a CHANGE TO action.",
+  "filter_state": "Independent per-tab filter state for Heroes, Legacies, Skills, Events, and Items. Skill Class filters never affect Event or Item results.",
+  "release_delta": "UI-only: clearer Style switch wording and GA4. Deck schema, card definitions, starter data, and gameplay behavior unchanged."
 }

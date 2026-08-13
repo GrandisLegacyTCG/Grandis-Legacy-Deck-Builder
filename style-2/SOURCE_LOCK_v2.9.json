@@ -1,8 +1,8 @@
 {
   "package": "Grandis Legacy Public Deck Builder",
-  "version": "2.8",
-  "date": "2026-07-30",
-  "branch_identity": "v2.1 classic two-tab workflow developed as a separate alternative; v3.12 remains the latest main Deck Builder line",
+  "version": "2.9",
+  "date": "2026-08-14",
+  "branch_identity": "Classic two-tab alternative. v2.9 adds explicit Style switch wording and a display-only Hero & Legacy reference library; Style 1 v3.13 remains the primary Deck Builder line.",
   "active_ui_source": {
     "html": "index.html",
     "css": "css/app.css",
@@ -18,5 +18,7 @@
   "runtime_gameplay_changed": false,
   "card_definitions_changed": false,
   "starter_deck_data_changed": false,
-  "mobile_status": "responsive fallback included; desktop is the locked target"
+  "mobile_status": "responsive fallback included; desktop is the locked target",
+  "legacy_reference_library": "Display-only responsive card grid. Shows all Hero cards first, then Legacy cards; no search/filter, no dimming, no add/select behavior; Card Review remains available.",
+  "release_delta": "UI-only. Deck format, card definitions, starter data, Legacy selection rules, and gameplay behavior unchanged."
 }
