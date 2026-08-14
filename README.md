@@ -1,9 +1,9 @@
-# Grandis Legacy Deck Builder v1.3
+# Grandis Legacy Deck Builder v1.4
 
 One GitHub Pages repository with two locked Deck Builder styles:
 
 - **Style 1** — v3.13 at the repository root: `https://grandislegacytcg.github.io/Grandis-Legacy-Deck-Builder/`
-- **Style 2** — v2.11 at `/style-2/`: `https://grandislegacytcg.github.io/Grandis-Legacy-Deck-Builder/style-2/`
+- **Style 2** — v2.12 at `/style-2/`: `https://grandislegacytcg.github.io/Grandis-Legacy-Deck-Builder/style-2/`
 
 The small style button beside **DECK BUILDER** switches between the two pages. Both pages include navigation to VS AI and PvP and use the same shared card art/font assets.
 
@@ -12,7 +12,7 @@ The small style button beside **DECK BUILDER** switches between the two pages. B
 Copy this package directly into the `Grandis-Legacy-Deck-Builder` repository root, commit, push, and wait for GitHub Pages to refresh.
 
 
-## v1.3 UI update
+## v1.4 UI update
 
 - Style switch labels now read as explicit CHANGE TO actions.
 - Style 2 uses a **LEGACY DECK LIBRARY** button tightly beside the `0 / 12` Legacy Deck total.

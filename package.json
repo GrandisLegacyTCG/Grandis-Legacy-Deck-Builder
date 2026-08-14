@@ -1,9 +1,9 @@
 {
   "name": "grandis-legacy-deck-builder",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
-  "description": "Grandis Legacy Deck Builder v1.3 GitHub Pages repository with Style 1 v3.13 and Style 2 v2.11 Legacy Deck Library layout hotfix plus GA4.",
+  "description": "Grandis Legacy Deck Builder v1.4 GitHub Pages repository with Style 1 v3.13 and Style 2 v2.12 Legacy Deck Library no-overlap/no-horizontal-scroll hotfix plus GA4.",
   "scripts": {
-    "check": "node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app.js && node tests/run-v13-ui-contract.cjs"
+    "check": "node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app.js && node tests/run-v14-ui-contract.cjs"
   }
 }
