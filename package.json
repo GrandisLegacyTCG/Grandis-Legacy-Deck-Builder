@@ -1,9 +1,9 @@
 {
   "name": "grandis-legacy-deck-builder",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "private": true,
-  "description": "Grandis Legacy Deck Builder v1.6 GitHub Pages repository with Style 1 v3.13 and Style 2 v2.14 Legacy Deck Library flex full-card hotfix plus GA4.",
+  "description": "Grandis Legacy Deck Builder v1.7 GitHub Pages repository with Style 1 v3.13 unchanged and Style 2 v2.15 minor Legacy header alignment plus Skill/Event/Item Card Library sorting.",
   "scripts": {
-    "check": "node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app.js && node tests/run-v16-ui-contract.cjs"
+    "check": "node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app.js && node tests/run-v17-ui-contract.cjs"
   }
 }

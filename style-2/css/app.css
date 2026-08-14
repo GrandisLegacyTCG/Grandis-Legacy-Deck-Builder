@@ -940,3 +940,12 @@ html,body,.app-shell{max-width:100vw!important;overflow-x:hidden!important}
   .legacy-reference-grid{gap:9px!important;padding:8px!important}
   .legacy-reference-card-tile{flex-basis:calc((100% - 9px)/2)!important;width:calc((100% - 9px)/2)!important}
 }
+
+
+/* Deck Builder Style 2 v2.15 — Minor Legacy header alignment only. */
+.legacy-total-with-library{
+  align-items:center!important;
+}
+.legacy-total-with-library .legacy-reference-open{
+  align-self:center!important;
+}

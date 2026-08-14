@@ -1,8 +1,8 @@
 {
   "package": "Grandis Legacy Public Deck Builder",
-  "version": "2.14",
-  "date": "2026-08-14",
-  "branch_identity": "Classic two-tab alternative. v2.14 fixes the display-only Legacy Deck Library by reusing Main-Deck-style full card tiles with flex wrapping, preventing stacked/overlapping cards and horizontal scrolling; Style 1 v3.13 remains the primary Deck Builder line.",
+  "version": "2.15",
+  "date": "2026-08-15",
+  "branch_identity": "Classic two-tab alternative. v2.15 is a Style 2-only minor UI/sorting update: the Legacy Deck Library button is vertically centered with the 0/12 counter, and the Main Deck Card Library sorts Skill first, then Event, then Item, with Card ID ascending inside each family. Style 1 v3.13 is unchanged.",
   "active_ui_source": {
     "html": "index.html",
     "css": "css/app.css",
@@ -10,7 +10,7 @@
   },
   "generated_data": "js/data.js",
   "source_database": "One Source Authority v1.4",
-  "main_deck_sort": "Skill, Event, Item; Card ID ascending within each family",
+  "main_deck_sort": "Card Library and selected Main Deck: Skill, Event, Item; Card ID ascending within each family",
   "theme_reference": "Public Deck Builder v3.12 dark gray, gold, cyan, Card Review hierarchy, and exact Deck Builder tagline",
   "legacy_deck_layout": "One-page desktop split with enlarged matching gray Hero/Legacy frames, position labels below Hero cards, centered SVG swap controls, and frame-aligned Rank/Legacy controls",
   "filter_layout": "Top row unchanged; lower row keeps Mana Cost first with compact range allocation, then All Cards, Available Cards, and complete Reset button",
@@ -20,5 +20,5 @@
   "starter_deck_data_changed": false,
   "mobile_status": "responsive fallback included; desktop is the locked target",
   "legacy_reference_library": "Display-only responsive Legacy Deck Library. Button sits beside the 0/12 Legacy Deck total; Hero cards are shown first and Legacy cards after. Cards use full Main-Deck-style tiles with normal size, no overlap, no horizontal scrolling, no search/filter/dimming/add/select behavior, and Card Review remains available.",
-  "release_delta": "UI-only. Legacy Deck Library now uses fixed full-card flex tiles instead of the previous stacked grid, so every Hero and Legacy card appears as a complete card like the Main Deck view. Deck format, card definitions, starter data, Legacy selection rules, and gameplay behavior unchanged."
+  "release_delta": "Style 2-only UI/sorting change. Legacy Deck Library button/counter vertical alignment corrected. Main Deck Card Library now groups Skill, Event, Item before sorting by Card ID. Style 1 v3.13, deck format, card definitions, starter data, Legacy selection rules, and gameplay behavior unchanged."
 }
