@@ -761,3 +761,91 @@ html,body,.app-shell{max-width:100vw!important;overflow-x:hidden!important}
   .legacy-reference-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;padding:8px!important}
   .legacy-reference-grid .library-card,.legacy-reference-grid .legacy-reference-tile{max-width:none!important}
 }
+
+
+/* Deck Builder Style 2 v2.13 — Legacy Deck Library full visible Main-Deck-style cards. */
+.legacy-reference-dialog{
+  width:calc(100vw - 20px)!important;
+  max-width:calc(100vw - 20px)!important;
+  overflow:hidden!important;
+}
+.legacy-reference-card{
+  width:min(1320px,calc(100vw - 28px))!important;
+  max-width:calc(100vw - 28px)!important;
+  height:min(820px,calc(100dvh - 28px))!important;
+  max-height:calc(100dvh - 28px)!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+.legacy-reference-grid{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  flex:1 1 auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(auto-fill,minmax(132px,1fr))!important;
+  grid-auto-rows:auto!important;
+  align-items:start!important;
+  justify-items:start!important;
+  align-content:start!important;
+  justify-content:start!important;
+  gap:12px!important;
+  padding:8px 10px 20px 2px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain!important;
+}
+.legacy-reference-card-tile{
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+  max-width:150px!important;
+  min-width:0!important;
+  aspect-ratio:5/7!important;
+  height:auto!important;
+  min-height:0!important;
+  border:1px solid #444753!important;
+  border-radius:8px!important;
+  background:#11131a!important;
+  box-shadow:0 6px 14px rgba(0,0,0,.35)!important;
+  overflow:hidden!important;
+  opacity:1!important;
+  filter:none!important;
+  cursor:default!important;
+  transform:none!important;
+  user-select:none!important;
+}
+.legacy-reference-card-tile img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  opacity:1!important;
+  filter:none!important;
+  pointer-events:none!important;
+}
+.legacy-reference-card-tile:hover{
+  border-color:#777b8c!important;
+  transform:none!important;
+}
+.legacy-reference-card-tile>.review-button{
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+  transform:none!important;
+}
+@media(min-width:1500px){
+  .legacy-reference-grid{grid-template-columns:repeat(auto-fill,minmax(146px,1fr))!important}
+  .legacy-reference-card-tile{max-width:162px!important}
+}
+@media(max-width:1180px){
+  .legacy-reference-card{width:calc(100vw - 22px)!important;max-width:calc(100vw - 22px)!important}
+  .legacy-reference-grid{grid-template-columns:repeat(auto-fill,minmax(126px,1fr))!important;gap:10px!important;padding-right:8px!important}
+  .legacy-reference-card-tile{max-width:146px!important}
+}
+@media(max-width:760px){
+  .legacy-reference-dialog{width:calc(100vw - 10px)!important;max-width:calc(100vw - 10px)!important}
+  .legacy-reference-card{width:calc(100vw - 14px)!important;max-width:calc(100vw - 14px)!important;height:calc(100dvh - 16px)!important}
+  .legacy-reference-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;padding:8px!important}
+  .legacy-reference-card-tile{max-width:none!important}
+}
