@@ -49,7 +49,10 @@
         <div class="legacy-panel panel">
           <div class="section-head">
             <div><span class="eyebrow">LEGACY DECK</span><h2>Heroes &amp; Legacies</h2></div>
-            <div class="large-total"><strong id="legacyDeckTotal">0</strong><span>/ 12</span></div>
+            <div class="legacy-head-actions">
+              <button id="legacyReferenceOpen" class="legacy-reference-open" type="button">LEGACY DECK LIBRARY</button>
+              <div class="large-total"><strong id="legacyDeckTotal">0</strong><span>/ 12</span></div>
+            </div>
           </div>
           <div class="legacy-content legacy-split">
             <section class="legacy-half hero-half" aria-label="Heroes">
@@ -64,7 +67,7 @@
               </div>
             </section>
             <section class="legacy-half legacy-half-panel" aria-label="Legacies">
-              <div class="subsection-heading legacy-heading"><span>LEGACIES</span><button id="legacyReferenceOpen" class="legacy-reference-open" type="button">VIEW HERO &amp; LEGACY</button><strong id="legacyCountBadge">0</strong></div>
+              <div class="subsection-heading legacy-heading"><span>LEGACIES</span><strong id="legacyCountBadge">0</strong></div>
               <div id="legacySlotsGrid" class="legacy-slots-grid"></div>
             </section>
           </div>
@@ -136,10 +139,10 @@
     <div class="dialog-card legacy-reference-card">
       <button id="legacyReferenceClose" class="dialog-close" type="button" aria-label="Close">×</button>
       <div class="legacy-reference-head">
-        <div><span class="dialog-eyebrow">REFERENCE</span><h2>Hero &amp; Legacy Library</h2></div>
+        <div><span class="dialog-eyebrow">REFERENCE</span><h2>Legacy Deck Library</h2></div>
         <div id="legacyReferenceCount" class="head-count">0</div>
       </div>
-      <p class="legacy-reference-note">Display only. Hero and Legacy selection remains in the Legacy Deck controls.</p>
+      <p class="legacy-reference-note">Display only. Hero cards are listed first, followed by Legacy cards.</p>
       <div id="legacyReferenceGrid" class="legacy-reference-grid" aria-label="Hero and Legacy card reference"></div>
     </div>
   </dialog>

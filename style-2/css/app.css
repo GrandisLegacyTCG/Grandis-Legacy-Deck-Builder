@@ -472,7 +472,7 @@ img,a,button,select,.subsection-heading strong,.quantity-badge,.head-count,.larg
 }
 
 
-/* Public Deck Builder v2.9 — optical centering, family-first deck order, compact filter fit, and Hero/Legacy reference library. */
+/* Public Deck Builder v2.10 — optical centering, family-first deck order, compact filter fit, and Hero/Legacy reference library. */
 
 /* Use geometry-based SVG icons so arrows are centered by their visual axis, not a font baseline. */
 .position-swap svg,
@@ -580,7 +580,7 @@ img,a,button,select,.subsection-heading strong,.quantity-badge,.head-count,.larg
 @media(max-width:760px){.topbar{flex-direction:row!important;flex-wrap:wrap!important;align-items:center!important}.brand-block{flex:1}.global-nav{width:100%;justify-content:flex-end}.brand-copy{display:block}.brand-copy p{display:none}}
 
 
-/* Deck Builder v2.9 — display-only Hero & Legacy reference library. */
+/* Deck Builder v2.10 — display-only Hero & Legacy reference library. */
 .legacy-heading{grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center}
 .legacy-reference-open{min-height:30px;padding:5px 11px;border:1px solid rgba(230,184,43,.78);border-radius:7px;background:rgba(230,184,43,.08);color:#f3d36f;font:800 10px/1 var(--font-ui,Arial,sans-serif);letter-spacing:.05em;white-space:nowrap;cursor:pointer}
 .legacy-reference-open:hover,.legacy-reference-open:focus-visible{background:rgba(230,184,43,.16);border-color:#e6b82b;outline:none}
@@ -594,3 +594,27 @@ img,a,button,select,.subsection-heading strong,.quantity-badge,.head-count,.larg
 .legacy-reference-grid .library-card img{opacity:1!important;filter:none!important}
 .legacy-reference-grid .library-card:hover{transform:none}
 @media(max-width:760px){.legacy-heading{grid-template-columns:minmax(0,1fr) auto}.legacy-heading .legacy-reference-open{grid-row:2;grid-column:1/-1;justify-self:start}.legacy-reference-card{width:calc(100vw - 16px);height:calc(100dvh - 16px);max-height:calc(100dvh - 16px)}.legacy-reference-grid{grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:9px}}
+
+/* Deck Builder Style 2 v2.10 — Legacy Deck Library placement and readable card sizing. */
+.legacy-head-actions{display:flex;align-items:center;justify-content:flex-end;gap:16px;min-width:0}
+.legacy-head-actions .large-total{flex:0 0 auto}
+.legacy-head-actions .legacy-reference-open{flex:0 0 auto}
+.legacy-reference-card{width:min(1480px,calc(100vw - 28px))!important}
+.legacy-reference-grid{
+  grid-template-columns:repeat(auto-fill,minmax(190px,1fr))!important;
+  gap:10px!important;
+}
+.legacy-reference-grid .library-card{
+  width:100%!important;
+  max-width:none!important;
+  flex:none!important;
+  aspect-ratio:5/7!important;
+}
+@media(max-width:1180px){
+  .legacy-reference-grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))!important}
+}
+@media(max-width:760px){
+  .legacy-head-actions{gap:8px}
+  .legacy-head-actions .legacy-reference-open{min-height:28px;padding:4px 8px;font-size:8px}
+  .legacy-reference-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+}
