@@ -1,9 +1,9 @@
-# Grandis Legacy Deck Builder v1.2
+# Grandis Legacy Deck Builder v1.3
 
 ## Style 1 v3.13
 - No functional/UI change from v1.1; remains the primary Deck Builder style.
 
-## Style 2 v2.10
+## Style 2 v2.11
 - Renames the reference action to **LEGACY DECK LIBRARY**.
 - Moves the button beside the Legacy Deck `0 / 12` total instead of inside the LEGACIES subsection.
 - Keeps the popup display-only with Hero cards first and Legacy cards second.

@@ -618,3 +618,76 @@ img,a,button,select,.subsection-heading strong,.quantity-badge,.head-count,.larg
   .legacy-head-actions .legacy-reference-open{min-height:28px;padding:4px 8px;font-size:8px}
   .legacy-reference-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
 }
+
+
+/* Deck Builder Style 2 v2.11 — Legacy Deck Library final placement and non-overlapping card grid. */
+.legacy-head-actions{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  margin-left:auto!important;
+  gap:0!important;
+}
+.legacy-total-with-library{
+  display:flex!important;
+  align-items:baseline!important;
+  justify-content:flex-end!important;
+  gap:8px!important;
+  white-space:nowrap!important;
+}
+.legacy-total-with-library .legacy-reference-open{
+  margin-right:8px!important;
+}
+.legacy-reference-card{
+  width:min(1480px,calc(100vw - 28px))!important;
+}
+.legacy-reference-grid{
+  --legacy-reference-card-width:clamp(132px,9.2vw,150px);
+  display:grid!important;
+  grid-template-columns:repeat(auto-fill,var(--legacy-reference-card-width))!important;
+  grid-auto-rows:auto!important;
+  justify-content:start!important;
+  align-content:start!important;
+  align-items:start!important;
+  gap:12px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding:8px 10px 18px 2px!important;
+}
+.legacy-reference-grid .library-card,
+.legacy-reference-grid .legacy-reference-tile{
+  position:relative!important;
+  flex:0 0 var(--legacy-reference-card-width)!important;
+  width:var(--legacy-reference-card-width)!important;
+  min-width:0!important;
+  max-width:none!important;
+  height:auto!important;
+  min-height:0!important;
+  aspect-ratio:5/7!important;
+  overflow:hidden!important;
+  opacity:1!important;
+  filter:none!important;
+  cursor:default!important;
+  transform:none!important;
+}
+.legacy-reference-grid .library-card img,
+.legacy-reference-grid .legacy-reference-tile img{
+  width:100%!important;
+  height:100%!important;
+  display:block!important;
+  object-fit:contain!important;
+  opacity:1!important;
+  filter:none!important;
+}
+.legacy-reference-grid .library-card:hover,
+.legacy-reference-grid .legacy-reference-tile:hover{
+  transform:none!important;
+}
+@media(max-width:1180px){
+  .legacy-reference-grid{--legacy-reference-card-width:clamp(122px,13vw,140px);gap:10px!important}
+}
+@media(max-width:760px){
+  .legacy-total-with-library{align-items:center!important;gap:6px!important}
+  .legacy-total-with-library .legacy-reference-open{margin-right:4px!important;min-height:28px;padding:4px 8px;font-size:8px}
+  .legacy-reference-grid{--legacy-reference-card-width:calc((100vw - 54px)/2);grid-template-columns:repeat(2,var(--legacy-reference-card-width))!important;gap:9px!important;padding:8px!important}
+}

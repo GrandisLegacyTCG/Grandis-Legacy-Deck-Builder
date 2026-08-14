@@ -1,8 +1,8 @@
 {
   "package": "Grandis Legacy Public Deck Builder",
-  "version": "2.10",
+  "version": "2.11",
   "date": "2026-08-14",
-  "branch_identity": "Classic two-tab alternative. v2.10 refines the display-only Legacy Deck Library placement and card sizing; Style 1 v3.13 remains the primary Deck Builder line.",
+  "branch_identity": "Classic two-tab alternative. v2.11 fixes the display-only Legacy Deck Library placement and non-overlapping card grid sizing; Style 1 v3.13 remains the primary Deck Builder line.",
   "active_ui_source": {
     "html": "index.html",
     "css": "css/app.css",
@@ -20,5 +20,5 @@
   "starter_deck_data_changed": false,
   "mobile_status": "responsive fallback included; desktop is the locked target",
   "legacy_reference_library": "Display-only responsive Legacy Deck Library. Button sits beside the 0/12 Legacy Deck total; cards use Main Deck Card Library sizing, show all Hero cards first then Legacy cards, and keep Card Review without search/filter/dimming/add/select behavior.",
-  "release_delta": "UI-only. Legacy Deck Library placement/name/card sizing refined. Deck format, card definitions, starter data, Legacy selection rules, and gameplay behavior unchanged."
+  "release_delta": "UI-only. Legacy Deck Library placement/name/non-overlapping card grid sizing refined. Deck format, card definitions, starter data, Legacy selection rules, and gameplay behavior unchanged."
 }
