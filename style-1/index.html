@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <base href="../">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TG5921Z2EL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TG5921Z2EL');
+  </script>
+  <title>Grandis Legacy — Deck Builder</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <img class="brand-logo" src="assets/ui/grandis-legacy-logo.webp" alt="Grandis Legacy">
+        <div class="brand-copy">
+          <div class="brand-title-row"><h1>DECK BUILDER</h1><a class="style-switch-link" href="style-2/">CHANGE TO STYLE 2</a></div>
+          <p>Build your Legacy Deck first, then complete your Main Deck.</p>
+        </div>
+      </div>
+      <nav class="global-nav" aria-label="Grandis Legacy applications"><a class="global-nav-link global-nav-link--outline" href="https://grandislegacytcg.github.io/Grandis-Legacy-VS-AI/" target="_blank" rel="noopener noreferrer">GO TO VS AI</a><a class="global-nav-link global-nav-link--blue" href="https://p01--grandis-legacy-pvp--2kwws8nzlcc2.code.run/" target="_blank" rel="noopener noreferrer">GO TO PVP</a></nav>
+    </header>
+
+    <main class="builder-layout">
+      <section class="library-shell" aria-label="Card library">
+        <div class="library-toolbar">
+          <div class="library-tabs" role="tablist" aria-label="Card categories">
+            <button class="library-tab active" data-library-tab="heroes" role="tab">Heroes</button>
+            <button class="library-tab" data-library-tab="legacies" role="tab">Legacies</button>
+            <button class="library-tab" data-library-tab="skills" role="tab">Skills</button>
+            <button class="library-tab" data-library-tab="events" role="tab">Events</button>
+            <button class="library-tab" data-library-tab="items" role="tab">Items</button>
+          </div>
+          <div id="libraryResultCount" class="library-result-count">0 cards</div>
+          <div class="library-search-row">
+            <label class="search-box" aria-label="Search cards">
+              <input id="searchInput" type="search" placeholder="Search Card">
+              <span aria-hidden="true">⌕</span>
+            </label>
+            <button id="filterToggle" class="filter-toggle" type="button" aria-expanded="false">FILTER <img class="filter-chevron" src="assets/ui/chevron-down.png" alt="" aria-hidden="true"></button>
+          </div>
+          <div id="filterPanel" class="filter-panel" hidden>
+            <div class="filter-grid">
+              <label id="cardPoolField" class="filter-field">
+                <span>Card Pool</span>
+                <select id="cardPoolSelect">
+                  <option value="available">Available Cards</option>
+                  <option value="all">All Cards</option>
+                </select>
+              </label>
+              <label id="classField" class="filter-field">
+                <span>Class</span>
+                <select id="classFilter">
+                  <option value="">All Classes</option>
+                  <option value="Archer">Archer</option>
+                  <option value="Cleric">Cleric</option>
+                  <option value="Mage">Mage</option>
+                  <option value="Thief">Thief</option>
+                  <option value="Warrior">Warrior</option>
+                </select>
+              </label>
+              <label id="skillTypeField" class="filter-field">
+                <span>Skill Type</span>
+                <select id="skillTypeFilter">
+                  <option value="">All Skills</option>
+                  <option value="Attack">Attack</option>
+                  <option value="Defense">Defense</option>
+                  <option value="Tactical">Tactical</option>
+                  <option value="Support">Support</option>
+                </select>
+              </label>
+              <label id="attackStyleField" class="filter-field">
+                <span>Attack Style</span>
+                <select id="attackStyleFilter">
+                  <option value="">All Attack Styles</option>
+                  <option value="Physical">Physical</option>
+                  <option value="Magical">Magical</option>
+                  <option value="Area">Area</option>
+                  <option value="Range">Range</option>
+                  <option value="Casting">Casting</option>
+                </select>
+              </label>
+              <div id="manaField" class="filter-field mana-filter-field">
+                <div class="field-label-row"><span>Mana Cost</span><strong id="manaRangeValue">0–9</strong></div>
+                <div class="dual-range" aria-label="Mana cost range">
+                  <div id="manaRangeTrack" class="range-track"></div>
+                  <input id="manaMin" type="range" min="0" max="9" value="0" step="1" aria-label="Minimum Mana cost">
+                  <input id="manaMax" type="range" min="0" max="9" value="9" step="1" aria-label="Maximum Mana cost">
+                </div>
+                <div class="range-labels"><span>0</span><span>9</span></div>
+              </div>
+              <button id="resetFilters" class="reset-filter" type="button">RESET FILTERS</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="libraryContent" class="library-content" data-remove-zone="true">
+          <div id="heroLibrary" class="hero-library"></div>
+          <div id="cardLibrary" class="card-library" hidden></div>
+          <div id="removeDropOverlay" class="remove-drop-overlay" hidden>DROP TO REMOVE 1 COPY</div>
+        </div>
+      </section>
+
+      <section class="deck-shell" aria-label="My Deck">
+        <div class="deck-toolbar">
+          <div class="deck-toolbar-title">DECK NAME</div>
+          <div class="deck-actions">
+            <input id="deckName" type="text" maxlength="80" value="New Deck" aria-label="Deck Name" placeholder="Deck Name">
+            <button id="newDeckButton" type="button">NEW DECK</button>
+            <button id="importDeckButton" type="button">IMPORT DECK</button>
+            <button id="exportDeckButton" class="primary-action" type="button">EXPORT DECK</button>
+            <input id="deckFileInput" type="file" accept="application/json,.json" hidden>
+          </div>
+        </div>
+
+        <section id="legacyDeckSection" class="deck-section expanded">
+          <button class="deck-section-head" data-section-toggle="legacy" type="button" aria-expanded="true">
+            <span>Legacy Deck</span>
+            <span class="section-total">Total Cards <strong id="legacyTotal">0/12</strong> <img class="chevron chevron-icon" src="assets/ui/chevron-up.png" alt="" aria-hidden="true"></span>
+          </button>
+          <div class="deck-section-body legacy-body">
+            <div class="subsection-title"><span>HEROES</span><strong id="heroTotalBadge">0</strong></div>
+            <div class="formation-wrap">
+              <div id="formationGrid" class="formation-grid"></div>
+              <div class="rank-control" aria-label="Hero rank preview">
+                <button id="rankPrev" type="button" aria-label="Previous rank">‹</button>
+                <strong id="rankLabel">RANK I</strong>
+                <button id="rankNext" type="button" aria-label="Next rank">›</button>
+              </div>
+            </div>
+            <div class="subsection-title legacy-subtitle"><span>LEGACIES</span><strong id="legacyCountBadge">0</strong></div>
+            <div id="legacySlotsGrid" class="legacy-slots-grid"></div>
+          </div>
+        </section>
+
+        <section id="mainDeckSection" class="deck-section collapsed">
+          <button class="deck-section-head" data-section-toggle="main" type="button" aria-expanded="false">
+            <span>Main Deck</span>
+            <span class="section-total">Total Cards <strong id="mainTotal">0/60</strong> <img class="chevron chevron-icon" src="assets/ui/chevron-down.png" alt="" aria-hidden="true"></span>
+          </button>
+          <div class="deck-section-body main-body" hidden>
+            <div class="main-summary">
+              <span>Skills <strong id="skillCount">0</strong></span>
+              <span>Events <strong id="eventCount">0</strong></span>
+              <span>Items <strong id="itemCount">0</strong></span>
+              <span id="deckStatus" class="deck-status">Incomplete</span>
+            </div>
+            <div id="mainDeckDropZone" class="main-deck-groups" data-main-drop-zone="true">
+              <section class="main-deck-group" data-main-family="Skill">
+                <div class="main-group-head"><span>SKILLS</span><strong id="skillGroupCount">0</strong></div>
+                <div id="skillDeckList" class="main-deck-list"></div>
+                <div id="skillEmptyState" class="main-group-empty">No Skill cards selected.</div>
+              </section>
+              <section class="main-deck-group" data-main-family="Event">
+                <div class="main-group-head"><span>EVENTS</span><strong id="eventGroupCount">0</strong></div>
+                <div id="eventDeckList" class="main-deck-list"></div>
+                <div id="eventEmptyState" class="main-group-empty">No Event cards selected.</div>
+              </section>
+              <section class="main-deck-group" data-main-family="Item">
+                <div class="main-group-head"><span>ITEMS</span><strong id="itemGroupCount">0</strong></div>
+                <div id="itemDeckList" class="main-deck-list"></div>
+                <div id="itemEmptyState" class="main-group-empty">No Item cards selected.</div>
+              </section>
+            </div>
+            <div id="mainEmptyState" class="main-empty-state">Select available cards from the library to build your Main Deck.</div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="newDeckDialog" class="app-dialog initial-dialog">
+    <div class="dialog-card new-deck-card">
+      <button id="newDeckClose" class="dialog-close" type="button" aria-label="Close" hidden>×</button>
+      <div class="dialog-heading">
+        <span>START A DECK</span>
+        <h2>Choose how to begin</h2>
+        <p>Create a blank deck or load one of the five official Starter Decks.</p>
+      </div>
+      <button id="createBlankDeck" class="create-blank-card" type="button">
+        <span>CREATE NEW</span>
+        <strong>Blank Deck</strong>
+        <small>Start with an empty Legacy Deck and Main Deck.</small>
+      </button>
+      <div class="starter-heading">STARTER DECKS</div>
+      <div id="starterDeckGrid" class="starter-deck-grid"></div>
+    </div>
+  </dialog>
+
+  <dialog id="confirmDialog" class="app-dialog">
+    <div class="dialog-card confirm-card">
+      <button id="confirmClose" class="dialog-close" type="button" aria-label="Close">×</button>
+      <span id="confirmEyebrow" class="dialog-eyebrow">CONFIRM</span>
+      <h2 id="confirmTitle">Confirm action</h2>
+      <div id="confirmMessage" class="dialog-message"></div>
+      <div id="confirmList" class="confirm-list" hidden></div>
+      <div class="dialog-actions">
+        <button id="confirmCancel" type="button">CANCEL</button>
+        <button id="confirmOk" class="primary-action" type="button">OK</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="cardReviewDialog" class="app-dialog review-dialog">
+    <div class="dialog-card review-card">
+      <div class="review-header">
+        <div>
+          <span id="reviewEyebrow" class="dialog-eyebrow">CARD REVIEW</span>
+          <h2 id="reviewTitle">Card Name</h2>
+        </div>
+        <button id="reviewClose" class="dialog-close review-close" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="review-layout">
+        <div class="review-art-column">
+          <img id="reviewArt" class="review-art" alt="Card review">
+        </div>
+        <div class="review-detail-column">
+          <div id="reviewStats" class="review-stats"></div>
+          <div id="reviewRows" class="review-rows"></div>
+        </div>
+      </div>
+      <div id="reviewProgression" class="review-progression" hidden>
+        <span>HERO LINEAGES</span>
+        <div id="reviewProgressionCards" class="review-progression-cards"></div>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="hoverCardZoom" class="hover-card-zoom" hidden aria-hidden="true">
+    <img id="hoverCardZoomImage" src="" alt="Card hover preview">
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
