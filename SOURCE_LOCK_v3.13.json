@@ -28,5 +28,5 @@
   "card_review": "Skill Card Review keeps the approved compact Class/Rank and metric/Skill Effect structure. DAMAGE and BLOCK values show Physical, Magical, or Physical / Magical beneath the number. Metric wording is not repeated in Skill Effect. Ultimate values remain white; labels remain gold.",
   "header_guidance": "Build your Legacy Deck first, then complete your Main Deck. Style switch is explicitly labeled as a CHANGE TO action.",
   "filter_state": "Independent per-tab filter state for Heroes, Legacies, Skills, Events, and Items. Skill Class filters never affect Event or Item results.",
-  "release_delta": "UI-only: clearer Style switch wording and GA4. Deck schema, card definitions, starter data, and gameplay behavior unchanged."
+  "release_delta": "Public package v1.14: both Style 1 and Style 2 require exactly 60 Main Deck cards before Export. Style 2 retains its 80-card temporary cutting workspace. Card definitions, starter data, and gameplay rules are unchanged."
 }

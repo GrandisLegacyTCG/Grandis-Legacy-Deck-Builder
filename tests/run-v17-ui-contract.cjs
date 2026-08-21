@@ -3,10 +3,10 @@ const path=require('path');
 const root=path.resolve(__dirname,'..');
 function need(ok,msg){if(!ok){console.error('FAIL',msg);process.exit(1)}}
 const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
-const js=fs.readFileSync(path.join(root,'style-2/js/app-v1.13.js'),'utf8');
-const css=fs.readFileSync(path.join(root,'style-2/css/app-v1.13.css'),'utf8');
+const js=fs.readFileSync(path.join(root,'style-2/js/app-v1.14.js'),'utf8');
+const css=fs.readFileSync(path.join(root,'style-2/css/app-v1.14.css'),'utf8');
 const html=fs.readFileSync(path.join(root,'style-2/index.html'),'utf8');
-need(pkg.version==='1.13.0','package version must be 1.13.0');
+need(pkg.version==='1.14.0','package version must be 1.14.0');
 need(html.includes('LEGACY DECK LIBRARY'),'Legacy Deck Library button missing');
 need(css.includes('Style 2 v2.15')&&css.includes('.legacy-total-with-library{\n  align-items:center!important;'),'Legacy library button/counter must be vertically centered');
 need(js.includes('}).sort(mainDeckSort);\n}\nfunction libraryCardHtml'),'Card Library must use family-first mainDeckSort');

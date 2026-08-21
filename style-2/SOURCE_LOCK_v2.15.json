@@ -2,11 +2,11 @@
   "package": "Grandis Legacy Public Deck Builder",
   "version": "2.15",
   "date": "2026-08-15",
-  "branch_identity": "Classic two-tab alternative. Public package v1.13 rebuilds the Style 2 cutting workspace on the v1.12 baseline: 80-card temporary workspace, 60-card legal/export limit, hover-only Skill class breakdown, and versioned runtime assets to prevent stale cached 60-card behavior. Style 1 remains unchanged.",
+  "branch_identity": "Classic two-tab alternative. Public package v1.14 keeps the 80-card temporary cutting workspace but requires exactly 60 Main Deck cards before Export; underfilled and overfilled decks cannot export. Hover-only Skill class breakdown and v1.11 navigation are preserved.",
   "active_ui_source": {
     "html": "index.html",
-    "css": "css/app-v1.13.css",
-    "javascript": "js/app-v1.13.js"
+    "css": "css/app-v1.14.css",
+    "javascript": "js/app-v1.14.js"
   },
   "generated_data": "js/data.js",
   "source_database": "One Source Authority v1.4",
@@ -20,5 +20,5 @@
   "starter_deck_data_changed": false,
   "mobile_status": "responsive fallback included; desktop is the locked target",
   "legacy_reference_library": "Display-only responsive Legacy Deck Library. Button sits beside the 0/12 Legacy Deck total; Hero cards are shown first and Legacy cards after. Cards use full Main-Deck-style tiles with normal size, no overlap, no horizontal scrolling, no search/filter/dimming/add/select behavior, and Card Review remains available.",
-  "release_delta": "Public package v1.13, Style 2 only: explicit 80-card workspace with 60-card legal/export limit; counter remains XX / 60; 61\u201380 is invalid and non-exportable; hover-only Skill class summary capped at 3 classes; versioned CSS/JS runtime assets. Card definitions, starter data, Legacy selection rules, and gameplay behavior unchanged."
+  "release_delta": "Public package v1.14, both styles: Export requires exactly 60 Main Deck cards. Style 2 retains an 80-card cutting workspace, XX / 60 counter, 61\u201380 invalid state, and hover-only Skill class summary capped at 3 classes."
 }

@@ -1,4 +1,12 @@
-# Grandis Legacy Deck Builder v1.13
+# Grandis Legacy Deck Builder v1.14
+
+## v1.14 — Exact-60 export lock
+- Both Style 1 and Style 2 now require the Main Deck to contain exactly 60 cards before Export can run.
+- Style 2 still supports the temporary 80-card cutting workspace; `61–80 / 60` remains invalid and non-exportable.
+- Style 2 underfilled decks (`0–59 / 60`) are now also non-exportable.
+- Style 1 receives the same hard exact-60 export guard in addition to its existing validation-based disabled state.
+- Runtime references are cache-busted/versioned for v1.14.
+
 
 ## v1.13 — Style 2 workspace rebuild
 - Rebuilt the Style 2 Main Deck capacity around explicit constants: 60-card legal limit and 80-card workspace limit.
