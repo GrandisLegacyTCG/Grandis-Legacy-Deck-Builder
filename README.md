@@ -1,3 +1,3 @@
-# Grandis Legacy Deck Builder v1.10
+# Grandis Legacy Deck Builder v1.11
 
-Built on v1.9. The Grandis Legacy logo is now clickable in the root, Style 1, and Style 2 interfaces and returns to `https://grandislegacytcg.github.io/` in the same tab. Deck Builder behavior, layout, shared Season 1 assets, and GA4 remain unchanged.
+Built on v1.10. All Grandis Legacy application navigation now stays in the same browser tab. `GO TO PVP` now uses the public GitHub Pages route `https://grandislegacytcg.github.io/pvp/`. Homepage logo navigation, Style 1, Style 2, Deck Builder logic, card data, shared Season 1 assets, and GA4 behavior remain unchanged.
