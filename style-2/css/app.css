@@ -949,3 +949,5 @@ html,body,.app-shell{max-width:100vw!important;overflow-x:hidden!important}
 .legacy-total-with-library .legacy-reference-open{
   align-self:center!important;
 }
+
+.brand-home-link{display:block;line-height:0;text-decoration:none;flex:0 0 auto}

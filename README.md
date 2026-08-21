@@ -1,3 +1,3 @@
-# Grandis Legacy Deck Builder v1.9
+# Grandis Legacy Deck Builder v1.10
 
-Built on v1.7. Style 1 and Style 2 behavior/layout are unchanged. Season 1 card WebP images now load from the shared versioned asset source at `https://grandislegacytcg.github.io/shared/season1/v1/`; duplicate local card copies were removed.
+Built on v1.9. The Grandis Legacy logo is now clickable in the root, Style 1, and Style 2 interfaces and returns to `https://grandislegacytcg.github.io/` in the same tab. Deck Builder behavior, layout, shared Season 1 assets, and GA4 remain unchanged.

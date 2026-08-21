@@ -747,3 +747,5 @@ input[type="text"],input[type="search"],textarea{
 .global-nav-link--blue{min-width:132px;background:#075b86;border-color:#075b86}
 @media(max-width:900px){.topbar{padding-left:18px;padding-right:18px}.global-nav-link{height:34px;padding:0 11px;font-size:9px}.global-nav-link--blue{min-width:100px}.style-switch-link{height:24px;font-size:8px}}
 @media(max-width:760px){.topbar{flex-wrap:wrap}.global-nav{width:100%;justify-content:flex-end}.brand-copy{display:block!important}.brand-copy p{display:none}.brand-title-row h1{font-size:13px!important}}
+
+.brand-home-link{display:block;line-height:0;text-decoration:none;flex:0 0 auto}

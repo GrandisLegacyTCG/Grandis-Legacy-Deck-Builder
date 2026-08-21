@@ -1,9 +1,9 @@
 {
   "name": "grandis-legacy-deck-builder",
-  "version": "1.8.0",
+  "version": "1.10.0",
   "private": true,
-  "description": "Grandis Legacy Deck Builder v1.8 \u2014 Style 1 and Style 2 preserved from v1.7, with Season 1 card WebPs centralized to the shared Grandis Legacy GitHub Pages asset source.",
+  "description": "Grandis Legacy Deck Builder v1.10 — Style 1 and Style 2 preserved from v1.7, with Season 1 card WebPs centralized to the shared Grandis Legacy GitHub Pages asset source.",
   "scripts": {
-    "check": "node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app.js && node tests/run-v17-ui-contract.cjs"
+    "check": "node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app.js && node tests/run-v17-ui-contract.cjs && node tests/run-v110-home-logo-navigation.cjs"
   }
 }
