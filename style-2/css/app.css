@@ -951,3 +951,63 @@ html,body,.app-shell{max-width:100vw!important;overflow-x:hidden!important}
 }
 
 .brand-home-link{display:block;line-height:0;text-decoration:none;flex:0 0 auto}
+
+
+/* v1.12 — Style 2 cutting workspace + Skill class hover summary */
+.skill-summary-hover{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  cursor:help;
+  outline:none;
+}
+.skill-summary-hover:focus-visible{
+  border-radius:4px;
+  box-shadow:0 0 0 2px rgba(10,168,246,.28);
+}
+.skill-class-tooltip{
+  position:absolute;
+  z-index:60;
+  left:0;
+  top:calc(100% + 8px);
+  min-width:170px;
+  padding:9px 10px;
+  border:1px solid #4a4d59;
+  border-radius:8px;
+  background:#11131a;
+  box-shadow:0 12px 28px rgba(0,0,0,.42);
+  color:#f4f5f7;
+  pointer-events:none;
+}
+.skill-class-tooltip[hidden]{display:none!important}
+.skill-summary-hover:hover .skill-class-tooltip:not([hidden]),
+.skill-summary-hover:focus .skill-class-tooltip:not([hidden]),
+.skill-summary-hover:focus-within .skill-class-tooltip:not([hidden]){
+  display:grid;
+}
+.skill-tooltip-title{
+  display:block;
+  margin-bottom:5px;
+  color:#b9bdc8;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.skill-tooltip-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:12px;
+  align-items:center;
+  padding:3px 0;
+  font-size:10px;
+  white-space:nowrap;
+}
+.skill-tooltip-row strong{color:#f3d27d}
+.deck-validation.invalid{color:#ff8b8b!important}
+#exportJson:disabled{
+  opacity:.42!important;
+  cursor:not-allowed!important;
+  border-color:#4a4c55!important;
+}

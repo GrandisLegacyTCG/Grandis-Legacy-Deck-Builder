@@ -61,6 +61,26 @@ function cardCompatible(card,slots=state.slots){
 function incompatibleDeckEntries(slots=state.slots,deck=state.deck){return Object.entries(deck).filter(([,qty])=>qty>0).map(([id,quantity])=>({card:state.byId.get(id),quantity})).filter(entry=>!cardCompatible(entry.card,slots)).sort((a,b)=>idSort(a.card,b.card))}
 function lostCompatibilityEntries(proposedSlots){return Object.entries(state.deck).filter(([,qty])=>qty>0).map(([id,quantity])=>({card:state.byId.get(id),quantity})).filter(entry=>cardCompatible(entry.card,state.slots)&&!cardCompatible(entry.card,proposedSlots)).sort((a,b)=>idSort(a.card,b.card))}
 function familyCount(family){return Object.entries(state.deck).reduce((sum,[id,qty])=>sum+(state.byId.get(id)?.family===family?Number(qty):0),0)}
+function skillClassBreakdown(){
+  const counts=new Map();
+  for(const [id,qtyRaw] of Object.entries(state.deck)){
+    const card=state.byId.get(id),qty=Number(qtyRaw||0);
+    if(!card||card.family!=='Skill'||qty<=0)continue;
+    const className=String(card.classGroup||'Unknown').trim()||'Unknown';
+    counts.set(className,(counts.get(className)||0)+qty);
+  }
+  return Array.from(counts.entries())
+    .sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]))
+    .slice(0,3);
+}
+function renderSkillClassTooltip(){
+  const tip=$('skillClassTooltip');if(!tip)return;
+  const rows=skillClassBreakdown();
+  if(!rows.length){tip.hidden=true;tip.innerHTML='';return}
+  tip.innerHTML=`<span class="skill-tooltip-title">Skill Classes</span>${rows.map(([name,count])=>`<span class="skill-tooltip-row"><span>${esc(name)}</span><strong>${count}</strong></span>`).join('')}`;
+  tip.hidden=false;
+}
+
 
 function compatibleLegacies(progressionId,slotIndex,slots=state.slots){
   const progression=state.progressionById.get(progressionId);if(!progression)return [];
@@ -177,7 +197,7 @@ function renderLibrary(){
 }
 function addMainCard(id){
   const card=state.byId.get(id);if(!card)return;if(!cardCompatible(card)){toast('This card is not compatible with the selected Heroes');return}
-  const current=Number(state.deck[id]||0),limit=copyLimit(card);if(countDeck()>=60){toast('Main Deck already contains 60 cards');return}if(current>=limit){toast(`Maximum ${limit} cop${limit===1?'y':'ies'} reached`);return}
+  const current=Number(state.deck[id]||0),limit=copyLimit(card);if(countDeck()>=80){toast('Main Deck workspace already contains 80 cards');return}if(current>=limit){toast(`Maximum ${limit} cop${limit===1?'y':'ies'} reached`);return}
   state.deck[id]=current+1;renderLibrary();renderMainDeck();updateTabs();
 }
 function removeMainCard(id){const current=Number(state.deck[id]||0);if(current<=0)return;if(current===1)delete state.deck[id];else state.deck[id]=current-1;renderLibrary();renderMainDeck();updateTabs()}
@@ -207,8 +227,12 @@ function renderMainDeck(){
   const root=$('deckGrid'),scrollTop=root.scrollTop,entries=Object.entries(state.deck).filter(([,qty])=>qty>0).map(([id,quantity])=>({card:state.byId.get(id),quantity})).filter(item=>item.card).sort(mainDeckSort);
   root.innerHTML=entries.map(({card,quantity})=>`<article class="deck-card" data-deck-card="${card.id}" draggable="true" title="${esc(card.name)}"><img src="${card.image}" alt="${esc(card.name)}"><span class="quantity-badge">×${quantity}</span>${reviewButton(card.id)}</article>`).join('');root.scrollTop=scrollTop;
   root.querySelectorAll('[data-deck-card]').forEach(tile=>{const id=tile.dataset.deckCard;tile.addEventListener('click',event=>{if(event.target.closest('.review-button'))return;locateCardInLibrary(id)});tile.addEventListener('contextmenu',event=>event.preventDefault());tile.addEventListener('dragstart',event=>{if(event.target.closest('.review-button')){event.preventDefault();return}event.dataTransfer.setData('text/grandis-remove-card-id',id);event.dataTransfer.effectAllowed='move';tile.classList.add('dragging')});tile.addEventListener('dragend',()=>tile.classList.remove('dragging'))});bindReviewButtons(root);
-  const total=countDeck();$('deckCount').textContent=total;$('mainTabCount').textContent=`${total} / 60`;$('skillCount').textContent=familyCount('Skill');$('eventCount').textContent=familyCount('Event');$('itemCount').textContent=familyCount('Item');
-  const valid=validationIssues().length===0;$('deckValidation').textContent=valid?'Deck Valid':'Incomplete';$('deckValidation').classList.toggle('valid',valid);$('emptyDeck').hidden=entries.length>0;
+  const total=countDeck();$('deckCount').textContent=total;$('mainTabCount').textContent=`${total} / 60`;$('skillCount').textContent=familyCount('Skill');$('eventCount').textContent=familyCount('Event');$('itemCount').textContent=familyCount('Item');renderSkillClassTooltip();
+  const valid=validationIssues().length===0,overLimit=total>60;
+  $('deckValidation').textContent=valid?'Deck Valid':overLimit?'Deck Invalid':'Incomplete';
+  $('deckValidation').classList.toggle('valid',valid);$('deckValidation').classList.toggle('invalid',overLimit);
+  const exportButton=$('exportJson');if(exportButton){exportButton.disabled=overLimit;exportButton.title=overLimit?'Reduce Main Deck to 60 cards or fewer before exporting.':''}
+  $('emptyDeck').hidden=entries.length>0;
 }
 function renderMain(){updateFilterStates();renderLibrary();renderMainDeck();updateTabs()}
 
@@ -269,7 +293,7 @@ async function importDeckFile(file){try{const data=JSON.parse(await file.text())
 function expandedLegacy(){const output=[];state.slots.forEach((slot,index)=>{const progression=state.progressionById.get(slot.progressionId),legacy=state.legacyById.get(slot.legacyId);if(!progression)return;const packageId=`CUSTOM-SLOT-${index+1}`,packageName=`${progression.name}${legacy?` + ${legacy.name}`:''}`;progression.cardIds.forEach(id=>{const card=state.legacyById.get(id);if(card)output.push({card_id:id,card_name:card.name,card_type:'Hero',package_id:packageId,package_name:packageName})});if(legacy)output.push({card_id:legacy.id,card_name:legacy.name,card_type:'Legacy',package_id:packageId,package_name:packageName})});return output}
 function exportObject(){const issues=validationIssues(),slots=state.slots.map(slot=>({progression:slot.progressionId,legacy:slot.legacyId}));return {schema_version:'GL-DECK-1.0',builder_version:'2.15-classic-split',deck_name:$('deckName').value.trim()||'New Deck',format:'One Source Authority v1.4 + Public Deck Builder v2.11',main_deck_count:countDeck(),legacy_package_count:selectedProgressions().length,legacy_deck_count:legacyCardCount(),legacy_deck_label:'Legacy Deck',legacy_deck_package_slots:slots,legacy_deck_expanded:expandedLegacy(),side_package_count:selectedProgressions().length,side_deck_count:legacyCardCount(),side_deck_package_slots:slots,side_deck_expanded:expandedLegacy(),is_valid:issues.length===0,validation_issues:issues,validation_warnings:[],main_deck:Object.entries(state.deck).map(([id,quantity])=>({card_id:id,card_name:state.byId.get(id)?.name||id,quantity,family:state.byId.get(id)?.family||''})).sort((a,b)=>mainDeckSort({card:{id:a.card_id,family:a.family}},{card:{id:b.card_id,family:b.family}})).map(({family,...entry})=>entry),default_formation:{LEFT:state.progressionById.get(state.slots[0].progressionId)?.cardIds[0]||'',CENTER:state.progressionById.get(state.slots[1].progressionId)?.cardIds[0]||'',RIGHT:state.progressionById.get(state.slots[2].progressionId)?.cardIds[0]||''},source_database_version:window.GL_DECK_BUILDER_DATA.sourceDatabaseVersion,builder_version_note:'Classic two-tab Deck Builder v2.15 with Card Library sorting locked to Skill, Event, then Item before Card ID order; Legacy Deck Library header controls vertically centered; full-card Legacy reference layout, compact filters, v3.13 Card Review hierarchy, bidirectional drag-and-drop, and PvP navigation preserved.'}}
 function downloadJson(object){const safe=(object.deck_name||'Grandis_Legacy_Deck').replace(/[^a-z0-9_-]+/gi,'_').replace(/^_+|_+$/g,'')||'Grandis_Legacy_Deck',blob=new Blob([JSON.stringify(object,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),anchor=document.createElement('a');anchor.href=url;anchor.download=`${safe}.json`;document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-async function exportDeck(){const object=exportObject();if(!object.is_valid){const ok=await askConfirm({eyebrow:'EXPORT DECK',title:'Export an incomplete deck?',message:'This deck is not match-ready yet.',list:object.validation_issues.map(issue=>({label:issue,value:'Issue'})),okLabel:'EXPORT ANYWAY'});if(!ok)return}downloadJson(object);toast('Deck exported')}
+async function exportDeck(){if(countDeck()>60){toast('Reduce Main Deck to 60 cards or fewer before exporting');return}const object=exportObject();if(!object.is_valid){const ok=await askConfirm({eyebrow:'EXPORT DECK',title:'Export an incomplete deck?',message:'This deck is not match-ready yet.',list:object.validation_issues.map(issue=>({label:issue,value:'Issue'})),okLabel:'EXPORT ANYWAY'});if(!ok)return}downloadJson(object);toast('Deck exported')}
 
 function resetFilters(){const family=state.filters.family,fresh=defaultFilterSet(family),key=family||'all';state.filters=fresh;state.filterSets[key]=fresh;syncFilterControls();renderLibrary()}
 function bindStaticEvents(){
