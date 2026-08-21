@@ -1,4 +1,11 @@
-# Grandis Legacy Deck Builder v1.12
+# Grandis Legacy Deck Builder v1.13
+
+## v1.13 — Style 2 workspace rebuild
+- Rebuilt the Style 2 Main Deck capacity around explicit constants: 60-card legal limit and 80-card workspace limit.
+- Counter remains `XX / 60`; 61–80 cards are allowed for cutting but remain invalid and cannot be exported.
+- 81st card is rejected. Imports above 80 cards are rejected rather than silently trimmed.
+- Skill class breakdown is hidden by default and appears only while hovering/focusing `Skills XX`, showing at most 3 classes.
+- Style 2 behavior/CSS assets are versioned (`app-v1.13.js`, `app-v1.13.css`) to prevent stale cached v1.11/v1.12 behavior.
 
 Built directly on v1.11.
 

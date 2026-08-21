@@ -1,9 +1,9 @@
 {
   "name": "grandis-legacy-deck-builder",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "private": true,
-  "description": "Grandis Legacy Deck Builder v1.12 — based on v1.11; Style 2 gains an 80-card cutting workspace while legal/export limit remains 60, plus Skill class-count hover summary. v1.11 navigation is preserved.",
+  "description": "Grandis Legacy Deck Builder v1.13 \u2014 rebuilt from v1.12. Style 2 uses an explicit 80-card cutting workspace with a 60-card legal/export limit, versioned runtime assets, and hover-only Skill class breakdown.",
   "scripts": {
-    "check": "node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app.js && node tests/run-v17-ui-contract.cjs && node tests/run-v110-home-logo-navigation.cjs && node tests/run-v111-same-tab-navigation.cjs && node tests/run-v112-style2-cutting-workspace.cjs"
+    "check": "node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app-v1.13.js && node tests/run-v17-ui-contract.cjs && node tests/run-v110-home-logo-navigation.cjs && node tests/run-v111-same-tab-navigation.cjs && node tests/run-v113-style2-cutting-workspace.cjs"
   }
 }
