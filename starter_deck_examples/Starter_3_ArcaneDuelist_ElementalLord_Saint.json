@@ -1,8 +1,8 @@
 {
   "schema_version": "GL-DECK-1.0",
-  "builder_version": "1.14-public-deck-builder",
+  "builder_version": "1.16-public-deck-builder",
   "deck_name": "Starter 3 - ArcaneDuelist/ElementalLord/Saint",
-  "format": "One Source Authority v1.4 + Starter60 v1.2",
+  "format": "One Source Authority v1.6.1 + Starter60 v1.3",
   "main_deck_count": 60,
   "legacy_package_count": 3,
   "legacy_deck_count": 12,
@@ -399,6 +399,6 @@
     "CENTER": "S1-MAG-H004",
     "RIGHT": "S1-CLE-H001"
   },
-  "source_database_version": "One Source Authority v1.4 · registry 5812e107dbe82cef660975e091388eae1ad5a852c7be066c7443a5a321188bab · Starter60 v1.2",
-  "builder_version_note": "Deck Builder v1.14 preserves the approved Card Review structure while consuming canonical printed text, legality, runtime semantics, effects, hashes, and assets from One Source Authority v1.4."
+  "source_database_version": "Grandis Legacy Source Authority Stack Hotfix 2026-08-24 · OSA v1.6.1 · Runtime Data v0.13.1 · registry b185307752fd523d6c1e4a450f8bdd82b96b4d4cbfbb884fca8a619e8c5c8057",
+  "builder_version_note": "Deck Builder v1.16 preserves the approved deck contents while adopting the corrected Source Stack registry and Resurrection metadata."
 }
