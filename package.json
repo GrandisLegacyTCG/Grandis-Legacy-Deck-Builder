@@ -1,11 +1,11 @@
 {
   "name": "grandis-legacy-deck-builder",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "private": true,
-  "description": "Grandis Legacy Deck Builder v1.16 \u2014 corrected Source Stack registry adoption; v1.15 UI behavior preserved.",
+  "description": "Grandis Legacy Deck Builder v1.17 \u2014 targeted Style 2 mobile alignment and view-only Main Deck overview.",
   "scripts": {
     "build:data": "node tools/build-deck-data.cjs",
-    "check": "npm run build:data && node --check tools/build-deck-data.cjs && node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app-v1.15.js && node tests/run-v17-ui-contract.cjs && node tests/run-v110-home-logo-navigation.cjs && node tests/run-v111-same-tab-navigation.cjs && node tests/run-v114-export-exact-60.cjs && node tests/run-v116-source-stack.cjs && node tests/run-v115-style2-mobile-drag.cjs",
+    "check": "npm run build:data && node --check tools/build-deck-data.cjs && node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app-v1.17.js && node tests/run-v17-ui-contract.cjs && node tests/run-v110-home-logo-navigation.cjs && node tests/run-v111-same-tab-navigation.cjs && node tests/run-v114-export-exact-60.cjs && node tests/run-v117-source-stack.cjs && node tests/run-v117-style2-minor-ui.cjs",
     "manifest": "node tools/build-file-manifest.cjs",
     "verify": "npm run check && npm run manifest && node tests/run-manifest-verification.cjs"
   }

@@ -1,4 +1,14 @@
-# Grandis Legacy Deck Builder v1.16
+# Grandis Legacy Deck Builder v1.17
+
+## v1.17 — Style 2 minor mobile alignment + Main Deck view
+
+- Mobile Deck Name controls now keep Load Starter, Import Deck, Export Deck, and Clear Deck in one compact row.
+- Mobile Hero and Legacy slots now share the same LEFT / CENTER / RIGHT column centers.
+- Added a view-only Main Deck visual overview on both mobile and desktop.
+- Desktop `VIEW DECK` sits in the Main Deck header in the same pattern as `LEGACY DECK LIBRARY`.
+- Main Deck view shows card artwork and quantities, supports card preview, and never edits deck state.
+- Style 1, deck legality, 80-card Style 2 workspace, export rules, Source Stack data, and desktop drag/drop remain unchanged.
+
 
 ## v1.16 — Corrected Source Stack hotfix
 

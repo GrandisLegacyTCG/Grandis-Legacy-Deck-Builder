@@ -93,10 +93,10 @@ function updateStarter(starter){
       if(card)entry.card_name=card.name;
     }
   }
-  next.builder_version='1.16-public-deck-builder';
+  next.builder_version='1.17-public-deck-builder';
   next.format='One Source Authority v1.6.1 + Starter60 v1.3';
   next.source_database_version=`Grandis Legacy Source Authority Stack Hotfix 2026-08-24 · OSA v1.6.1 · Runtime Data v0.13.1 · registry ${runtime.canonical_registry_hash}`;
-  next.builder_version_note='Deck Builder v1.16 preserves the approved deck contents while adopting the corrected Source Stack registry and Resurrection metadata.';
+  next.builder_version_note='Deck Builder v1.17 preserves the approved deck contents and corrected Source Stack registry while adding targeted Style 2 presentation controls.';
   return next;
 }
 

@@ -3,11 +3,11 @@ const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
 const style1=fs.readFileSync('js/app.js','utf8');
 const style1Html=fs.readFileSync('index.html','utf8');
 const style1Route=fs.readFileSync('style-1/index.html','utf8');
-const style2=fs.readFileSync('style-2/js/app-v1.15.js','utf8');
+const style2=fs.readFileSync('style-2/js/app-v1.17.js','utf8');
 const style2Html=fs.readFileSync('style-2/index.html','utf8');
-const style2Css=fs.readFileSync('style-2/css/app-v1.15.css','utf8');
+const style2Css=fs.readFileSync('style-2/css/app-v1.17.css','utf8');
 function must(x,m){if(!x)throw new Error(m)}
-must(pkg.version==='1.16.0','Package version must be 1.16.0');
+must(pkg.version==='1.17.0','Package version must be 1.17.0');
 must(style1.includes("if(countDeck()!==60){toast('Main Deck must contain exactly 60 cards before exporting');return}"),'Style 1 exact-60 hard export guard missing');
 must(style1Html.includes('js/app.js?v=1.15')&&style1Html.includes('css/app.css?v=1.15'),'Root Style 1 cache-busting refs missing');
 must(style1Route.includes('js/app.js?v=1.15')&&style1Route.includes('css/app.css?v=1.15'),'Explicit /style-1/ cache-busting refs missing');
@@ -17,7 +17,7 @@ must(style2.includes('wrongSize=total!==MAIN_DECK_LEGAL_LIMIT'),'Style 2 exact-s
 must(style2.includes('exportButton.disabled=wrongSize'),'Style 2 Export button must be disabled below or above 60');
 must(style2.includes('if(countDeck()!==MAIN_DECK_LEGAL_LIMIT)'), 'Style 2 exact-60 hard export guard missing');
 must(style2.includes('countDeck()>=MAIN_DECK_WORKSPACE_LIMIT'),'Style 2 80-card add guard must remain');
-must(style2Html.includes('js/app-v1.15.js')&&style2Html.includes('css/app-v1.15.css'),'Style 2 v1.15 runtime refs missing');
+must(style2Html.includes('js/app-v1.17.js')&&style2Html.includes('css/app-v1.17.css'),'Style 2 v1.17 runtime refs missing');
 must(!fs.existsSync('style-2/js/app-v1.14.js')&&!fs.existsSync('style-2/css/app-v1.14.css'),'Stale Style 2 v1.14 runtime assets remain');
 must(style2Css.includes('.skill-class-tooltip{\n  display:none;'),'Skill tooltip must remain hidden by default');
-console.log('PASS Deck Builder v1.15 preserves exact-60 export contract for Style 1 + Style 2');
+console.log('PASS Deck Builder v1.17 preserves exact-60 export contract for Style 1 + Style 2');

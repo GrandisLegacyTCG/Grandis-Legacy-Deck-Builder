@@ -1,12 +1,12 @@
 {
   "package": "Grandis Legacy Public Deck Builder Style 2",
-  "version": "2.17",
-  "public_package_version": "1.16",
+  "version": "2.18",
+  "public_package_version": "1.17",
   "date": "2026-08-24",
   "active_ui_source": {
     "html": "index.html",
-    "css": "css/app-v1.15.css",
-    "javascript": "js/app-v1.15.js"
+    "css": "css/app-v1.17.css",
+    "javascript": "js/app-v1.17.js"
   },
   "generated_data": "js/data.js",
   "source_database": "Grandis Legacy Source Authority Stack 2026-08-24",
@@ -17,7 +17,8 @@
   "workspace_limit": 80,
   "export_rule": "enabled only at exactly 60 Main Deck cards",
   "mobile_main_deck": "Style 1-aligned vertical list with thumbnail, name, type/subtype, Mana, minus, quantity, and plus controls",
-  "mobile_legacy_deck": "compact three-position responsive layout with accessible swap controls, non-overlapping rank controls, cards, and Legacy selectors",
+  "mobile_legacy_deck": "compact three-position responsive layout with Hero and Legacy card columns sharing the same LEFT/CENTER/RIGHT centers; accessible swap and rank controls remain intact",
   "desktop_drag_drop": "Library to Main Deck adds one; Main Deck to Card Library removes one; internal Main Deck drops do not reorder",
-  "desktop_layout_changed": false
+  "desktop_layout_changed": "Main Deck header gains View Deck control only; card editing/layout otherwise preserved",
+  "main_deck_view": "view-only visual card grid on mobile and desktop; desktop button mirrors Legacy Deck Library placement"
 }

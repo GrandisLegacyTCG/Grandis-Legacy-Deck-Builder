@@ -13,7 +13,7 @@
     gtag('config', 'G-TG5921Z2EL');
   </script>
   <title>Grandis Legacy — Public Deck Builder</title>
-  <link rel="stylesheet" href="css/app-v1.15.css?v=1.15">
+  <link rel="stylesheet" href="css/app-v1.17.css?v=1.17">
 </head>
 <body>
   <div class="app-shell">
@@ -118,7 +118,9 @@
         <section class="panel main-deck-panel" aria-label="Main Deck">
           <div class="section-head compact-head main-deck-head">
             <h2>Main Deck</h2>
-            <div class="large-total"><strong id="deckCount">0</strong><span>/ 60</span></div>
+            <div class="main-head-actions">
+              <div class="large-total main-total-with-view"><button id="mainDeckViewOpen" class="legacy-reference-open main-deck-view-open" type="button">VIEW DECK</button><strong id="deckCount">0</strong><span>/ 60</span></div>
+            </div>
           </div>
           <div class="deck-summary">
             <span id="skillSummary" class="skill-summary-hover" tabindex="0">Skills <strong id="skillCount">0</strong><span id="skillClassTooltip" class="skill-class-tooltip" role="tooltip" hidden></span></span>
@@ -143,6 +145,22 @@
       </div>
       <p class="legacy-reference-note">Display only. Hero cards are listed first, followed by Legacy cards.</p>
       <div id="legacyReferenceGrid" class="legacy-reference-grid" aria-label="Hero and Legacy card reference"></div>
+    </div>
+  </dialog>
+
+  <dialog id="mainDeckViewDialog" class="app-dialog main-deck-view-dialog">
+    <div class="dialog-card main-deck-view-card">
+      <button id="mainDeckViewClose" class="dialog-close" type="button" aria-label="Close">×</button>
+      <div class="main-deck-view-head">
+        <div><span class="dialog-eyebrow">MAIN DECK</span><h2>Deck View</h2></div>
+        <div class="main-deck-view-status">
+          <span id="mainDeckViewValidation" class="deck-validation">Deck Invalid</span>
+          <div class="large-total"><strong id="mainDeckViewCount">0</strong><span>/ 60</span></div>
+        </div>
+      </div>
+      <p class="main-deck-view-note">View only. Select a card preview icon to inspect card details.</p>
+      <div id="mainDeckViewGrid" class="main-deck-view-grid" aria-label="Main Deck visual overview"></div>
+      <div id="mainDeckViewEmpty" class="main-deck-view-empty" hidden>No cards in Main Deck.</div>
     </div>
   </dialog>
 
@@ -190,7 +208,7 @@
     </div>
   </dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="js/data.js?v=1.15"></script>
-  <script src="js/app-v1.15.js?v=1.15"></script>
+  <script src="js/data.js?v=1.17"></script>
+  <script src="js/app-v1.17.js?v=1.17"></script>
 </body>
 </html>
