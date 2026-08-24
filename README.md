@@ -1,4 +1,12 @@
-# Grandis Legacy Deck Builder v1.17
+# Grandis Legacy Deck Builder v1.18
+
+## v1.18 — Style 2 Main Deck View size parity
+
+- Main Deck View now uses the same modal size and card dimensions as Legacy Deck Library.
+- Prevents card overlap/stacking in the view-only deck overview.
+- Quantity badges and enlarge/preview buttons are preserved.
+- No deck editing, legality, Style 1, or Source Stack behavior changed.
+
 
 ## v1.17 — Style 2 minor mobile alignment + Main Deck view
 

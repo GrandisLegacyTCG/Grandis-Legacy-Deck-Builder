@@ -1,7 +1,7 @@
 {
   "package": "Grandis Legacy Public Deck Builder",
-  "version": "3.16",
-  "public_package_version": "1.17",
+  "version": "3.17",
+  "public_package_version": "1.18",
   "date": "2026-08-24",
   "active_ui_source": {
     "html": "index.html",
@@ -28,5 +28,5 @@
   "main_deck_legal_size": 60,
   "normal_copy_limit": 2,
   "ultimate_copy_limit": 1,
-  "release_delta": "Style 2-only UI patch: compact four-button mobile tool row, aligned mobile Hero/Legacy position columns, and view-only Main Deck visual overview on mobile/desktop. Style 1 and gameplay/source authority unchanged."
+  "release_delta": "Style 2-only UI patch: Main Deck View reuses the proven Legacy Deck Library modal/card geometry to prevent overlap while preserving quantity badges and enlarge controls. Style 1, deck logic, and source authority unchanged."
 }
