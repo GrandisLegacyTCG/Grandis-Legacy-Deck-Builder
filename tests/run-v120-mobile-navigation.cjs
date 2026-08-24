@@ -10,7 +10,7 @@ for(const rel of pages){
   assert(html.includes('https://grandislegacytcg.github.io/Grandis-Legacy-VS-AI/'),`${rel}: VS AI link missing`);
   assert(html.includes('https://grandislegacytcg.github.io/pvp/'),`${rel}: PvP link missing`);
   assert(html.includes('https://grandislegacytcg.github.io/Grandis-Legacy-Deck-Builder/style-2/'),`${rel}: mobile Deck Builder must point Style 2`);
-  assert(html.includes('mobile-app-nav.js?v=1.20'),`${rel}: menu controller missing`);
+  assert(html.includes('mobile-app-nav.js?v=1.21'),`${rel}: menu controller missing`);
 }
 for(const rel of ['css/app.css','style-2/css/app-v1.19.css']){
   const css=fs.readFileSync(path.join(root,rel),'utf8');
@@ -21,4 +21,4 @@ for(const rel of ['css/app.css','style-2/css/app-v1.19.css']){
 const js=fs.readFileSync(path.join(root,'js/mobile-app-nav.js'),'utf8');
 assert(js.includes("aria-expanded"),'mobile menu accessibility state missing');
 assert(js.includes("document.addEventListener('click'"),'outside click close missing');
-console.log('Deck Builder v1.20 mobile navigation: PASS');
+console.log('Deck Builder mobile navigation baseline: PASS');

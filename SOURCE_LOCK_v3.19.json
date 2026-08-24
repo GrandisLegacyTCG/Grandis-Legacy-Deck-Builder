@@ -1,0 +1,32 @@
+{
+  "package": "Grandis Legacy Public Deck Builder",
+  "version": "3.19",
+  "public_package_version": "1.21",
+  "date": "2026-08-24",
+  "active_ui_source": {
+    "html": "index.html",
+    "css": "css/app.css",
+    "javascript": "js/app.js"
+  },
+  "generated_data": "js/data.js",
+  "source_database": "Grandis Legacy Source Authority Stack 2026-08-24",
+  "source_stack": {
+    "one_source_authority": "1.6.1",
+    "runtime_foundation": "1.85",
+    "runtime_core_template": "0.53",
+    "season1_runtime_data": "0.13.1",
+    "season1_effect_recipe": "0.12.1",
+    "season1_effect_checkpoint": "0.12.1",
+    "legality_map": "0.11.9",
+    "application_runtime_sync": "2.47",
+    "hero_component_authority": "1.0.0"
+  },
+  "canonical_registry_hash": "b185307752fd523d6c1e4a450f8bdd82b96b4d4cbfbb884fca8a619e8c5c8057",
+  "hero_component_registry_hash": "487aa2620b5be99480a81d462082f1a35ee637ec2cc38ebf42b1bcf1103d06c9",
+  "canonical_card_count": 198,
+  "style_1_ui_changed": false,
+  "main_deck_legal_size": 60,
+  "normal_copy_limit": 2,
+  "ultimate_copy_limit": 1,
+  "release_delta": "Mobile hamburger dropdown visibility fix: menu is promoted outside clipped headers and positioned against the three-line button. Cross-app links remain VS AI / PVP / Deck Builder Style 2. Deck logic/UI otherwise unchanged."
+}

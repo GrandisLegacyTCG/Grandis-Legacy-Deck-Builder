@@ -762,3 +762,7 @@ input[type="text"],input[type="search"],textarea{
   .mobile-app-menu-button{display:flex}
   .topbar{flex-wrap:nowrap!important}
 }
+
+/* v1.21 mobile application menu visibility fix */
+.mobile-app-menu{position:fixed!important;z-index:10000!important}
+@media(max-width:760px){.mobile-app-menu-button{position:relative;z-index:10001}}

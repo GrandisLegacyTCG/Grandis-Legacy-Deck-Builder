@@ -1,4 +1,12 @@
-# Grandis Legacy Deck Builder v1.20
+# Grandis Legacy Deck Builder v1.21
+
+
+## v1.21 — Mobile hamburger dropdown visibility fix
+
+- Fixed the mobile three-line application menu opening without visible choices in clipped header layouts.
+- The dropdown is now promoted to the document body and positioned against the hamburger button, so VS AI / PVP / DECK BUILDER choices remain visible above Style 2 UI.
+- Mobile Deck Builder continues to route DECK BUILDER to Style 2.
+- Deck editing, Deck View, legality, export, drag/drop, and desktop navigation are unchanged.
 
 ## v1.20 — Style 2 Deck View literal library reuse + mobile position alignment
 
