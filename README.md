@@ -1,12 +1,12 @@
-# Grandis Legacy Deck Builder v1.18
+# Grandis Legacy Deck Builder v1.19
 
-## v1.18 — Style 2 Main Deck View size parity
+## v1.19 — Style 2 Deck View literal library reuse + mobile position alignment
 
-- Main Deck View now uses the same modal size and card dimensions as Legacy Deck Library.
-- Prevents card overlap/stacking in the view-only deck overview.
-- Quantity badges and enlarge/preview buttons are preserved.
-- No deck editing, legality, Style 1, or Source Stack behavior changed.
-
+- Main Deck **Deck View** now uses the exact same modal, scroll grid, and card-tile classes as **Legacy Deck Library** instead of a parallel layout implementation.
+- Main Deck quantity badges (`×1` / `×2`) and enlarge/preview controls remain.
+- Mobile Hero and Legacy frames now share the exact same three LEFT / CENTER / RIGHT columns and frame width.
+- Existing 4-button mobile Deck Name row is preserved.
+- Style 1, 60-card legality, Style 2 80-card workspace, export guard, drag/drop, card data, and Source Stack are unchanged.
 
 ## v1.17 — Style 2 minor mobile alignment + Main Deck view
 
