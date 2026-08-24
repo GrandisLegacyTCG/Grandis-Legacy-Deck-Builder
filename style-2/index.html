@@ -25,6 +25,15 @@
           <p>Build your Legacy Deck first, then complete your Main Deck.</p>
         </div>
       </div>
+
+      <button class="mobile-app-menu-button" type="button" aria-expanded="false" aria-controls="mobile-app-menu" aria-label="Open application menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="mobile-app-menu" class="mobile-app-menu" aria-label="Grandis Legacy mobile applications" hidden>
+        <a href="https://grandislegacytcg.github.io/Grandis-Legacy-VS-AI/">VS AI</a>
+        <a href="https://grandislegacytcg.github.io/pvp/">PVP</a>
+        <a href="https://grandislegacytcg.github.io/Grandis-Legacy-Deck-Builder/style-2/">DECK BUILDER</a>
+      </nav>
       <nav class="global-nav" aria-label="Grandis Legacy applications"><a class="global-nav-link global-nav-link--outline" href="https://grandislegacytcg.github.io/Grandis-Legacy-VS-AI/">GO TO VS AI</a><a class="global-nav-link global-nav-link--blue" href="https://grandislegacytcg.github.io/pvp/">GO TO PVP</a></nav>
     </header>
 
@@ -210,5 +219,6 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="js/data.js?v=1.19"></script>
   <script src="js/app-v1.19.js?v=1.19"></script>
+  <script src="../js/mobile-app-nav.js?v=1.20"></script>
 </body>
 </html>

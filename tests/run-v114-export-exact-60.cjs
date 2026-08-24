@@ -7,7 +7,7 @@ const style2=fs.readFileSync('style-2/js/app-v1.19.js','utf8');
 const style2Html=fs.readFileSync('style-2/index.html','utf8');
 const style2Css=fs.readFileSync('style-2/css/app-v1.19.css','utf8');
 function must(x,m){if(!x)throw new Error(m)}
-must(pkg.version==='1.19.0','Package version must be 1.19.0');
+must(pkg.version==='1.20.0','Package version must be 1.20.0');
 must(style1.includes("if(countDeck()!==60){toast('Main Deck must contain exactly 60 cards before exporting');return}"),'Style 1 exact-60 hard export guard missing');
 must(style1Html.includes('js/app.js?v=1.15')&&style1Html.includes('css/app.css?v=1.15'),'Root Style 1 cache-busting refs missing');
 must(style1Route.includes('js/app.js?v=1.15')&&style1Route.includes('css/app.css?v=1.15'),'Explicit /style-1/ cache-busting refs missing');

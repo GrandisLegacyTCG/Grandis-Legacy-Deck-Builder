@@ -1,6 +1,6 @@
-# Grandis Legacy Deck Builder v1.19
+# Grandis Legacy Deck Builder v1.20
 
-## v1.19 — Style 2 Deck View literal library reuse + mobile position alignment
+## v1.20 — Style 2 Deck View literal library reuse + mobile position alignment
 
 - Main Deck **Deck View** now uses the exact same modal, scroll grid, and card-tile classes as **Legacy Deck Library** instead of a parallel layout implementation.
 - Main Deck quantity badges (`×1` / `×2`) and enlarge/preview controls remain.
@@ -60,3 +60,11 @@ Built directly on v1.11.
 - Hovering/focusing the `Skills XX` summary in Style 2 shows Skill counts by Class, up to 3 Classes.
 - All v1.11 navigation behavior is preserved, including same-tab public VS AI/PvP routes and clickable Grandis Legacy homepage logos.
 - Style 1 gameplay/layout behavior is unchanged.
+
+## v1.20 mobile navigation
+
+- Mobile Deck Builder now uses a three-line application menu instead of the large VS AI / PvP buttons.
+- Menu destinations: VS AI, PVP, and Deck Builder.
+- Every mobile Deck Builder destination points to Style 2.
+- Desktop cross-application navigation remains unchanged.
+- Style 1 / Style 2 deck behavior, legality, export, drag-and-drop, and Deck View are unchanged.
