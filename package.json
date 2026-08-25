@@ -1,8 +1,8 @@
 {
   "name": "grandis-legacy-deck-builder",
-  "version": "1.21.0",
+  "version": "1.22.0",
   "private": true,
-  "description": "Grandis Legacy Deck Builder v1.21 \u2014 mobile cross-application hamburger dropdown visibility fix; existing v1.19 deck UI and logic preserved.",
+  "description": "Grandis Legacy Deck Builder v1.22 — Source Stack v1.7.1 card authority synchronization; existing deck UI behavior preserved.",
   "scripts": {
     "build:data": "node tools/build-deck-data.cjs",
     "check": "npm run build:data && node --check tools/build-deck-data.cjs && node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app-v1.19.js && node tests/run-v17-ui-contract.cjs && node tests/run-v110-home-logo-navigation.cjs && node tests/run-v111-same-tab-navigation.cjs && node tests/run-v114-export-exact-60.cjs && node tests/run-v117-source-stack.cjs && node tests/run-v119-style2-layout.cjs && node tests/run-v120-mobile-navigation.cjs && node tests/run-v121-mobile-navigation.cjs",

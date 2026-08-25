@@ -35,7 +35,7 @@
 - Exact-60 export, Style 2 workspace maximum 80, desktop drag/drop, and mobile +/- editing remain verified.
 
 ## v1.15 — Source Stack 2026-08-24 + Style 2 mobile/drag update
-- Adopted all 198 canonical Season 1 Card IDs from Runtime Data v0.13.0, including `S1-THF-010` **Back Slash** and all 30 revised functional entries.
+- Adopted all 198 canonical Season 1 Card IDs from Runtime Data v0.13.1, including `S1-THF-010` **Back Slash** and all 30 revised functional entries.
 - Embedded Hero Component Authority v1.0.0: 6 reusable Racial Traits, 16 reusable Class Abilities, 10 Hero profiles, and 30 resolved Hero compositions.
 - Style 2 mobile Main Deck now uses vertical Skills / Events / Items lists with thumbnail, name, type/subtype, Mana, minus, quantity, and plus controls.
 - Style 2 mobile Legacy Deck was compacted into a collision-free three-position layout; swap and Rank controls remain accessible.

@@ -3,7 +3,7 @@
 ## 1. Source Stack adoption
 - One Source Authority v1.6.0
 - Runtime Foundation v1.84 / Runtime Core Template v0.52
-- Season 1 Runtime Data v0.13.0
+- Season 1 Runtime Data v0.13.1
 - Effect Recipe / Checkpoint v0.12.0
 - Legality Map v0.11.8
 - Application Runtime Sync v2.46

@@ -5,14 +5,14 @@ const path=require('path');
 const vm=require('vm');
 
 const ROOT=path.resolve(__dirname,'..');
-const RUNTIME_PATH=path.join(ROOT,'data/season1/cards.runtime.v0.13.1.json');
+const RUNTIME_PATH=path.join(ROOT,'data/season1/cards.runtime.v0.14.1.json');
 const runtime=JSON.parse(fs.readFileSync(RUNTIME_PATH,'utf8'));
 const canonicalById=new Map(runtime.cards.map(card=>[card.card_id,card]));
 
 if(runtime.count!==198||canonicalById.size!==198){
   throw new Error(`Canonical Season 1 registry must contain exactly 198 unique cards (found ${canonicalById.size}).`);
 }
-if(runtime.canonical_registry_hash!=='b185307752fd523d6c1e4a450f8bdd82b96b4d4cbfbb884fca8a619e8c5c8057'){
+if(runtime.canonical_registry_hash!=='8ee6bb98c22dc66ee72f49fa88b4f7fd05fce1c96a2932e28a1a8667c9d3932e'){
   throw new Error('Unexpected canonical Season 1 registry hash.');
 }
 if(runtime.hero_component_registry_hash!=='487aa2620b5be99480a81d462082f1a35ee637ec2cc38ebf42b1bcf1103d06c9'){

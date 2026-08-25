@@ -454,6 +454,6 @@
     "CENTER": "S1-WAR-H001",
     "RIGHT": "S1-THF-H001"
   },
-  "source_database_version": "Grandis Legacy Source Authority Stack Hotfix 2026-08-24 · OSA v1.6.1 · Runtime Data v0.13.1 · registry b185307752fd523d6c1e4a450f8bdd82b96b4d4cbfbb884fca8a619e8c5c8057",
+  "source_database_version": "Grandis Legacy Source Authority Stack Hotfix 2026-08-24 · OSA v1.6.1 · Runtime Data v0.13.1 · registry 8ee6bb98c22dc66ee72f49fa88b4f7fd05fce1c96a2932e28a1a8667c9d3932e",
   "builder_version_note": "Deck Builder v1.17 preserves the approved deck contents and corrected Source Stack registry while adding targeted Style 2 presentation controls."
 }
