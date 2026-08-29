@@ -1,8 +1,8 @@
 {
   "schema_version": "GL-DECK-1.0",
-  "builder_version": "1.23-public-deck-builder",
+  "builder_version": "1.24-public-deck-builder",
   "deck_name": "Starter 4 - GrandRanger/Conqueror/GrandArbalest",
-  "format": "One Source Authority v1.7.3 + Starter60 v1.3",
+  "format": "One Source Authority v1.7.3 + Starter60 v1.4",
   "main_deck_count": 60,
   "legacy_package_count": 3,
   "legacy_deck_count": 12,
@@ -445,5 +445,5 @@
     "RIGHT": "S1-ARC-H004"
   },
   "source_database_version": "Grandis Legacy Source Authority Stack v1.7.3 · OSA v1.7.3 · Runtime Data v0.14.2 · registry 5d362f3c1dd785af82f12297d6ab1ecea4f6c43508a7b0f48319e846dd61139c",
-  "builder_version_note": "Deck Builder v1.17 preserves the approved deck contents and corrected Source Stack registry while adding targeted Style 2 presentation controls."
+  "builder_version_note": "Deck Builder v1.24 uses Starter60 v1.4 replacement authority for Starter 1 and Starter 2 while preserving current Source Stack v1.7.3 card authority."
 }

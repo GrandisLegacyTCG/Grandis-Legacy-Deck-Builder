@@ -93,10 +93,10 @@ function updateStarter(starter){
       if(card)entry.card_name=card.name;
     }
   }
-  next.builder_version='1.23-public-deck-builder';
-  next.format='One Source Authority v1.7.3 + Starter60 v1.3';
+  next.builder_version='1.24-public-deck-builder';
+  next.format='One Source Authority v1.7.3 + Starter60 v1.4';
   next.source_database_version=`Grandis Legacy Source Authority Stack v1.7.3 · OSA v1.7.3 · Runtime Data v0.14.2 · registry ${runtime.canonical_registry_hash}`;
-  next.builder_version_note='Deck Builder v1.17 preserves the approved deck contents and corrected Source Stack registry while adding targeted Style 2 presentation controls.';
+  next.builder_version_note='Deck Builder v1.24 uses Starter60 v1.4 replacement authority for Starter 1 and Starter 2 while preserving current Source Stack v1.7.3 card authority.';
   return next;
 }
 
@@ -127,13 +127,13 @@ function build(relativePath,builderVersion){
     heroComponents:runtime.hero_components,
     mainCards:(previous.mainCards||[]).map(updateCard),
     legacyCards:(previous.legacyCards||[]).map(updateCard),
-    starters:(previous.starters||[]).map(updateStarter)
+    starters:fs.readdirSync(path.join(ROOT,'starter_deck_examples')).filter(file=>/^Starter_[1-5]_.*\.json$/i.test(file)).sort().map(file=>updateStarter(JSON.parse(fs.readFileSync(path.join(ROOT,'starter_deck_examples',file),'utf8'))))
   };
   fs.writeFileSync(path.join(ROOT,relativePath),`window.GL_DECK_BUILDER_DATA = ${JSON.stringify(data)};\n`);
 }
 
-build('js/data.js','3.20-public-deck-builder');
-build('style-2/js/data.js','2.22-classic-split');
+build('js/data.js','3.21-public-deck-builder');
+build('style-2/js/data.js','2.23-classic-split');
 for(const name of fs.readdirSync(path.join(ROOT,'starter_deck_examples')).filter(file=>file.endsWith('.json'))){
   const target=path.join(ROOT,'starter_deck_examples',name);
   const starter=updateStarter(JSON.parse(fs.readFileSync(target,'utf8')));

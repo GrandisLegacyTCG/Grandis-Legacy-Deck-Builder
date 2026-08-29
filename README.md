@@ -1,9 +1,9 @@
-# Grandis Legacy Deck Builder v1.23
+# Grandis Legacy Deck Builder v1.24
 
 
 ## v1.21 — Mobile hamburger dropdown visibility fix
 
-## v1.23 Source Stack v1.7.3 Hero HP sync
+## v1.24 Source Stack v1.7.3 Hero HP sync
 
 - Synchronizes Hero HP and canonical card authority to Source Stack v1.7.3.
 - Regenerates Style 1 / Style 2 source data and manifests.
