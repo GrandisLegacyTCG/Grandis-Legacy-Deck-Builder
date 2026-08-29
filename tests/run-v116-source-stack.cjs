@@ -11,13 +11,13 @@ function loadBuilder(file){
   return context.window.GL_DECK_BUILDER_DATA;
 }
 
-const runtime=JSON.parse(fs.readFileSync('data/season1/cards.runtime.v0.13.1.json','utf8'));
+const runtime=JSON.parse(fs.readFileSync('data/season1/cards.runtime.v0.14.2.json','utf8'));
 const components=JSON.parse(fs.readFileSync('data/season1/hero-components.runtime.v1.0.0.json','utf8'));
 const canonical=new Map(runtime.cards.map(card=>[card.card_id,card]));
 
 assert.equal(runtime.count,198);
 assert.equal(canonical.size,198);
-assert.equal(runtime.canonical_registry_hash,'b185307752fd523d6c1e4a450f8bdd82b96b4d4cbfbb884fca8a619e8c5c8057');
+assert.equal(runtime.canonical_registry_hash,'5d362f3c1dd785af82f12297d6ab1ecea4f6c43508a7b0f48319e846dd61139c');
 assert.equal(components.registry_hash,'487aa2620b5be99480a81d462082f1a35ee637ec2cc38ebf42b1bcf1103d06c9');
 
 for(const file of ['js/data.js','style-2/js/data.js']){
@@ -43,7 +43,7 @@ for(const file of ['js/data.js','style-2/js/data.js']){
   assert(!cards.some(card=>card.name==='Back Stab'));
   for(const starter of data.starters||[]){
     assert(!JSON.stringify(starter).includes('Back Stab'),`${file}: starter retains Back Stab`);
-    assert(String(starter.format||'').includes('One Source Authority v1.6.1'),`${file}: starter format is stale`);
+    assert(String(starter.format||'').includes('One Source Authority v1.7.3'),`${file}: starter format is stale`);
     assert(String(starter.source_database_version||'').includes(runtime.canonical_registry_hash),`${file}: starter registry is stale`);
   }
 }

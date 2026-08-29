@@ -1,8 +1,8 @@
 {
   "schema_version": "GL-DECK-1.0",
-  "builder_version": "1.17-public-deck-builder",
+  "builder_version": "1.23-public-deck-builder",
   "deck_name": "Starter 2 - Saint/Crusader/GrandRanger",
-  "format": "One Source Authority v1.6.1 + Starter60 v1.3",
+  "format": "One Source Authority v1.7.3 + Starter60 v1.3",
   "main_deck_count": 60,
   "legacy_package_count": 3,
   "legacy_deck_count": 12,
@@ -439,6 +439,6 @@
     "CENTER": "S1-WAR-H004",
     "RIGHT": "S1-ARC-H001"
   },
-  "source_database_version": "Grandis Legacy Source Authority Stack Hotfix 2026-08-24 · OSA v1.6.1 · Runtime Data v0.13.1 · registry 8ee6bb98c22dc66ee72f49fa88b4f7fd05fce1c96a2932e28a1a8667c9d3932e",
+  "source_database_version": "Grandis Legacy Source Authority Stack v1.7.3 · OSA v1.7.3 · Runtime Data v0.14.2 · registry 5d362f3c1dd785af82f12297d6ab1ecea4f6c43508a7b0f48319e846dd61139c",
   "builder_version_note": "Deck Builder v1.17 preserves the approved deck contents and corrected Source Stack registry while adding targeted Style 2 presentation controls."
 }

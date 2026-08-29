@@ -5,14 +5,14 @@ const path=require('path');
 const vm=require('vm');
 
 const ROOT=path.resolve(__dirname,'..');
-const RUNTIME_PATH=path.join(ROOT,'data/season1/cards.runtime.v0.14.1.json');
+const RUNTIME_PATH=path.join(ROOT,'data/season1/cards.runtime.v0.14.2.json');
 const runtime=JSON.parse(fs.readFileSync(RUNTIME_PATH,'utf8'));
 const canonicalById=new Map(runtime.cards.map(card=>[card.card_id,card]));
 
 if(runtime.count!==198||canonicalById.size!==198){
   throw new Error(`Canonical Season 1 registry must contain exactly 198 unique cards (found ${canonicalById.size}).`);
 }
-if(runtime.canonical_registry_hash!=='8ee6bb98c22dc66ee72f49fa88b4f7fd05fce1c96a2932e28a1a8667c9d3932e'){
+if(runtime.canonical_registry_hash!=='5d362f3c1dd785af82f12297d6ab1ecea4f6c43508a7b0f48319e846dd61139c'){
   throw new Error('Unexpected canonical Season 1 registry hash.');
 }
 if(runtime.hero_component_registry_hash!=='487aa2620b5be99480a81d462082f1a35ee637ec2cc38ebf42b1bcf1103d06c9'){
@@ -93,9 +93,9 @@ function updateStarter(starter){
       if(card)entry.card_name=card.name;
     }
   }
-  next.builder_version='1.17-public-deck-builder';
-  next.format='One Source Authority v1.6.1 + Starter60 v1.3';
-  next.source_database_version=`Grandis Legacy Source Authority Stack Hotfix 2026-08-24 · OSA v1.6.1 · Runtime Data v0.13.1 · registry ${runtime.canonical_registry_hash}`;
+  next.builder_version='1.23-public-deck-builder';
+  next.format='One Source Authority v1.7.3 + Starter60 v1.3';
+  next.source_database_version=`Grandis Legacy Source Authority Stack v1.7.3 · OSA v1.7.3 · Runtime Data v0.14.2 · registry ${runtime.canonical_registry_hash}`;
   next.builder_version_note='Deck Builder v1.17 preserves the approved deck contents and corrected Source Stack registry while adding targeted Style 2 presentation controls.';
   return next;
 }
@@ -110,18 +110,18 @@ function build(relativePath,builderVersion){
     ...previous,
     schemaVersion:'GL-DECK-BUILDER-DATA-1.1',
     builderVersion,
-    sourceDatabaseVersion:`Grandis Legacy Source Authority Stack Hotfix 2026-08-24 · OSA v1.6.1 · Runtime Data v0.13.1 · registry ${runtime.canonical_registry_hash}`,
+    sourceDatabaseVersion:`Grandis Legacy Source Authority Stack v1.7.3 · OSA v1.7.3 · Runtime Data v0.14.2 · registry ${runtime.canonical_registry_hash}`,
     canonicalRegistryHash:runtime.canonical_registry_hash,
     heroComponentRegistryHash:runtime.hero_component_registry_hash,
     sourceStack:{
-      oneSourceAuthority:'1.6.1',
-      runtimeFoundation:'1.85',
-      runtimeCoreTemplate:'0.53',
-      runtimeData:'0.13.1',
-      effectRecipe:'0.12.1',
-      effectCheckpoint:'0.12.1',
+      oneSourceAuthority:'1.7.3',
+      runtimeFoundation:'1.89',
+      runtimeCoreTemplate:'0.57',
+      runtimeData:'0.14.2',
+      effectRecipe:'0.13.2',
+      effectCheckpoint:'0.13.2',
       legalityMap:'0.11.9',
-      applicationRuntimeSync:'2.47',
+      applicationRuntimeSync:'2.51',
       heroComponentAuthority:'1.0.0'
     },
     heroComponents:runtime.hero_components,
@@ -132,8 +132,8 @@ function build(relativePath,builderVersion){
   fs.writeFileSync(path.join(ROOT,relativePath),`window.GL_DECK_BUILDER_DATA = ${JSON.stringify(data)};\n`);
 }
 
-build('js/data.js','3.15-public-deck-builder');
-build('style-2/js/data.js','2.17-classic-split');
+build('js/data.js','3.20-public-deck-builder');
+build('style-2/js/data.js','2.22-classic-split');
 for(const name of fs.readdirSync(path.join(ROOT,'starter_deck_examples')).filter(file=>file.endsWith('.json'))){
   const target=path.join(ROOT,'starter_deck_examples',name);
   const starter=updateStarter(JSON.parse(fs.readFileSync(target,'utf8')));

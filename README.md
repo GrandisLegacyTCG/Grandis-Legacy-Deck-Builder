@@ -1,7 +1,14 @@
-# Grandis Legacy Deck Builder v1.21
+# Grandis Legacy Deck Builder v1.23
 
 
 ## v1.21 — Mobile hamburger dropdown visibility fix
+
+## v1.23 Source Stack v1.7.3 Hero HP sync
+
+- Synchronizes Hero HP and canonical card authority to Source Stack v1.7.3.
+- Regenerates Style 1 / Style 2 source data and manifests.
+- No Deck Builder layout, legality, export, or interaction changes.
+
 
 - Fixed the mobile three-line application menu opening without visible choices in clipped header layouts.
 - The dropdown is now promoted to the document body and positioned against the hamburger button, so VS AI / PVP / DECK BUILDER choices remain visible above Style 2 UI.

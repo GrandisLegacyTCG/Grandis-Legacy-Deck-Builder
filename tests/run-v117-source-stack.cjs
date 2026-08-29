@@ -11,13 +11,13 @@ function loadBuilder(file){
   return context.window.GL_DECK_BUILDER_DATA;
 }
 
-const runtime=JSON.parse(fs.readFileSync('data/season1/cards.runtime.v0.13.1.json','utf8'));
+const runtime=JSON.parse(fs.readFileSync('data/season1/cards.runtime.v0.14.2.json','utf8'));
 const components=JSON.parse(fs.readFileSync('data/season1/hero-components.runtime.v1.0.0.json','utf8'));
 const canonical=new Map(runtime.cards.map(card=>[card.card_id,card]));
 
 assert.equal(runtime.count,198);
 assert.equal(canonical.size,198);
-assert.equal(runtime.canonical_registry_hash,'b185307752fd523d6c1e4a450f8bdd82b96b4d4cbfbb884fca8a619e8c5c8057');
+assert.equal(runtime.canonical_registry_hash,'5d362f3c1dd785af82f12297d6ab1ecea4f6c43508a7b0f48319e846dd61139c');
 assert.equal(components.registry_hash,'487aa2620b5be99480a81d462082f1a35ee637ec2cc38ebf42b1bcf1103d06c9');
 
 for(const file of ['js/data.js','style-2/js/data.js']){
@@ -43,7 +43,7 @@ for(const file of ['js/data.js','style-2/js/data.js']){
   assert(!cards.some(card=>card.name==='Back Stab'));
   for(const starter of data.starters||[]){
     assert(!JSON.stringify(starter).includes('Back Stab'),`${file}: starter retains Back Stab`);
-    assert(String(starter.format||'').includes('One Source Authority v1.6.1'),`${file}: starter format is stale`);
+    assert(String(starter.format||'').includes('One Source Authority v1.7.3'),`${file}: starter format is stale`);
     assert(String(starter.source_database_version||'').includes(runtime.canonical_registry_hash),`${file}: starter registry is stale`);
   }
 }
@@ -54,7 +54,7 @@ for(const name of fs.readdirSync('starter_deck_examples').filter(file=>file.ends
   assert(!content.includes('One Source Authority v1.4'),`${name}: stale OSA marker remains`);
   assert(!content.includes('Starter60 v1.2'),`${name}: stale Starter60 marker remains`);
   const starter=JSON.parse(content);
-  assert.equal(starter.builder_version,'1.17-public-deck-builder',`${name}: stale repository release metadata`);
+  assert.equal(starter.builder_version,'1.23-public-deck-builder',`${name}: stale repository release metadata`);
   for(const field of ['main_deck','main_deck_expanded','legacy_deck_expanded','side_deck_expanded']){
     for(const entry of starter[field]||[]){
       const source=canonical.get(entry.card_id);
@@ -74,4 +74,4 @@ assert.equal(resurrection.canonical_execution.revive_policy.set_hp,50);
 assert.equal(resurrection.canonical_execution.revive.set_hp,50);
 assert(!JSON.stringify(resurrection).includes('40 HP'));
 
-console.log('PASS Deck Builder v1.17 corrected 198-card and Hero Component Source Stack parity');
+console.log('PASS Deck Builder v1.23 corrected 198-card and Hero Component Source Stack parity');
