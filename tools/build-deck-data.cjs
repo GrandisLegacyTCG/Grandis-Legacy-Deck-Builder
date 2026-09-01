@@ -94,10 +94,10 @@ function updateStarter(starter){
       if(card)entry.card_name=card.name;
     }
   }
-  next.builder_version='1.26-public-deck-builder';
+  next.builder_version='1.27-public-deck-builder';
   next.format='One Source Authority v1.7.3 + Starter60 v1.4';
   next.source_database_version=`Grandis Legacy Source Authority Stack v1.7.3 · OSA v1.7.3 · Runtime Data v0.14.2 · registry ${runtime.canonical_registry_hash}`;
-  next.builder_version_note='Deck Builder v1.26 allows legal Main Deck sizes of exactly 50 or 60 cards and up to 3 copies of each normal Main Deck card; Ultimate remains maximum 1 copy. Starter60 v1.4 and Source Stack v1.7.3 authority are preserved.';
+  next.builder_version_note='Deck Builder v1.27 allows legal Main Deck sizes of exactly 50 or 60 cards and up to 3 copies of each normal Main Deck card; Ultimate remains maximum 1 copy. Starter60 v1.4 and Source Stack v1.7.3 authority are preserved.';
   return next;
 }
 

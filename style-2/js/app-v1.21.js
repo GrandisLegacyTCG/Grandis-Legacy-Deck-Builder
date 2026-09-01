@@ -77,8 +77,7 @@ function skillClassBreakdown(){
     counts.set(className,(counts.get(className)||0)+qty);
   }
   return Array.from(counts.entries())
-    .sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]))
-    .slice(0,3);
+    .sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
 }
 function renderSkillClassTooltip(){
   const tip=$('skillClassTooltip');if(!tip)return;

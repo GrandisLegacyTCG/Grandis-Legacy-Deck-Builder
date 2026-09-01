@@ -1,4 +1,4 @@
-# Grandis Legacy Deck Builder v1.26
+# Grandis Legacy Deck Builder v1.27
 
 
 ## v1.26 — 50 / 60 Main Deck test format

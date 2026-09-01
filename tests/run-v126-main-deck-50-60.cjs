@@ -24,8 +24,8 @@ must(s2.includes("if(!isLegalMainDeckSize(countDeck()))issues.push(`Main Deck mu
 must(s2.includes("if(!isLegalMainDeckSize(countDeck())){toast('Main Deck must contain exactly 50 or 60 cards before exporting')"),'Style 2 export guard is not 50/60');
 must(s1.includes('Number(card?.maxCopies||3)') && s2.includes('Number(card?.maxCopies||3)'),'Normal max-3 fallback missing');
 must(s1.includes('card?.ultimate?.isUltimate?1') && s2.includes('card?.ultimate?.isUltimate?1'),'Ultimate max-1 guard missing');
-const lock=JSON.parse(fs.readFileSync(path.join(root,'release/DECK_RULE_LOCK_v1.26.json'),'utf8'));
+const lock=JSON.parse(fs.readFileSync(path.join(root,'release/DECK_RULE_LOCK_v1.27.json'),'utf8'));
 must(JSON.stringify(lock.main_deck_legal_sizes)===JSON.stringify([50,60]),'Release lock 50/60 sizes missing');
 must(lock.normal_copy_limit===3 && lock.ultimate_copy_limit===1,'Release copy limits mismatch');
-must(pkg.version==='1.26.0','Package version mismatch');
-console.log('PASS v1.26: Deck Builder accepts exactly 50 or 60 cards, normal max 3, Ultimate max 1.');
+must(pkg.version==='1.27.0','Package version mismatch');
+console.log('PASS v1.27: Deck Builder accepts exactly 50 or 60 cards, normal max 3, Ultimate max 1.');

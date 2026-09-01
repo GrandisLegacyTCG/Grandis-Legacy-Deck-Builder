@@ -1,11 +1,5 @@
-# Grandis Legacy Deck Builder Release Records
+# Release records
 
-Version-bump artifacts are stored here instead of the repository root.
+Current release: **v1.27**.
 
-Current release: **v1.26** (2026-09-01).
-
-- `RELEASE_NOTE_v1.26.md`
-- `UPDATE_SUMMARY_v1.26.md`
-- `VERIFICATION_v1.26.md`
-- `DECK_RULE_LOCK_v1.26.json`
-- `history/` contains prior release records.
+All new version-bump/release/update/verification records belong in this `release/` directory. Historical release records belong in `release/history/`; do not add new release-note files to the repository root.

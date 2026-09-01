@@ -5,7 +5,7 @@ const css=fs.readFileSync('style-2/css/app-v1.19.css','utf8');
 const html=fs.readFileSync('style-2/index.html','utf8');
 const js=fs.readFileSync('style-2/js/app-v1.21.js','utf8');
 assert(html.includes('app-v1.19.css?v=1.19'),'v1.19 CSS is not active');
-assert(html.includes('app-v1.21.js?v=1.26'),'v1.21 JS is not active');
+assert(html.includes('app-v1.21.js?v=1.27'),'v1.21 JS is not active');
 assert(/id="mainDeckViewDialog" class="app-dialog legacy-reference-dialog"/.test(html),'Deck View does not reuse Legacy dialog class');
 assert((html.match(/class="dialog-card legacy-reference-card"/g)||[]).length>=2,'Deck View does not reuse Legacy card container class');
 assert(/<div class="legacy-reference-head">[\s\S]*?Deck View/.test(html),'Deck View does not reuse Legacy header class');
