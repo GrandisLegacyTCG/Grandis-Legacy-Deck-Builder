@@ -1,0 +1,12 @@
+{
+  "package": "Grandis Legacy Deck Builder",
+  "public_version": "1.25",
+  "date": "2026-09-01",
+  "main_deck_legal_size": 60,
+  "style_2_workspace_limit": 80,
+  "normal_copy_limit": 3,
+  "ultimate_copy_limit": 1,
+  "starter60": "1.4",
+  "source_stack": "1.7.3",
+  "scope": "Deck Builder legality/UI only; no gameplay/card-effect authority changes."
+}

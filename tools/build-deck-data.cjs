@@ -56,7 +56,8 @@ function updateCard(current){
     text:card.card_text||card.effect_text||'',
     rows:canonicalRows(card),
     image:`https://grandislegacytcg.github.io/shared/season1/v1/cards/thumbs/${card.card_id}.webp`,
-    canonicalHash:card.canonical_hash
+    canonicalHash:card.canonical_hash,
+    maxCopies:card.is_ultimate===true?1:3
   };
 
   const legal=asList(card.source_requirement?.legal_active_classes||card.legal_active_classes);
@@ -93,10 +94,10 @@ function updateStarter(starter){
       if(card)entry.card_name=card.name;
     }
   }
-  next.builder_version='1.24-public-deck-builder';
+  next.builder_version='1.25-public-deck-builder';
   next.format='One Source Authority v1.7.3 + Starter60 v1.4';
   next.source_database_version=`Grandis Legacy Source Authority Stack v1.7.3 · OSA v1.7.3 · Runtime Data v0.14.2 · registry ${runtime.canonical_registry_hash}`;
-  next.builder_version_note='Deck Builder v1.24 uses Starter60 v1.4 replacement authority for Starter 1 and Starter 2 while preserving current Source Stack v1.7.3 card authority.';
+  next.builder_version_note='Deck Builder v1.25 allows up to 3 copies of each normal Main Deck card while Ultimate cards remain maximum 1 copy. Starter60 v1.4 and Source Stack v1.7.3 authority are preserved.';
   return next;
 }
 
@@ -132,8 +133,8 @@ function build(relativePath,builderVersion){
   fs.writeFileSync(path.join(ROOT,relativePath),`window.GL_DECK_BUILDER_DATA = ${JSON.stringify(data)};\n`);
 }
 
-build('js/data.js','3.21-public-deck-builder');
-build('style-2/js/data.js','2.23-classic-split');
+build('js/data.js','3.22-public-deck-builder');
+build('style-2/js/data.js','2.24-classic-split');
 for(const name of fs.readdirSync(path.join(ROOT,'starter_deck_examples')).filter(file=>file.endsWith('.json'))){
   const target=path.join(ROOT,'starter_deck_examples',name);
   const starter=updateStarter(JSON.parse(fs.readFileSync(target,'utf8')));

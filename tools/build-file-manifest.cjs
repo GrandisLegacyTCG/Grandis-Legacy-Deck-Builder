@@ -23,4 +23,4 @@ for(const rel of walk(root)){
   rows.push(`${rel},${data.length},${crypto.createHash('sha256').update(data).digest('hex')}`);
 }
 fs.writeFileSync(path.join(root,'FILE_MANIFEST_SHA256.csv'),`${rows.join('\n')}\n`);
-console.log(`PASS Deck Builder v1.20 manifest: ${rows.length-1} files.`);
+console.log(`PASS Deck Builder v1.25 manifest: ${rows.length-1} files.`);
