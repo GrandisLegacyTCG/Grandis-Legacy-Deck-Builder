@@ -1,6 +1,6 @@
 {
   "schema_version": "GL-DECK-1.0",
-  "builder_version": "1.25-public-deck-builder",
+  "builder_version": "1.26-public-deck-builder",
   "deck_name": "Starter 2 - Saint/Crusader/GrandRanger",
   "format": "One Source Authority v1.7.3 + Starter60 v1.4",
   "main_deck_count": 60,
@@ -445,7 +445,7 @@
     "RIGHT": "S1-ARC-H001"
   },
   "source_database_version": "Grandis Legacy Source Authority Stack v1.7.3 · OSA v1.7.3 · Runtime Data v0.14.2 · registry 5d362f3c1dd785af82f12297d6ab1ecea4f6c43508a7b0f48319e846dd61139c",
-  "builder_version_note": "Deck Builder v1.25 allows up to 3 copies of each normal Main Deck card while Ultimate cards remain maximum 1 copy. Starter60 v1.4 and Source Stack v1.7.3 authority are preserved.",
+  "builder_version_note": "Deck Builder v1.26 allows legal Main Deck sizes of exactly 50 or 60 cards and up to 3 copies of each normal Main Deck card; Ultimate remains maximum 1 copy. Starter60 v1.4 and Source Stack v1.7.3 authority are preserved.",
   "display_name": "Starter 2 — Saint / Crusader / Grand Ranger",
   "preset_id": "starter_02_saint_crusader_grand_ranger",
   "main_deck_expanded": [

@@ -1,11 +1,11 @@
 # Grandis Legacy Deck Builder Release Records
 
-Version-bump artifacts are stored in this folder to keep the repository root clean.
+Version-bump artifacts are stored here instead of the repository root.
 
-Current release: **v1.25** (2026-09-01).
+Current release: **v1.26** (2026-09-01).
 
-- `RELEASE_NOTE_v1.25.md` — player-facing release delta.
-- `UPDATE_SUMMARY_v1.25.md` — implementation summary.
-- `VERIFICATION_v1.25.md` — test/verification record.
-- `DECK_RULE_LOCK_v1.25.json` — Deck Builder legality limits for this release.
-- `history/` — prior root-level release records moved during later updates.
+- `RELEASE_NOTE_v1.26.md`
+- `UPDATE_SUMMARY_v1.26.md`
+- `VERIFICATION_v1.26.md`
+- `DECK_RULE_LOCK_v1.26.json`
+- `history/` contains prior release records.

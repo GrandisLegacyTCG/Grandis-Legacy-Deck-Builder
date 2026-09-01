@@ -1,16 +1,13 @@
-# Grandis Legacy Deck Builder v1.25
+# Grandis Legacy Deck Builder v1.26
 
 
-## v1.25 — Normal card copy limit increased to 3
-
-- Normal Main Deck cards now allow a maximum of **3 copies per card** in both Style 1 and Style 2.
-- Ultimate cards remain limited to **1 copy**.
-- Import clamping, + buttons, desktop drag-and-drop, deck validation, and exported deck quantities all use the new copy limit.
-- Main Deck legal size remains exactly **60 cards**. Style 2 keeps its **80-card cutting workspace** and exact-60 export requirement.
-- Starter60 v1.4 replacements and Source Stack v1.7.3 gameplay/card authority are preserved.
-- Release/version notes for this update are stored under `release/` rather than the repository root.
-- Historical `SOURCE_LOCK_*` files remain snapshots of older releases; the current copy-limit rule is locked in `release/DECK_RULE_LOCK_v1.25.json`.
-
+## v1.26 — 50 / 60 Main Deck test format
+- Legal Main Deck size for save/export is now **exactly 50 or exactly 60 cards**.
+- Normal Main Deck cards allow **maximum 3 copies**.
+- Ultimate cards remain **maximum 1 copy**.
+- Style 2 keeps its 80-card cutting workspace; counts other than 50 or 60 remain editable but cannot be exported as a valid deck.
+- No Hero/card-effect/gameplay authority changes are included.
+- Current rule record: `release/DECK_RULE_LOCK_v1.26.json`.
 
 ## v1.21 — Mobile hamburger dropdown visibility fix
 

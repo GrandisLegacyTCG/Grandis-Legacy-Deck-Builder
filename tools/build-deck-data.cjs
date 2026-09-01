@@ -94,10 +94,10 @@ function updateStarter(starter){
       if(card)entry.card_name=card.name;
     }
   }
-  next.builder_version='1.25-public-deck-builder';
+  next.builder_version='1.26-public-deck-builder';
   next.format='One Source Authority v1.7.3 + Starter60 v1.4';
   next.source_database_version=`Grandis Legacy Source Authority Stack v1.7.3 · OSA v1.7.3 · Runtime Data v0.14.2 · registry ${runtime.canonical_registry_hash}`;
-  next.builder_version_note='Deck Builder v1.25 allows up to 3 copies of each normal Main Deck card while Ultimate cards remain maximum 1 copy. Starter60 v1.4 and Source Stack v1.7.3 authority are preserved.';
+  next.builder_version_note='Deck Builder v1.26 allows legal Main Deck sizes of exactly 50 or 60 cards and up to 3 copies of each normal Main Deck card; Ultimate remains maximum 1 copy. Starter60 v1.4 and Source Stack v1.7.3 authority are preserved.';
   return next;
 }
 
@@ -133,8 +133,8 @@ function build(relativePath,builderVersion){
   fs.writeFileSync(path.join(ROOT,relativePath),`window.GL_DECK_BUILDER_DATA = ${JSON.stringify(data)};\n`);
 }
 
-build('js/data.js','3.22-public-deck-builder');
-build('style-2/js/data.js','2.24-classic-split');
+build('js/data.js','3.23-public-deck-builder');
+build('style-2/js/data.js','2.25-classic-split');
 for(const name of fs.readdirSync(path.join(ROOT,'starter_deck_examples')).filter(file=>file.endsWith('.json'))){
   const target=path.join(ROOT,'starter_deck_examples',name);
   const starter=updateStarter(JSON.parse(fs.readFileSync(target,'utf8')));
