@@ -1,11 +1,11 @@
 {
   "name": "grandis-legacy-deck-builder",
-  "version": "1.27.0",
+  "version": "1.28.0",
   "private": true,
-  "description": "Grandis Legacy Deck Builder v1.27 — 50/60 save/export, max-3 normal copies, five-row Skill Classes breakdown.",
+  "description": "Grandis Legacy Deck Builder v1.28 \u2014 unrestricted Main Deck save/export count, max-3 normal copies, max-1 Ultimate.",
   "scripts": {
     "build:data": "node tools/build-deck-data.cjs",
-    "check": "npm run build:data && node --check tools/build-deck-data.cjs && node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app-v1.21.js && node tests/run-v17-ui-contract.cjs && node tests/run-v110-home-logo-navigation.cjs && node tests/run-v111-same-tab-navigation.cjs && node tests/run-v126-main-deck-50-60.cjs && node tests/run-v117-source-stack.cjs && node tests/run-v119-style2-layout.cjs && node tests/run-v120-mobile-navigation.cjs && node tests/run-v121-mobile-navigation.cjs && node tests/run-v123-hero-hp-source.cjs && node tests/run-v124-starter-favicon.cjs && node tests/run-v127-next-fixes.cjs",
+    "check": "npm run build:data && node --check tools/build-deck-data.cjs && node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app-v1.21.js && node tests/run-v17-ui-contract.cjs && node tests/run-v110-home-logo-navigation.cjs && node tests/run-v111-same-tab-navigation.cjs && node tests/run-v128-deck-save-policy.cjs && node tests/run-v117-source-stack.cjs && node tests/run-v119-style2-layout.cjs && node tests/run-v120-mobile-navigation.cjs && node tests/run-v121-mobile-navigation.cjs && node tests/run-v123-hero-hp-source.cjs && node tests/run-v124-starter-favicon.cjs && node tests/run-v127-next-fixes.cjs",
     "manifest": "node tools/build-file-manifest.cjs",
     "verify": "npm run check && npm run manifest && node tests/run-manifest-verification.cjs"
   }

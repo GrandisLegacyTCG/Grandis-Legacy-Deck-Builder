@@ -1,0 +1,14 @@
+{
+  "version": "v1.28",
+  "date": "2026-09-04",
+  "main_deck_save_export_size_policy": "ANY_COUNT",
+  "style_2_workspace_limit": 80,
+  "normal_copy_limit": 3,
+  "ultimate_copy_limit": 1,
+  "match_legality_consumers": {
+    "vs_ai": "exactly 60",
+    "pvp": "exactly 60"
+  },
+  "source_stack": "v1.7.3",
+  "starter60": "v1.4"
+}

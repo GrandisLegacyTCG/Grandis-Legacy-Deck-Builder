@@ -54,7 +54,7 @@ for(const name of fs.readdirSync('starter_deck_examples').filter(file=>file.ends
   assert(!content.includes('One Source Authority v1.4'),`${name}: stale OSA marker remains`);
   assert(!content.includes('Starter60 v1.2'),`${name}: stale Starter60 marker remains`);
   const starter=JSON.parse(content);
-  assert.equal(starter.builder_version,'1.27-public-deck-builder',`${name}: stale repository release metadata`);
+  assert.equal(starter.builder_version,'1.28-public-deck-builder',`${name}: stale repository release metadata`);
   for(const field of ['main_deck','main_deck_expanded','legacy_deck_expanded','side_deck_expanded']){
     for(const entry of starter[field]||[]){
       const source=canonical.get(entry.card_id);
@@ -74,4 +74,4 @@ assert.equal(resurrection.canonical_execution.revive_policy.set_hp,50);
 assert.equal(resurrection.canonical_execution.revive.set_hp,50);
 assert(!JSON.stringify(resurrection).includes('40 HP'));
 
-console.log('PASS Deck Builder v1.27 corrected 198-card and Hero Component Source Stack parity');
+console.log('PASS Deck Builder v1.28 corrected 198-card and Hero Component Source Stack parity');

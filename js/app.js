@@ -27,7 +27,6 @@ const clone=value=>JSON.parse(JSON.stringify(value));
 function emptySlot(){return {progressionId:'',legacyId:''}}
 function countDeck(deck=state.deck){return Object.values(deck).reduce((sum,qty)=>sum+Number(qty||0),0)}
 function copyLimit(card){return card?.ultimate?.isUltimate?1:Number(card?.maxCopies||3)}
-function isLegalMainDeckSize(total){return total===50||total===60}
 function selectedProgressions(slots=state.slots){return slots.map(slot=>state.progressionById.get(slot.progressionId)).filter(Boolean)}
 function heroFormationComplete(slots=state.slots){return selectedProgressions(slots).length===3}
 function hasSelectedHeroes(slots=state.slots){return selectedProgressions(slots).length>0}
@@ -407,7 +406,7 @@ function renderMainDeck(){
   const rowHtml=({card,quantity})=>{const ultimate=Boolean(card.ultimate?.isUltimate),meta=ultimate?`<span class="main-ultimate-label">Ultimate Skill Card</span>${compactManaCost(card)?` • ${esc(compactManaCost(card))}`:''}`:`${esc(card.classification)}${card.cost&&card.cost!=='No Mana cost'?` • ${esc(card.cost)}`:''}`;return `<article class="main-deck-row ${ultimate?'ultimate-card-row':''}" draggable="true" data-main-deck-id="${card.id}" data-drag-type="deck-remove" data-review-id="${card.id}" data-hover-card-id="${card.id}">
     <img src="${card.image}" alt="${esc(card.name)}">
     <div class="main-card-info"><strong>${esc(card.name)}</strong><small>${meta}</small></div>
-    <button class="qty-control" type="button" data-remove-main="${card.id}" aria-label="Remove one ${esc(card.name)}">−</button><span class="main-qty">${quantity}</span><button class="qty-control" type="button" data-add-main="${card.id}" ${quantity>=copyLimit(card)||countDeck()>=60?'disabled':''} aria-label="Add one ${esc(card.name)}">+</button>
+    <button class="qty-control" type="button" data-remove-main="${card.id}" aria-label="Remove one ${esc(card.name)}">−</button><span class="main-qty">${quantity}</span><button class="qty-control" type="button" data-add-main="${card.id}" ${quantity>=copyLimit(card)?'disabled':''} aria-label="Add one ${esc(card.name)}">+</button>
   </article>`};
   for(const family of ['Skill','Event','Item']){
     const familyEntries=entries.filter(entry=>entry.card.family===family),prefix=family.toLowerCase();
@@ -424,7 +423,7 @@ function renderAll(){renderDeckPanels();renderLibrary()}
 
 function addMainCard(id){
   const card=state.byId.get(id);if(!card||!hasSelectedHeroes()||!cardCompatible(card))return;
-  const quantity=state.deck[id]||0;if(quantity>=copyLimit(card)||countDeck()>=60)return;
+  const quantity=state.deck[id]||0;if(quantity>=copyLimit(card))return;
   state.deck[id]=quantity+1;renderMainDeck();renderLibrary();updateExportButton();
 }
 function removeMainCard(id){
@@ -642,7 +641,6 @@ function validationIssues(){
   if(!heroFormationComplete())issues.push('Select three Hero progression packages.');
   if(!legacyUniqueComplete())issues.push('Choose three unique Legacy Cards.');
   if(legacyCardCount()!==12)issues.push(`Legacy Deck must contain 12 cards (currently ${legacyCardCount()}).`);
-  if(!isLegalMainDeckSize(countDeck()))issues.push(`Main Deck must contain exactly 50 or 60 cards (currently ${countDeck()}).`);
   const incompatible=incompatibleDeckEntries();if(incompatible.length)issues.push(`${incompatible.reduce((sum,entry)=>sum+entry.quantity,0)} Main Deck card(s) are incompatible with the selected Heroes.`);
   for(const [id,quantity] of Object.entries(state.deck)){const card=state.byId.get(id);if(!card)issues.push(`Unknown card ID: ${id}.`);else if(quantity>copyLimit(card))issues.push(`${card.name} exceeds its copy limit (${quantity}/${copyLimit(card)}).`)}
   return issues;
@@ -717,10 +715,10 @@ function expandedLegacy(){
 }
 function exportObject(){
   const issues=validationIssues(),slots=state.slots.map(slot=>({progression:slot.progressionId,legacy:slot.legacyId})),expanded=expandedLegacy();
-  return {schema_version:'GL-DECK-1.0',builder_version:'3.23-public-deck-builder',deck_name:$('deckName').value.trim()||'New Deck',format:'Grandis Legacy Source Stack v1.7.3 + Public Deck Builder v3.23',main_deck_count:countDeck(),legacy_package_count:selectedProgressions().length,legacy_deck_count:legacyCardCount(),legacy_deck_label:'Legacy Deck',legacy_deck_package_slots:slots,legacy_deck_expanded:expanded,side_package_count:selectedProgressions().length,side_deck_count:legacyCardCount(),side_deck_package_slots:slots,side_deck_expanded:expanded,is_valid:issues.length===0,validation_issues:issues,validation_warnings:[],main_deck:Object.entries(state.deck).map(([id,quantity])=>({card_id:id,card_name:state.byId.get(id)?.name||id,quantity})).sort((a,b)=>String(a.card_id).localeCompare(String(b.card_id),undefined,{numeric:true})),default_formation:{LEFT:state.progressionById.get(state.slots[0].progressionId)?.cardIds[0]||'',CENTER:state.progressionById.get(state.slots[1].progressionId)?.cardIds[0]||'',RIGHT:state.progressionById.get(state.slots[2].progressionId)?.cardIds[0]||''},source_database_version:window.GL_DECK_BUILDER_DATA.sourceDatabaseVersion,builder_version_note:'Style 1 v3.23 allows legal Main Deck sizes of exactly 50 or 60 cards. Normal cards allow up to 3 copies; Ultimate remains maximum 1 copy. Source Stack v1.7.3 authority is preserved.'};
+  return {schema_version:'GL-DECK-1.0',builder_version:'3.24-public-deck-builder',deck_name:$('deckName').value.trim()||'New Deck',format:'Grandis Legacy Source Stack v1.7.3 + Public Deck Builder v3.24',main_deck_count:countDeck(),legacy_package_count:selectedProgressions().length,legacy_deck_count:legacyCardCount(),legacy_deck_label:'Legacy Deck',legacy_deck_package_slots:slots,legacy_deck_expanded:expanded,side_package_count:selectedProgressions().length,side_deck_count:legacyCardCount(),side_deck_package_slots:slots,side_deck_expanded:expanded,is_valid:issues.length===0,validation_issues:issues,validation_warnings:[],main_deck:Object.entries(state.deck).map(([id,quantity])=>({card_id:id,card_name:state.byId.get(id)?.name||id,quantity})).sort((a,b)=>String(a.card_id).localeCompare(String(b.card_id),undefined,{numeric:true})),default_formation:{LEFT:state.progressionById.get(state.slots[0].progressionId)?.cardIds[0]||'',CENTER:state.progressionById.get(state.slots[1].progressionId)?.cardIds[0]||'',RIGHT:state.progressionById.get(state.slots[2].progressionId)?.cardIds[0]||''},source_database_version:window.GL_DECK_BUILDER_DATA.sourceDatabaseVersion,builder_version_note:'Style 1 v3.24 allows Main Deck export at any card count. Normal cards remain maximum 3 copies and Ultimate remains maximum 1 copy. Official match legality is validated by VS AI and PvP.'};
 }
 function downloadJson(object){const safe=(object.deck_name||'Grandis_Legacy_Deck').replace(/[^a-z0-9_-]+/gi,'_').replace(/^_+|_+$/g,'')||'Grandis_Legacy_Deck';const blob=new Blob([JSON.stringify(object,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),anchor=document.createElement('a');anchor.href=url;anchor.download=`${safe}.json`;document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-async function exportDeck(){if(!isLegalMainDeckSize(countDeck())){toast('Main Deck must contain exactly 50 or 60 cards before exporting');return}const object=exportObject();if(!object.is_valid){const ok=await askConfirm({eyebrow:'EXPORT DECK',title:'Export an incomplete deck?',message:'This deck is not match-ready yet.',list:object.validation_issues.map(issue=>({label:issue,value:'Issue'})),okLabel:'EXPORT ANYWAY'});if(!ok)return}downloadJson(object);toast('Deck exported')}
+async function exportDeck(){const object=exportObject();if(!object.is_valid){const ok=await askConfirm({eyebrow:'EXPORT DECK',title:'Export an incomplete deck?',message:'This deck is not match-ready yet.',list:object.validation_issues.map(issue=>({label:issue,value:'Issue'})),okLabel:'EXPORT ANYWAY'});if(!ok)return}downloadJson(object);toast('Deck exported')}
 
 function bindStaticEvents(){
   document.querySelectorAll('.library-tab').forEach(button=>button.addEventListener('click',()=>setLibraryTab(button.dataset.libraryTab)));
