@@ -1,4 +1,4 @@
-# Grandis Legacy Deck Builder v1.28
+# Grandis Legacy Deck Builder v1.29
 
 Deck Builder is intentionally permissive on Main Deck size when saving/exporting. Normal cards remain maximum 3 copies; Ultimate remains maximum 1. VS AI and PvP enforce official 60-card match legality.
 

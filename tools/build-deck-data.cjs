@@ -97,7 +97,7 @@ function updateStarter(starter){
   next.builder_version='1.28-public-deck-builder';
   next.format='One Source Authority v1.7.3 + Starter60 v1.4';
   next.source_database_version=`Grandis Legacy Source Authority Stack v1.7.3 · OSA v1.7.3 · Runtime Data v0.14.2 · registry ${runtime.canonical_registry_hash}`;
-  next.builder_version_note='Deck Builder v1.28 allows export/save at any Main Deck count; normal cards remain maximum 3 copies and Ultimate maximum 1 copy. Official match legality is enforced by VS AI and PvP. Starter60 v1.4 and Source Stack v1.7.3 authority are preserved.';
+  next.builder_version_note='Deck Builder v1.29 allows export/save at any Main Deck count; normal cards remain maximum 3 copies and Ultimate maximum 1 copy. Official match legality is enforced by VS AI and PvP. Starter60 v1.4 and Source Stack v1.7.3 authority are preserved.';
   return next;
 }
 

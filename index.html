@@ -192,13 +192,20 @@
       <div class="dialog-heading">
         <span>START A DECK</span>
         <h2>Choose how to begin</h2>
-        <p>Create a blank deck or load one of the five official Starter Decks.</p>
+        <p>Create a blank deck, import a deck JSON from your device, or load one of the five official Starter Decks.</p>
       </div>
-      <button id="createBlankDeck" class="create-blank-card" type="button">
-        <span>CREATE NEW</span>
-        <strong>Blank Deck</strong>
-        <small>Start with an empty Legacy Deck and Main Deck.</small>
-      </button>
+      <div class="deck-start-choice-grid">
+        <button id="createBlankDeck" class="create-blank-card deck-start-option" type="button">
+          <span>CREATE NEW</span>
+          <strong>Blank Deck</strong>
+          <small>Start with an empty Legacy Deck and Main Deck.</small>
+        </button>
+        <button id="importDeckStart" class="create-blank-card deck-start-option" type="button">
+          <span>IMPORT DECK</span>
+          <strong>Import JSON</strong>
+          <small>Choose a Grandis Legacy deck JSON directly from this device.</small>
+        </button>
+      </div>
       <div class="starter-heading">STARTER DECKS</div>
       <div id="starterDeckGrid" class="starter-deck-grid"></div>
     </div>

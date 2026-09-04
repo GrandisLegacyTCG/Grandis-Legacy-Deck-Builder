@@ -706,7 +706,7 @@ async function openNewDeckFlow(){
   showNewDeckDialog(false);
 }
 async function importDeckFile(file){
-  try{const data=JSON.parse(await file.text());applyDeck(normalizeImportedDeck(data));toast('Deck imported')}
+  try{const data=JSON.parse(await file.text());applyDeck(normalizeImportedDeck(data));if(state.initialChoicePending){state.initialChoicePending=false;const dialog=$('newDeckDialog');if(dialog&&dialog.open)dialog.close()}toast('Deck imported')}
   catch(error){await askConfirm({eyebrow:'IMPORT ERROR',title:'Could not import this deck',message:esc(error.message||String(error)),okLabel:'CLOSE'})}
   finally{$('deckFileInput').value=''}
 }
@@ -731,7 +731,7 @@ function bindStaticEvents(){
   $('attackStyleFilter').addEventListener('change',event=>{state.filters.attackStyle=event.target.value;renderLibrary()});
   ['manaMin','manaMax'].forEach(id=>$(id).addEventListener('input',()=>{updateManaRangeLabel();renderLibrary()}));
   $('resetFilters').addEventListener('click',resetFilters);$('rankPrev').addEventListener('click',()=>cycleRank(-1));$('rankNext').addEventListener('click',()=>cycleRank(1));
-  $('newDeckButton').addEventListener('click',openNewDeckFlow);$('createBlankDeck').addEventListener('click',chooseBlank);$('newDeckClose').addEventListener('click',closeNewDeckDialog);
+  $('newDeckButton').addEventListener('click',openNewDeckFlow);$('createBlankDeck').addEventListener('click',chooseBlank);$('importDeckStart').addEventListener('click',()=>$('deckFileInput').click());$('newDeckClose').addEventListener('click',closeNewDeckDialog);
   $('importDeckButton').addEventListener('click',()=>$('deckFileInput').click());$('deckFileInput').addEventListener('change',event=>{const file=event.target.files?.[0];if(file)importDeckFile(file)});$('exportDeckButton').addEventListener('click',exportDeck);
   $('reviewClose').addEventListener('click',()=>$('cardReviewDialog').close());$('cardReviewDialog').addEventListener('click',event=>{if(event.target===$('cardReviewDialog'))$('cardReviewDialog').close()});
   $('newDeckDialog').addEventListener('cancel',event=>{if(state.initialChoicePending)event.preventDefault()});$('newDeckDialog').addEventListener('click',event=>{if(event.target===$('newDeckDialog')&&!state.initialChoicePending)$('newDeckDialog').close()});

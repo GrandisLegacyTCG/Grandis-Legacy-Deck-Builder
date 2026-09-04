@@ -14,5 +14,5 @@ must(!s2.includes('Main Deck must contain exactly 50 or 60 cards (currently'),'S
 must(s2.includes('MAIN_DECK_WORKSPACE_LIMIT=80'),'Style 2 80-card cutting workspace changed unexpectedly');
 must(s1.includes('card?.ultimate?.isUltimate?1')&&s2.includes('card?.ultimate?.isUltimate?1'),'Ultimate max-1 missing');
 must(s1.includes('Number(card?.maxCopies||3)')&&s2.includes('Number(card?.maxCopies||3)'),'Normal max-3 missing');
-must(pkg.version==='1.28.0','package version');
+must(pkg.version==='1.29.0','package version');
 console.log('PASS v1.28: Deck Builder save/export is size-unrestricted; normal max 3; Ultimate max 1; Style 2 workspace remains 80.');

@@ -16,4 +16,4 @@ for(const row of rows){
   assert.strictEqual(crypto.createHash('sha256').update(data).digest('hex'),expected,`${rel}: hash mismatch`);
 }
 assert.ok(!rows.some(row=>row.startsWith('FILE_MANIFEST_SHA256.csv,')));
-console.log(`PASS Deck Builder v1.28 manifest verification: ${rows.length} files.`);
+console.log(`PASS Deck Builder v1.29 manifest verification: ${rows.length} files.`);
