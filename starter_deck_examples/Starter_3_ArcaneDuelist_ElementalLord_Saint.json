@@ -1,8 +1,8 @@
 {
   "schema_version": "GL-DECK-1.0",
-  "builder_version": "1.28-public-deck-builder",
+  "builder_version": "1.30-public-deck-builder",
   "deck_name": "Starter 3 - ArcaneDuelist/ElementalLord/Saint",
-  "format": "One Source Authority v1.7.3 + Starter60 v1.4",
+  "format": "One Source Authority v1.8.1 + Starter60 v1.5",
   "main_deck_count": 60,
   "legacy_package_count": 3,
   "legacy_deck_count": 12,
@@ -399,6 +399,6 @@
     "CENTER": "S1-MAG-H004",
     "RIGHT": "S1-CLE-H001"
   },
-  "source_database_version": "Grandis Legacy Source Authority Stack v1.7.3 · OSA v1.7.3 · Runtime Data v0.14.2 · registry 5d362f3c1dd785af82f12297d6ab1ecea4f6c43508a7b0f48319e846dd61139c",
-  "builder_version_note": "Deck Builder v1.29 allows export/save at any Main Deck count; normal cards remain maximum 3 copies and Ultimate maximum 1 copy. Official match legality is enforced by VS AI and PvP. Starter60 v1.4 and Source Stack v1.7.3 authority are preserved."
+  "source_database_version": "Grandis Legacy Source Authority Stack v1.8.1 · OSA v1.8.1 · Runtime Data v0.15.0 · registry ce79e5a97c115507f68734887160b575840899056e1533488e3fddd3a11fec1f",
+  "builder_version_note": "Deck Builder v1.30 allows export/save at any Main Deck count; normal cards remain maximum 3 copies and Ultimate maximum 1 copy. Official match legality is enforced by VS AI and PvP. Starter60 v1.5 and Source Stack v1.8.1 authority are preserved."
 }

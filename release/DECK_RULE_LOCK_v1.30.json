@@ -1,0 +1,25 @@
+{
+  "version": "v1.30",
+  "date": "2026-09-13",
+  "main_deck_save_export_size_policy": "ANY_COUNT",
+  "import_main_deck_size_policy": "ANY_COUNT",
+  "style_2_workspace_limit": 80,
+  "normal_copy_limit": 3,
+  "ultimate_copy_limit": 1,
+  "match_legality_consumers": {
+    "vs_ai": "exactly 60",
+    "pvp": "exactly 60"
+  },
+  "source_stack": "v1.8.1",
+  "runtime_data": "v0.15.0",
+  "season1_card_count": 200,
+  "shard_deck_size": 12,
+  "class_shard_max_per_class": 1,
+  "class_shard_max_total": 3,
+  "resource_terminology": {
+    "deck": "Shard Deck",
+    "pool": "Shard Pool",
+    "standard_shard": "Mana Shard",
+    "class_shard": "Class Shard"
+  }
+}

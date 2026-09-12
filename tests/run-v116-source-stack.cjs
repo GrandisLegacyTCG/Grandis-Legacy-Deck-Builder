@@ -1,6 +1,7 @@
 'use strict';
 
 const assert=require('assert');
+const normalizeTerms=s=>String(s||'').replace(/Generic Mana Shard/g,'Mana Shard').replace(/Mana Deck/g,'Shard Deck').replace(/Mana Pool/g,'Shard Pool');
 const fs=require('fs');
 const vm=require('vm');
 
@@ -36,7 +37,7 @@ for(const file of ['js/data.js','style-2/js/data.js']){
     assert(source,`${file}: unknown ${card.id}`);
     assert.equal(card.name,source.name,`${file}: name ${card.id}`);
     assert.equal(card.cost,source.cost_display,`${file}: cost ${card.id}`);
-    assert.equal(card.text,source.card_text,`${file}: text ${card.id}`);
+    assert.equal(card.text,normalizeTerms(source.card_text),`${file}: normalized text ${card.id}`);
     assert.equal(card.canonicalHash,source.canonical_hash,`${file}: hash ${card.id}`);
   }
   assert.equal(cards.find(card=>card.id==='S1-THF-010').name,'Back Slash');
