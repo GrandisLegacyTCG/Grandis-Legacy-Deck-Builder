@@ -1,11 +1,17 @@
-# Grandis Legacy Deck Builder v1.30
+# Grandis Legacy Deck Builder v1.31
 
-Release date: 2026-09-13.
+Grandis Legacy Deck Builder v1.31 is synchronized to **Grandis Legacy Source Authority v1.9.0** and its current 200-card Season 1 registry (Runtime Data v0.16.0). The Deck Builder is a consumer of OSA data and does not redefine or execute gameplay effects.
 
-Deck Builder v1.30 is synchronized to Source Authority Stack v1.8.1 / Season 1 Runtime Data v0.15.0 and the current 200-card Season 1 pool. It includes S1-ITM-019 Warp Scroll and S1-ITM-020 Freeze Bomb in both Style 1 and Style 2.
+## Active sources
 
-Current resource terminology is **Shard Deck**, **Shard Pool**, **Mana Shard**, and **Class Shard**. The 12-card Shard Deck is derived from the unique Classes represented by the selected Ultimate Cards: maximum 1 Class Shard per Class, maximum 3 Class Shards total, with remaining slots filled by Mana Shards.
+- Style 1: `index.html`, `css/app.css`, `js/app.js`
+- Style 2: `style-2/index.html`, `style-2/css/app-v1.31.css`, `style-2/js/app-v1.31.js`
+- Generated card data: `js/data.js` and `style-2/js/data.js`, both built from `data/season1/cards.runtime.v0.16.0.json`
+- Active source lock: `SOURCE_LOCK_v3.20.json`
+- Active Deck Rule Lock: `release/DECK_RULE_LOCK_v1.31.json`
 
-Deck Builder remains intentionally permissive on Main Deck size when importing/saving/exporting. Normal cards remain maximum 3 copies and Ultimate remains maximum 1. Style 2 retains its 80-card cutting workspace. VS AI and PvP remain the match-legality consumers that require exactly 60 Main Deck cards.
+The current registry includes **S1-ITM-019 Warp Scroll** and **S1-ITM-020 Freeze Bomb**. Their runtime gameplay behavior remains owned by OSA/gameplay applications; Deck Builder preserves their identity and display/deck-building data.
 
-See `release/RELEASE_NOTE_v1.30.md`, `release/DECK_RULE_LOCK_v1.30.json`, and `release/VERIFICATION_v1.30.md`.
+Style 1 keeps its existing enlarged preview size but positions the preview farther left so quantity controls remain visible and usable. Style 2 now has the same-size desktop hover preview: Library cards preview to the right, Deck cards preview to the left, and the preview disappears immediately when the pointer leaves the source card.
+
+See `release/RELEASE_NOTE_v1.31.md` and `release/VERIFICATION_v1.31.md`. Historical v1.30 records and old source locks are preserved under `release/history/`.

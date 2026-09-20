@@ -1,11 +1,14 @@
 {
   "name": "grandis-legacy-deck-builder",
-  "version": "1.30.0",
+  "version": "1.31.0",
   "private": true,
-  "description": "Grandis Legacy Deck Builder v1.30 \u2014 Source Stack v1.8.1 / 200-card Season 1 sync with Warp Scroll and Freeze Bomb in both styles; existing flexible save/export and copy-limit policy preserved.",
+  "description": "Grandis Legacy Deck Builder v1.31 \u2014 synchronized to OSA v1.9.0 / Runtime Data v0.16.0 with 200-card Season 1 coverage, Style 1 preview positioning correction, and Style 2 source-card hover previews.",
   "scripts": {
     "build:data": "node tools/build-deck-data.cjs",
-    "check": "npm run build:data && node --check tools/build-deck-data.cjs && node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app-v1.21.js && node tests/run-v17-ui-contract.cjs && node tests/run-v110-home-logo-navigation.cjs && node tests/run-v111-same-tab-navigation.cjs && node tests/run-v128-deck-save-policy.cjs && node tests/run-v129-style1-import-flow.cjs && node tests/run-v130-season1-200.cjs && node tests/run-v117-source-stack.cjs && node tests/run-v119-style2-layout.cjs && node tests/run-v120-mobile-navigation.cjs && node tests/run-v121-mobile-navigation.cjs && node tests/run-v123-hero-hp-source.cjs && node tests/run-v124-starter-favicon.cjs && node tests/run-v127-next-fixes.cjs",
+    "check:syntax": "node --check tools/build-deck-data.cjs && node --check js/data.js && node --check js/app.js && node --check style-2/js/data.js && node --check style-2/js/app-v1.31.js",
+    "check:regression": "node tests/run-v17-ui-contract.cjs && node tests/run-v110-home-logo-navigation.cjs && node tests/run-v111-same-tab-navigation.cjs && node tests/run-v128-deck-save-policy.cjs && node tests/run-v129-style1-import-flow.cjs && node tests/run-v131-season1-osa-sync.cjs && node tests/run-v131-source-authority.cjs && node tests/run-v119-style2-layout.cjs && node tests/run-v120-mobile-navigation.cjs && node tests/run-v121-mobile-navigation.cjs && node tests/run-v131-hero-hp-source.cjs && node tests/run-v131-starter-favicon.cjs && node tests/run-v127-next-fixes.cjs && node tests/run-v131-preview-contract.cjs && node tests/run-v131-import-export-static.cjs",
+    "check:browser": "python3 tests/run-v131-preview-browser.py",
+    "check": "npm run build:data && npm run check:syntax && npm run check:regression && npm run check:browser",
     "manifest": "node tools/build-file-manifest.cjs",
     "verify": "npm run check && npm run manifest && node tests/run-manifest-verification.cjs"
   }

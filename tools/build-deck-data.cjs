@@ -5,17 +5,17 @@ const path=require('path');
 const vm=require('vm');
 
 const ROOT=path.resolve(__dirname,'..');
-const RUNTIME_PATH=path.join(ROOT,'data/season1/cards.runtime.v0.15.0.json');
+const RUNTIME_PATH=path.join(ROOT,'data/season1/cards.runtime.v0.16.0.json');
 const runtime=JSON.parse(fs.readFileSync(RUNTIME_PATH,'utf8'));
 const canonicalById=new Map(runtime.cards.map(card=>[card.card_id,card]));
 
 if(runtime.count!==200||canonicalById.size!==200){
   throw new Error(`Canonical Season 1 registry must contain exactly 200 unique cards (found ${canonicalById.size}).`);
 }
-if(runtime.canonical_registry_hash!=='ce79e5a97c115507f68734887160b575840899056e1533488e3fddd3a11fec1f'){
+if(runtime.canonical_registry_hash!=='85d25ebda9bb2bc260983a566e6d430dde97bfc7a32e8042ec2fddfeaff1b42f'){
   throw new Error('Unexpected canonical Season 1 registry hash.');
 }
-if(runtime.hero_component_registry_hash!=='487aa2620b5be99480a81d462082f1a35ee637ec2cc38ebf42b1bcf1103d06c9'){
+if(runtime.hero_component_registry_hash!=='f36f1cc83eb9845743176c3af71f7823125353eae73e832588e9d8b42c6818be'){
   throw new Error('Unexpected Hero Component registry hash.');
 }
 
@@ -33,7 +33,8 @@ function asList(value){
 }
 
 function normalizeTermsText(value){
-  return String(value??'').replace(/Generic Mana Shard/g,'Mana Shard').replace(/Mana Deck/g,'Shard Deck').replace(/Mana Pool/g,'Shard Pool');
+  // Deck Builder is a consumer: preserve approved OSA display/printed wording verbatim.
+  return String(value??'');
 }
 function normalizeTermsDeep(value){
   if(Array.isArray(value))return value.map(normalizeTermsDeep);
@@ -103,10 +104,10 @@ function updateStarter(starter){
       if(card)entry.card_name=card.name;
     }
   }
-  next.builder_version='1.30-public-deck-builder';
-  next.format='One Source Authority v1.8.1 + Starter60 v1.5';
-  next.source_database_version=`Grandis Legacy Source Authority Stack v1.8.1 · OSA v1.8.1 · Runtime Data v0.15.0 · registry ${runtime.canonical_registry_hash}`;
-  next.builder_version_note='Deck Builder v1.30 allows export/save at any Main Deck count; normal cards remain maximum 3 copies and Ultimate maximum 1 copy. Official match legality is enforced by VS AI and PvP. Starter60 v1.5 and Source Stack v1.8.1 authority are preserved.';
+  next.builder_version='1.31-public-deck-builder';
+  next.format='Grandis Legacy Season 1 / OSA v1.9.0 / Starter60 v1.5 / 60-card Main Deck / max 3 normal / max 1 Ultimate';
+  next.source_database_version=`Grandis Legacy Source Authority v1.9.0 · Runtime Data v0.16.0 · Application Runtime Sync v2.58 · registry ${runtime.canonical_registry_hash}`;
+  next.builder_version_note='Deck Builder v1.31 consumes OSA v1.9.0 and Starter60 v1.5. Builder editing/export remains flexible; normal cards are maximum 3 copies and Ultimate cards maximum 1 copy. Official match legality is enforced by gameplay applications.';
   return next;
 }
 
@@ -125,30 +126,32 @@ function build(relativePath,builderVersion){
     ...previous,
     schemaVersion:'GL-DECK-BUILDER-DATA-1.1',
     builderVersion,
-    sourceDatabaseVersion:`Grandis Legacy Source Authority Stack v1.8.1 · OSA v1.8.1 · Runtime Data v0.15.0 · registry ${runtime.canonical_registry_hash}`,
+    sourceDatabaseVersion:`Grandis Legacy Source Authority v1.9.0 · Runtime Data v0.16.0 · Application Runtime Sync v2.58 · registry ${runtime.canonical_registry_hash}`,
     canonicalRegistryHash:runtime.canonical_registry_hash,
     heroComponentRegistryHash:runtime.hero_component_registry_hash,
     sourceStack:{
-      oneSourceAuthority:'1.8.1',
-      runtimeFoundation:'1.93',
-      runtimeCoreTemplate:'0.61',
-      runtimeData:'0.15.0',
-      effectRecipe:'0.14.0',
-      effectCheckpoint:'0.14.0',
-      legalityMap:'1.5.0',
-      applicationRuntimeSync:'2.56',
-      heroComponentAuthority:'1.0.0'
+      sourceAuthority:'1.9.0',
+      oneSourceAuthority:'1.9.0',
+      canonicalCardAuthority:'1.6.0',
+      sharedRuntime:'1.94.0',
+      runtimeData:'0.16.0',
+      effectRecipe:'0.15.0',
+      effectCheckpoint:'0.15.0',
+      starter60:'1.5',
+      uiContract:'2.52',
+      applicationRuntimeSync:'2.58',
+      heroComponentAuthority:'1.1.0'
     },
     heroComponents:normalizeTermsDeep(runtime.hero_components),
     mainCards:all.filter(card=>{const c=canonicalById.get(card.id);return c&&c.family!=='LegacyModeDefinition'&&c.family!=='Hero';}).map(updateCard),
     legacyCards:(previous.legacyCards||[]).map(updateCard),
-    starters:fs.readdirSync(path.join(ROOT,'starter_deck_examples')).filter(file=>/^Starter_[1-5]_.*\.json$/i.test(file)).sort().map(file=>updateStarter(JSON.parse(fs.readFileSync(path.join(ROOT,'starter_deck_examples',file),'utf8'))))
+    starters:fs.readdirSync(path.join(ROOT,'starter_deck_examples')).filter(file=>/^starter_.*_GL_DECK_1_0\.json$/i.test(file)).sort().map(file=>updateStarter(JSON.parse(fs.readFileSync(path.join(ROOT,'starter_deck_examples',file),'utf8'))))
   };
   fs.writeFileSync(path.join(ROOT,relativePath),`window.GL_DECK_BUILDER_DATA = ${JSON.stringify(data)};\n`);
 }
 
-build('js/data.js','3.24-public-deck-builder');
-build('style-2/js/data.js','2.26-classic-split');
+build('js/data.js','3.26-public-deck-builder');
+build('style-2/js/data.js','2.27-classic-split');
 for(const name of fs.readdirSync(path.join(ROOT,'starter_deck_examples')).filter(file=>file.endsWith('.json'))){
   const target=path.join(ROOT,'starter_deck_examples',name);
   const starter=updateStarter(JSON.parse(fs.readFileSync(target,'utf8')));

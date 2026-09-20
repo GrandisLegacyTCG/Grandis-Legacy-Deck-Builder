@@ -1,0 +1,14 @@
+{
+  "version": "v1.31",
+  "date": "2026-09-20",
+  "status": "ACTIVE",
+  "source_authority": "Grandis Legacy Source Authority v1.9.0",
+  "canonical_registry_hash": "85d25ebda9bb2bc260983a566e6d430dde97bfc7a32e8042ec2fddfeaff1b42f",
+  "main_deck_match_legal_size": 60,
+  "deck_builder_editing": "flexible; export allowed at any Main Deck count within existing workspace policy",
+  "normal_copy_limit": 3,
+  "ultimate_copy_limit": 1,
+  "starter60": "v1.5",
+  "application_runtime_sync": "v2.58",
+  "notes": "Deck Builder consumes OSA; it does not execute Warp Scroll or Freeze Bomb gameplay effects."
+}

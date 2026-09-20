@@ -17,5 +17,5 @@ assert.ok(app.includes("$('importDeckButton').addEventListener('click',()=>$('de
 assert.ok(app.includes("JSON.parse(await file.text())")&&app.includes('applyDeck(normalizeImportedDeck(data))'),'JSON file is not parsed and applied');
 assert.ok(app.includes('Math.min(Math.floor(quantity),copyLimit(card))'),'import does not retain per-card copy legality');
 assert.ok(!/main_deck_count\s*[!=<>]=?\s*60/.test(app.slice(app.indexOf('function normalizeImportedDeck'),app.indexOf('function compactDeckName'))),'import flow incorrectly requires 60 Main Deck cards');
-assert.ok(app.includes('Style 1 v3.25 allows Main Deck export at any card count.'),'flexible Main Deck export policy was not preserved');
+assert.ok(app.includes('Style 1 v3.26 / Deck Builder v1.31 allows Main Deck export at any card count.'),'flexible Main Deck export policy was not preserved');
 console.log('PASS Deck Builder v1.29: Style 1 has equal Blank Deck / Import Deck entry actions, direct device JSON import, per-card copy caps, and no 60-card import/save gate.');

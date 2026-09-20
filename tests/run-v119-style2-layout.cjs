@@ -1,11 +1,11 @@
 'use strict';
 const fs=require('fs');
 const assert=require('assert');
-const css=fs.readFileSync('style-2/css/app-v1.19.css','utf8');
+const css=fs.readFileSync('style-2/css/app-v1.31.css','utf8');
 const html=fs.readFileSync('style-2/index.html','utf8');
-const js=fs.readFileSync('style-2/js/app-v1.21.js','utf8');
-assert(html.includes('app-v1.19.css?v=1.19'),'v1.19 CSS is not active');
-assert(html.includes('app-v1.21.js?v=1.27'),'v1.21 JS is not active');
+const js=fs.readFileSync('style-2/js/app-v1.31.js','utf8');
+assert(html.includes('app-v1.31.css?v=1.31'),'v1.31 CSS is not active');
+assert(html.includes('app-v1.31.js?v=1.31'),'v1.31 JS is not active');
 assert(/id="mainDeckViewDialog" class="app-dialog legacy-reference-dialog"/.test(html),'Deck View does not reuse Legacy dialog class');
 assert((html.match(/class="dialog-card legacy-reference-card"/g)||[]).length>=2,'Deck View does not reuse Legacy card container class');
 assert(/<div class="legacy-reference-head">[\s\S]*?Deck View/.test(html),'Deck View does not reuse Legacy header class');
@@ -26,4 +26,4 @@ assert(block.includes('max-width:none!important'),'Card stages are not locked to
 assert(block.includes('left:33.333333%!important') && block.includes('left:66.666667%!important'),'Swap boundaries are not aligned to shared columns');
 assert(js.includes('const MAIN_DECK_LEGAL_LIMIT=60;'),'60-card legal limit changed');
 assert(js.includes('const MAIN_DECK_WORKSPACE_LIMIT=80;'),'80-card workspace changed');
-console.log('PASS Deck Builder v1.19 literal Legacy library reuse and mobile alignment');
+console.log('PASS Deck Builder v1.31 Style 2 layout regression');
