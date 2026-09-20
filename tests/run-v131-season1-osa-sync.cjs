@@ -10,10 +10,10 @@ for(const rel of ['js/data.js','style-2/js/data.js']){
  const d=load(rel),all=[...(d.mainCards||[]),...(d.legacyCards||[])];
  assert.equal(all.length,200,rel+' card count');assert.equal(new Set(all.map(c=>c.id)).size,200,rel+' unique count');
  assert.equal(d.canonicalRegistryHash,runtime.canonical_registry_hash);assert.equal(d.heroComponentRegistryHash,runtime.hero_component_registry_hash);
- assert.equal(d.sourceStack.sourceAuthority,'1.9.0');assert.equal(d.sourceStack.runtimeData,'0.16.0');assert.equal(d.sourceStack.applicationRuntimeSync,'2.58');assert.equal(d.sourceStack.uiContract,'2.52');
+ assert.equal(d.sourceStack.sourceAuthority,'1.9.1');assert.equal(d.sourceStack.runtimeData,'0.16.0');assert.equal(d.sourceStack.applicationRuntimeSync,'2.59');assert.equal(d.sourceStack.uiContract,'2.52');
  for(const id of ['S1-ITM-019','S1-ITM-020']){const c=all.find(x=>x.id===id);assert(c,id+' missing');assert(c.image.includes('/shared/season1/v1/cards/thumbs/'+id+'.webp'));}
  const by=Object.fromEntries(all.map(c=>[c.id,c]));
  for(const source of runtime.cards){const c=by[source.card_id];assert(c,source.card_id);assert.equal(c.name,source.name,source.card_id+' name');assert.equal(c.classification,source.classification,source.card_id+' classification');assert.equal(c.canonicalHash,source.canonical_hash,source.card_id+' hash');}
- assert.equal(d.starters.length,15,rel+' Starter60 count');
+ assert.equal(d.starters.length,5,rel+' active Starter count');
 }
-console.log('PASS Deck Builder v1.31 OSA v1.9.0 / 200-card sync');
+console.log('PASS Deck Builder v1.31 OSA v1.9.1 / 200-card + five-starter sync');

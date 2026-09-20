@@ -1,6 +1,6 @@
 # Grandis Legacy Deck Builder v1.31
 
-Grandis Legacy Deck Builder v1.31 is synchronized to **Grandis Legacy Source Authority v1.9.0** and its current 200-card Season 1 registry (Runtime Data v0.16.0). The Deck Builder is a consumer of OSA data and does not redefine or execute gameplay effects.
+Grandis Legacy Deck Builder v1.31 is synchronized to **Grandis Legacy Source Authority v1.9.1** and its current 200-card Season 1 registry (Runtime Data v0.16.0). The Deck Builder is a consumer of OSA data and does not redefine or execute gameplay effects.
 
 ## Active sources
 
@@ -12,6 +12,8 @@ Grandis Legacy Deck Builder v1.31 is synchronized to **Grandis Legacy Source Aut
 
 The current registry includes **S1-ITM-019 Warp Scroll** and **S1-ITM-020 Freeze Bomb**. Their runtime gameplay behavior remains owned by OSA/gameplay applications; Deck Builder preserves their identity and display/deck-building data.
 
-Style 1 keeps its existing enlarged preview size but positions the preview farther left so quantity controls remain visible and usable. Style 2 now has the same-size desktop hover preview: Library cards preview to the right, Deck cards preview to the left, and the preview disappears immediately when the pointer leaves the source card.
+Style 1 keeps its 250×350 enlarged preview and original per-hovered-row vertical placement; only X is shifted so the preview center aligns near the hovered row left edge without covering quantity controls. Style 2 keeps its approved Library-right / Deck-left 250×350 preview geometry. Direct card-to-card hover is immediate in either direction; no suppression/dead-zone can block the newly hovered card.
 
 See `release/RELEASE_NOTE_v1.31.md` and `release/VERIFICATION_v1.31.md`. Historical v1.30 records and old source locks are preserved under `release/history/`.
+
+Current starter authority: **v1.6.0**, exactly **5 active Starter Decks**, consumed from OSA v1.9.1. Application Runtime Sync reference: **v2.59**.

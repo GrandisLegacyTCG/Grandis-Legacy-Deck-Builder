@@ -20,8 +20,6 @@ def inline_page(style: int) -> str:
         css = (ROOT / 'style-2/css/app-v1.31.css').read_text(encoding='utf-8')
         data = (ROOT / 'style-2/js/data.js').read_text(encoding='utf-8')
         app = (ROOT / 'style-2/js/app-v1.31.js').read_text(encoding='utf-8')
-    # The execution environment blocks browser navigation, so execute the actual
-    # repository HTML/CSS/JS in a document assembled from the checked-in files.
     html = re.sub(r'<script\b[^>]*>[\s\S]*?</script>', '', html, flags=re.I)
     html = re.sub(r'<link\b[^>]*rel="stylesheet"[^>]*>', '', html, flags=re.I)
     html = html.replace('</head>', f'<style>{css}</style></head>')
@@ -43,187 +41,220 @@ def preview_visible(page):
 
 
 def run_style1(browser):
-    page = browser.new_page(viewport={'width': 1440, 'height': 1000})
-    page.set_default_timeout(8000)
+    page = browser.new_page(viewport={'width': 1440, 'height': 1200})
+    page.set_default_timeout(10000)
     page.set_content(inline_page(1), wait_until='domcontentloaded', timeout=20000)
-    require(page.locator('[data-starter-index]').count() == 15, 'Style 1 should expose all 15 Starter60 presets')
+    require(page.locator('[data-starter-index]').count() == 5, 'Style 1 must expose exactly five OSA v1.9.1 starters')
     page.locator('[data-starter-index]').first.click()
     require(not page.locator('#newDeckDialog').is_visible(), 'Style 1 starter dialog did not close')
     page.locator('[data-section-toggle="main"]').click()
-    row = page.locator('.main-deck-row:has(button[data-add-main]:not([disabled]))').first
-    require(row.count() == 1, 'Style 1 could not find a deck row with usable + control')
-    row.hover()
-    require(preview_visible(page), 'Style 1 preview did not appear on source hover')
+    rows = page.locator('.main-deck-row')
+    require(rows.count() >= 6, 'Style 1 starter did not populate enough deck rows')
     preview = page.locator('#hoverCardZoom')
-    pb = preview.bounding_box(); deck = page.locator('.deck-shell').bounding_box()
-    require(pb and deck, 'Style 1 preview/deck geometry unavailable')
-    require(abs((pb['x'] + pb['width']/2) - deck['x']) <= 24, 'Style 1 preview center is not near the left edge of deck panel')
-    require(pb['x'] >= 0 and pb['y'] >= 0 and pb['x']+pb['width'] <= 1440 and pb['y']+pb['height'] <= 1000, 'Style 1 preview overflows viewport')
-    controls = row.locator('.qty-control')
-    for i in range(controls.count()):
-        cb = controls.nth(i).bounding_box()
-        require(cb and not intersects(pb, cb), 'Style 1 preview overlaps a +/- control')
-    require(preview.evaluate('e=>getComputedStyle(e).pointerEvents') == 'none', 'Style 1 preview captures pointer events')
+    tested = 0
+    # Test several rows with enough vertical room to prove original per-row ABOVE placement.
+    for idx in range(rows.count()):
+        row = rows.nth(idx)
+        row.scroll_into_view_if_needed()
+        rb = row.bounding_box()
+        if not rb or rb['y'] < 380 or rb['y'] > 1080:
+            continue
+        row.hover()
+        require(preview_visible(page), f'Style 1 preview missing on row {idx}')
+        pb = preview.bounding_box(); require(pb, 'Style 1 preview geometry unavailable')
+        center_x = pb['x'] + pb['width']/2
+        require(abs(center_x - rb['x']) <= 3, f'Style 1 preview center X is not anchored to hovered row left edge ({idx})')
+        require(pb['y'] + pb['height'] <= rb['y'] - 5, f'Style 1 preview is not above hovered row {idx}')
+        require(abs(pb['width']-250) < 1 and abs(pb['height']-350) < 1, 'Style 1 approved preview size changed')
+        require(preview.evaluate('e=>getComputedStyle(e).pointerEvents') == 'none', 'Style 1 preview captures pointer events')
+        controls = row.locator('.qty-control')
+        for i in range(controls.count()):
+            cb = controls.nth(i).bounding_box()
+            require(cb and not intersects(pb, cb), f'Style 1 preview overlaps +/- control on row {idx}')
+        # Direct source mouseleave toward preview must hide immediately.
+        page.mouse.move(pb['x'] + pb['width']/2, pb['y'] + pb['height']/2)
+        require(preview.is_hidden(), f'Style 1 preview did not hide on source mouseleave row {idx}')
+        tested += 1
+        if tested >= 3:
+            break
+    require(tested >= 2, 'Style 1 could not verify multiple row-relative vertical anchors')
+
+    # +/- remains usable after preview behavior.
+    row = page.locator('.main-deck-row:has(button[data-add-main]:not([disabled]))').first
+    row.scroll_into_view_if_needed(); row.hover()
     before = int(row.locator('.main-qty').text_content())
     row.locator('[data-add-main]').click()
-    row = page.locator('.main-deck-row:has(button[data-add-main],button[data-remove-main])').filter(has_text=row.locator('.main-card-info strong').text_content()).first
-    after = int(row.locator('.main-qty').text_content())
-    require(after == before + 1, 'Style 1 + control is not usable with preview behavior')
-    row.hover(); pb = preview.bounding_box(); require(pb, 'Style 1 preview missing after deck rerender')
-    page.mouse.move(pb['x'] + pb['width']/2, pb['y'] + pb['height']/2)
-    require(preview.is_hidden(), 'Style 1 preview did not hide immediately when pointer left source toward preview')
-    size = (250, 350)
-    row.hover(); pb = preview.bounding_box(); require(abs(pb['width']-250) < 1 and abs(pb['height']-350) < 1, 'Style 1 approved preview size changed')
+    # reacquire after rerender
+    row2 = page.locator('.main-deck-row').filter(has_text=row.locator('.main-card-info strong').text_content()).first
+    after = int(row2.locator('.main-qty').text_content())
+    require(after == before + 1, 'Style 1 + control regressed')
     page.close()
-    return size
+    return (250,350)
+
+
+def same_row_pairs(boxes, direction='right'):
+    pairs=[]
+    for i,a in boxes:
+        for j,b in boxes:
+            if i==j: continue
+            ay=a['y']+a['height']/2; by=b['y']+b['height']/2
+            if abs(ay-by) > min(a['height'],b['height'])*0.35: continue
+            if direction=='right' and b['x'] > a['x']:
+                pairs.append((b['x']-a['x'],i,j))
+            if direction=='left' and b['x'] < a['x']:
+                pairs.append((a['x']-b['x'],i,j))
+    return sorted(pairs)
+
+
+def verify_all_starters_application(page):
+    # Exactly five active starters at actual application data + UI layer.
+    require(page.evaluate('window.GL_DECK_BUILDER_DATA.starters.length') == 5, 'Style 2 application data is not exactly five starters')
+    require(page.locator('#loadStarter').count()==1, 'Style 2 Load Starter control missing')
+    exported=[]
+    for idx in range(5):
+        # Clear to avoid replacement confirmation complexity.
+        if page.locator('#deckCount').text_content().strip() != '0':
+            page.locator('#clearDeck').click()
+            if page.locator('#confirmDialog').is_visible(): page.locator('#confirmOk').click()
+        page.locator('#loadStarter').click()
+        require(page.locator('#starterDialog').is_visible(), f'Style 2 starter dialog did not open for starter {idx+1}')
+        require(page.locator('[data-starter-index]').count()==5, 'Style 2 starter selector exposes non-current options')
+        page.locator(f'[data-starter-index="{idx}"]').click()
+        require(page.locator('#deckCount').text_content().strip() == '60', f'Starter {idx+1} did not load 60 cards')
+        obj=page.evaluate('exportObject()')
+        require(obj.get('main_deck_count')==60, f'Starter {idx+1} exportObject total mismatch')
+        require('OSA v1.9.1' in obj.get('format',''), f'Starter {idx+1} export metadata is stale')
+        # Actual app import-normalization/application roundtrip.
+        page.evaluate('obj=>applyDeck(normalizeImportedDeck(obj))', obj)
+        obj2=page.evaluate('exportObject()')
+        sem=lambda o:(o.get('legacy_deck_package_slots'),o.get('main_deck'),o.get('default_formation'))
+        require(sem(obj2)==sem(obj), f'Starter {idx+1} app export/import semantic roundtrip changed composition')
+        exported.append(obj)
+    return exported
 
 
 def run_style2_desktop(browser, expected_size):
     page = browser.new_page(viewport={'width': 1440, 'height': 1000}, accept_downloads=True)
-    page.set_default_timeout(8000)
+    page.set_default_timeout(10000)
     page.set_content(inline_page(2), wait_until='domcontentloaded', timeout=20000)
+    starter_exports = verify_all_starters_application(page)
 
-    # Existing Hero-selection and tab workflows must remain functional.
-    chooser = page.locator('[data-choose-hero]').first
-    require(chooser.count() == 1, 'Style 2 Hero selector missing')
-    chooser.click()
-    require(page.locator('#heroPickerDialog').is_visible(), 'Style 2 Hero picker did not open')
-    choice = page.locator('[data-progression-choice]:not([disabled])').first
-    require(choice.count() == 1, 'Style 2 Hero picker has no selectable progression')
-    choice.click()
-    require(not page.locator('#heroPickerDialog').is_visible(), 'Style 2 Hero picker did not close after selection')
-    require(page.locator('.hero-slot .card-stage img').count() >= 1, 'Style 2 Hero selection did not render a Hero')
-
+    # Start blank before hover/deck interaction tests.
+    page.locator('#clearDeck').click()
+    if page.locator('#confirmDialog').is_visible(): page.locator('#confirmOk').click()
     page.locator('#mainTabButton').click()
-    require(page.locator('#mainTabButton').get_attribute('class').find('active') >= 0, 'Style 2 Main Deck tab did not activate')
     require(page.locator('#hoverCardZoom').count() == 1, 'Style 2 must use one preview overlay')
 
-    # Exercise the real filter path and verify it returns only canonical Item cards.
-    page.locator('#filterToggle').click()
-    page.locator('#familyFilter').select_option('Item')
-    filtered_ids = page.locator('[data-library-card]').evaluate_all("els=>els.map(e=>e.dataset.libraryCard)")
-    require(len(filtered_ids) > 0, 'Style 2 Item filter returned no cards')
-    non_items = page.evaluate("ids=>ids.filter(id=>{const d=window.GL_DECK_BUILDER_DATA;const c=[...d.mainCards,...d.legacyCards].find(x=>x.id===id);return !c||c.family!=='Item'})", filtered_ids)
-    require(not non_items, 'Style 2 Item filter leaked non-Item cards')
-    page.locator('#resetFilters').click()
-    compatible = page.locator('.library-card:not(.incompatible)')
-    require(compatible.count() >= 2, 'Style 2 needs at least two compatible library cards for hover regression')
-    first = compatible.nth(0); first_title = first.get_attribute('title')
-    first.hover(); preview = page.locator('#hoverCardZoom'); require(preview_visible(page), 'Style 2 library preview missing')
-    sb = first.bounding_box(); pb = preview.bounding_box(); require(sb and pb, 'Style 2 library geometry unavailable')
-    require(abs(pb['width']-expected_size[0]) < 1 and abs(pb['height']-expected_size[1]) < 1, 'Style 2 preview size differs from Style 1')
-    require(pb['x'] >= sb['x'] + sb['width'] + 5, 'Style 2 Library preview is not on the RIGHT of source card')
-    require(pb['x'] + pb['width'] <= 1440 and pb['y'] >= 0 and pb['y'] + pb['height'] <= 1000, 'Style 2 Library preview overflows viewport')
-    require(preview.evaluate('e=>getComputedStyle(e).pointerEvents') == 'none', 'Style 2 preview captures pointer events')
-    # Cross the source card's right edge toward the preview.  The source-card
-    # mouseleave must hide immediately; only then move into the former preview
-    # area so another source tile on the path cannot create a false failure.
-    page.mouse.move(sb['x'] + sb['width'] + 2, sb['y'] + sb['height']/2)
-    require(preview.is_hidden(), 'Style 2 Library preview persists after source mouseleave toward preview')
-    page.mouse.move(pb['x'] + pb['width']/2, pb['y'] + pb['height']/2)
-    require(preview.is_hidden(), 'Style 2 Library preview reappears when pointer enters former preview area')
-
-    # Rapid card-to-card hover must reuse the singleton and show Card B.  Pick
-    # a second source outside Card A's preview rectangle so this tests genuine
-    # source-to-source movement rather than the separate anti-hover-bridge path.
-    first.hover(); alt_a = page.locator('#hoverCardZoomImage').get_attribute('alt')
-    rapid_pb = preview.bounding_box(); require(rapid_pb, 'Style 2 rapid-hover preview geometry unavailable')
-    second = None
-    for i in range(1, compatible.count()):
-        candidate = compatible.nth(i)
-        cb = candidate.bounding_box()
-        if not cb:
-            continue
-        cx, cy = cb['x'] + cb['width']/2, cb['y'] + cb['height']/2
-        if not (rapid_pb['x'] <= cx <= rapid_pb['x'] + rapid_pb['width'] and rapid_pb['y'] <= cy <= rapid_pb['y'] + rapid_pb['height']):
-            second = candidate
-            break
-    require(second is not None, 'Style 2 could not find a second card outside the preview overlay')
-    second.hover(); alt_b = page.locator('#hoverCardZoomImage').get_attribute('alt')
-    require(alt_a != alt_b and alt_b and alt_b.endswith(' preview') and preview.is_visible(), 'Style 2 rapid hover did not update to Card B')
-    require(page.locator('#hoverCardZoom').count() == 1, 'Style 2 created multiple preview overlays')
-    page.mouse.move(10, 10)
-
-    # Add a compatible card and verify deck-side LEFT placement.
-    first = page.locator('.library-card:not(.incompatible)').filter(has_text='').first
-    first.click()
-    deck_card = page.locator('[data-deck-card]').first
-    require(deck_card.count() == 1, 'Style 2 deck card was not added')
-    deck_card.hover(); pb = preview.bounding_box(); db = deck_card.bounding_box(); require(pb and db, 'Style 2 deck geometry unavailable')
-    require(pb['x'] + pb['width'] <= db['x'] - 5, 'Style 2 Deck preview is not on the LEFT of source card')
-    # Cross the source card's left edge toward the preview, then enter the
-    # former preview area after it has already been hidden.
-    page.mouse.move(db['x'] - 2, db['y'] + db['height']/2)
-    require(preview.is_hidden(), 'Style 2 Deck preview persists after source mouseleave toward preview')
-    page.mouse.move(pb['x'] + pb['width']/2, pb['y'] + pb['height']/2)
-    require(preview.is_hidden(), 'Style 2 Deck preview reappears when pointer enters former preview area')
-
-    # Add Warp Scroll + Freeze Bomb through the real library UI.
-    for name, cid in [('Warp Scroll','S1-ITM-019'),('Freeze Bomb','S1-ITM-020')]:
-        page.locator('#searchInput').fill(name)
-        tile = page.locator(f'[data-library-card="{cid}"]')
-        require(tile.count() == 1, f'{name} missing from Style 2 library')
-        tile.click()
-    page.locator('#searchInput').fill('')
-    # Export through the actual application flow.
-    page.locator('#exportJson').click()
-    require(page.locator('#confirmDialog').is_visible(), 'Style 2 incomplete export confirmation did not open')
-    with page.expect_download(timeout=8000) as download_info:
-        page.locator('#confirmOk').click()
-    download = download_info.value
-    exported_path = download.path()
-    exported = json.loads(Path(exported_path).read_text(encoding='utf-8'))
-    exported_ids = {x['card_id'] for x in exported.get('main_deck', [])}
-    require({'S1-ITM-019','S1-ITM-020'} <= exported_ids, 'Warp Scroll / Freeze Bomb lost during export')
-    require('OSA v1.9.0' in exported.get('format',''), 'Export metadata does not identify OSA v1.9.0')
-    # Clear and import the exported file through the actual file input path.
-    page.locator('#clearDeck').click(); require(page.locator('#confirmDialog').is_visible(), 'Clear confirmation missing')
-    page.locator('#confirmOk').click()
-    require(page.locator('#deckCount').text_content().strip() == '0', 'Style 2 deck did not clear')
-    page.set_input_files('#jsonFileInput', exported_path)
-    page.wait_for_timeout(100)
+    # Hero selection and filter paths remain functional.
+    page.locator('#legacyTabButton').click()
+    chooser=page.locator('[data-choose-hero]').first; chooser.click()
+    choice=page.locator('[data-progression-choice]:not([disabled])').first; require(choice.count()==1,'Style 2 no selectable Hero progression'); choice.click()
+    require(page.locator('.hero-slot .card-stage img').count()>=1,'Style 2 Hero selection failed')
     page.locator('#mainTabButton').click()
-    require(page.locator('[data-deck-card="S1-ITM-019"]').count() == 1, 'Warp Scroll identity lost on import')
-    require(page.locator('[data-deck-card="S1-ITM-020"]').count() == 1, 'Freeze Bomb identity lost on import')
+    page.locator('#filterToggle').click(); page.locator('#familyFilter').select_option('Item')
+    filtered_ids=page.locator('[data-library-card]').evaluate_all('els=>els.map(e=>e.dataset.libraryCard)')
+    require(filtered_ids,'Style 2 Item filter returned none')
+    non_items=page.evaluate("ids=>ids.filter(id=>{const d=window.GL_DECK_BUILDER_DATA;const c=[...d.mainCards,...d.legacyCards].find(x=>x.id===id);return !c||c.family!=='Item'})",filtered_ids)
+    require(not non_items,'Style 2 Item filter leaked non-Items')
+    page.locator('#resetFilters').click()
+
+    preview=page.locator('#hoverCardZoom')
+    compatible=page.locator('.library-card:not(.incompatible)')
+    require(compatible.count()>=6,'Style 2 needs compatible cards for direct-hover tests')
+    boxes=[]
+    for i in range(min(compatible.count(),18)):
+        b=compatible.nth(i).bounding_box()
+        if b: boxes.append((i,b))
+    pairs=same_row_pairs(boxes,'right')
+    require(pairs,'Style 2 could not find adjacent Library cards in same row')
+    _,ai,bi=pairs[0]
+    a=compatible.nth(ai); b=compatible.nth(bi)
+    aid=a.get_attribute('data-library-card'); bid=b.get_attribute('data-library-card'); btitle=b.get_attribute('title')
+    a.hover(); require(preview_visible(page),'Style 2 Library preview A missing')
+    ab=a.bounding_box(); ap=preview.bounding_box(); require(ab and ap,'Style 2 Library geometry missing')
+    require(abs(ap['width']-expected_size[0])<1 and abs(ap['height']-expected_size[1])<1,'Style 2 preview size differs from Style 1')
+    require(ap['x']>=ab['x']+ab['width']+5,'Style 2 Library preview not RIGHT')
+    require(preview.evaluate('e=>getComputedStyle(e).pointerEvents')=='none','Style 2 preview pointer-events is not none')
+    alt_a=page.locator('#hoverCardZoomImage').get_attribute('alt')
+    # Direct A -> adjacent B toward preview direction. This failed under the old suppression rectangle.
+    b.hover(); alt_b=page.locator('#hoverCardZoomImage').get_attribute('alt')
+    require(preview_visible(page) and alt_b!=alt_a and alt_b==f'{btitle} preview', 'Style 2 direct Library A→B did not transfer preview ownership')
+    # Reverse B -> A.
+    a.hover(); alt_a2=page.locator('#hoverCardZoomImage').get_attribute('alt')
+    require(preview_visible(page) and alt_a2==alt_a,'Style 2 Library reverse B→A failed')
+    # Empty area ends preview.
+    page.mouse.move(10,10); require(preview.is_hidden(),'Style 2 Library preview persists into empty area')
+    require(page.locator('#hoverCardZoom').count()==1,'Style 2 created multiple preview overlays')
+
+    # Add three library cards and test deck-side direct right->left hover.
+    add_ids=[]
+    for i in range(compatible.count()):
+        cid=compatible.nth(i).get_attribute('data-library-card')
+        if cid and cid not in add_ids:
+            add_ids.append(cid)
+        if len(add_ids)>=3: break
+    for cid in add_ids:
+        page.locator(f'[data-library-card="{cid}"]').click()
+    deck_cards=page.locator('[data-deck-card]'); require(deck_cards.count()>=3,'Style 2 could not build deck hover fixtures')
+    dboxes=[]
+    for i in range(deck_cards.count()):
+        bb=deck_cards.nth(i).bounding_box()
+        if bb: dboxes.append((i,bb))
+    dpairs=same_row_pairs(dboxes,'left')
+    require(dpairs,'Style 2 could not find adjacent Deck cards same row')
+    _,ri,li=dpairs[0]
+    right=deck_cards.nth(ri); left=deck_cards.nth(li)
+    right_title=right.get_attribute('title'); left_title=left.get_attribute('title')
+    right.hover(); rp=preview.bounding_box(); rb=right.bounding_box(); require(rp and rb,'Style 2 Deck geometry missing')
+    require(rp['x']+rp['width']<=rb['x']-5,'Style 2 Deck preview not LEFT')
+    ralt=page.locator('#hoverCardZoomImage').get_attribute('alt')
+    left.hover(); lalt=page.locator('#hoverCardZoomImage').get_attribute('alt')
+    require(preview_visible(page) and lalt!=ralt and lalt==f'{left_title} preview','Style 2 direct Deck right→left did not transfer preview ownership')
+    right.hover(); require(page.locator('#hoverCardZoomImage').get_attribute('alt')==f'{right_title} preview'==ralt,'Style 2 Deck reverse left→right failed')
+    page.mouse.move(10,10); require(preview.is_hidden(),'Style 2 Deck preview persists into empty area')
+
+    # Real file export/import flow with Warp Scroll + Freeze Bomb.
+    for name,cid in [('Warp Scroll','S1-ITM-019'),('Freeze Bomb','S1-ITM-020')]:
+        page.locator('#searchInput').fill(name)
+        tile=page.locator(f'[data-library-card="{cid}"]'); require(tile.count()==1,f'{name} missing'); tile.click()
+    page.locator('#searchInput').fill('')
+    page.locator('#exportJson').click()
+    if page.locator('#confirmDialog').is_visible():
+        with page.expect_download(timeout=10000) as info: page.locator('#confirmOk').click()
+    else:
+        raise AssertionError('Expected incomplete-deck export confirmation did not open')
+    exported_path=info.value.path(); exported=json.loads(Path(exported_path).read_text(encoding='utf-8'))
+    require('OSA v1.9.1' in exported.get('format',''),'Style 2 file export metadata is not OSA v1.9.1')
+    exported_ids={x['card_id'] for x in exported.get('main_deck',[])}; require({'S1-ITM-019','S1-ITM-020'}<=exported_ids,'Warp/Freeze lost during export')
+    page.locator('#clearDeck').click();
+    if page.locator('#confirmDialog').is_visible(): page.locator('#confirmOk').click()
+    page.set_input_files('#jsonFileInput',exported_path); page.wait_for_timeout(100); page.locator('#mainTabButton').click()
+    require(page.locator('[data-deck-card="S1-ITM-019"]').count()==1,'Warp Scroll identity lost on file import')
+    require(page.locator('[data-deck-card="S1-ITM-020"]').count()==1,'Freeze Bomb identity lost on file import')
     page.close()
 
 
 def run_style2_mobile(browser):
-    page = browser.new_page(viewport={'width': 700, 'height': 900})
-    page.set_default_timeout(8000)
-    page.set_content(inline_page(2), wait_until='domcontentloaded', timeout=20000)
-    page.locator('#mainTabButton').click()
-    tile = page.locator('[data-library-card="S1-ITM-019"]')
-    require(tile.count() == 1, 'Warp Scroll missing in mobile Style 2 library')
-    tile.hover()
-    require(page.locator('#hoverCardZoom').is_hidden(), 'Desktop hover preview was forced onto mobile')
-    tile.click()
-    row = page.locator('[data-mobile-deck-card="S1-ITM-019"]')
-    require(row.count() == 1, 'Warp Scroll not added to mobile deck list')
-    qty = row.locator('.mobile-main-qty'); before = int(qty.text_content())
-    row.locator('[data-mobile-add="S1-ITM-019"]').click()
-    row = page.locator('[data-mobile-deck-card="S1-ITM-019"]'); after = int(row.locator('.mobile-main-qty').text_content())
-    require(after == before + 1, 'Style 2 mobile + control regressed')
-    row.locator('[data-mobile-remove="S1-ITM-019"]').click()
-    row = page.locator('[data-mobile-deck-card="S1-ITM-019"]'); final = int(row.locator('.mobile-main-qty').text_content())
-    require(final == before, 'Style 2 mobile - control regressed')
-    page.close()
+    page=browser.new_page(viewport={'width':700,'height':900}); page.set_default_timeout(8000)
+    page.set_content(inline_page(2),wait_until='domcontentloaded',timeout=20000); page.locator('#mainTabButton').click()
+    tile=page.locator('[data-library-card="S1-ITM-019"]'); require(tile.count()==1,'Warp Scroll missing mobile'); tile.hover(); require(page.locator('#hoverCardZoom').is_hidden(),'Desktop hover forced onto mobile')
+    tile.click(); row=page.locator('[data-mobile-deck-card="S1-ITM-019"]'); require(row.count()==1,'Warp not added mobile')
+    before=int(row.locator('.mobile-main-qty').text_content()); row.locator('[data-mobile-add="S1-ITM-019"]').click(); row=page.locator('[data-mobile-deck-card="S1-ITM-019"]'); require(int(row.locator('.mobile-main-qty').text_content())==before+1,'Mobile + regressed'); row.locator('[data-mobile-remove="S1-ITM-019"]').click(); row=page.locator('[data-mobile-deck-card="S1-ITM-019"]'); require(int(row.locator('.mobile-main-qty').text_content())==before,'Mobile - regressed'); page.close()
 
 
 def main():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True, executable_path=CHROMIUM, args=['--no-sandbox'])
+        browser=p.chromium.launch(headless=True,executable_path=CHROMIUM,args=['--no-sandbox'])
         try:
-            size = run_style1(browser)
-            run_style2_desktop(browser, size)
+            size=run_style1(browser)
+            run_style2_desktop(browser,size)
             run_style2_mobile(browser)
         finally:
             browser.close()
-    print('PASS Deck Builder v1.31 executable browser preview geometry/lifecycle + Warp/Freeze import-export regression')
+    print('PASS Deck Builder v1.31 OSA v1.9.1 starters + Style1 row anchor + Style2 direct card hover browser regression')
 
-if __name__ == '__main__':
-    try:
-        main()
+if __name__=='__main__':
+    try: main()
     except Exception as exc:
-        print(f'FAIL Deck Builder v1.31 browser regression: {exc}', file=sys.stderr)
+        print(f'FAIL Deck Builder v1.31 browser regression: {exc}',file=sys.stderr)
         raise

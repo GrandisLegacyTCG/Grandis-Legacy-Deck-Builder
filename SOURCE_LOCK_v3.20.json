@@ -3,7 +3,7 @@
   "version": "3.20",
   "public_package_version": "1.31",
   "package_semver": "1.31.0",
-  "date": "2026-09-20",
+  "date": "2026-09-21",
   "status": "ACTIVE",
   "active_ui_source": {
     "html": "index.html",
@@ -19,17 +19,17 @@
     "js/data.js",
     "style-2/js/data.js"
   ],
-  "source_authority": "Grandis Legacy Source Authority v1.9.0",
+  "source_authority": "Grandis Legacy Source Authority v1.9.1",
   "source_stack": {
-    "source_authority": "1.9.0",
+    "source_authority": "1.9.1",
     "canonical_card_authority": "1.6.0",
     "shared_runtime": "1.94.0",
     "season1_runtime_data": "0.16.0",
     "season1_effect_recipe": "0.15.0",
     "season1_effect_checkpoint": "0.15.0",
-    "starter60": "1.5",
+    "starter60": "1.6.0",
     "ui_contract": "2.52",
-    "application_runtime_sync": "2.58",
+    "application_runtime_sync": "2.59",
     "hero_component_authority": "1.1.0"
   },
   "canonical_registry_hash": "85d25ebda9bb2bc260983a566e6d430dde97bfc7a32e8042ec2fddfeaff1b42f",
@@ -39,5 +39,7 @@
   "builder_workspace_policy": "flexible editing/export; match legality enforced by gameplay applications",
   "normal_copy_limit": 3,
   "ultimate_copy_limit": 1,
-  "release_delta": "OSA v1.9.0 sync; Style 1 hover preview shifted left away from quantity controls; Style 2 desktop source-card hover preview added with center-facing placement and immediate source-card mouseleave lifetime."
+  "release_delta": "OSA v1.9.1 five-starter sync; Style 1 per-row Y preserved with corrected row-left X anchor; Style 2 direct card-to-card hover reliability fixed by removing suppression/dead-zone logic.",
+  "active_starter_count": 5,
+  "starter_authority": "1.6.0"
 }

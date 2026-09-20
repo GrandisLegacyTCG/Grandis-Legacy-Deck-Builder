@@ -6,6 +6,8 @@ const vm=require('vm');
 
 const ROOT=path.resolve(__dirname,'..');
 const RUNTIME_PATH=path.join(ROOT,'data/season1/cards.runtime.v0.16.0.json');
+const ACTIVE_STARTER_MANIFEST_PATH=path.join(ROOT,'data/starter-decks/ACTIVE_STARTERS_v1.6.0.json');
+const ACTIVE_STARTER_DIR=path.join(ROOT,'data/starter-decks/active');
 const runtime=JSON.parse(fs.readFileSync(RUNTIME_PATH,'utf8'));
 const canonicalById=new Map(runtime.cards.map(card=>[card.card_id,card]));
 
@@ -95,20 +97,26 @@ function updateCard(current){
   return next;
 }
 
-function updateStarter(starter){
-  const next=JSON.parse(JSON.stringify(starter));
-  for(const key of ['main_deck','legacy_deck_expanded','side_deck_expanded']){
-    if(!Array.isArray(next[key]))continue;
-    for(const entry of next[key]){
-      const card=canonicalById.get(entry.card_id);
-      if(card)entry.card_name=card.name;
-    }
+function loadActiveStarters(){
+  const manifest=JSON.parse(fs.readFileSync(ACTIVE_STARTER_MANIFEST_PATH,'utf8'));
+  if(manifest.osa_version!=='v1.9.1'||manifest.authority_version!=='v1.6.0'||manifest.active_starter_count!==5||!Array.isArray(manifest.starters)||manifest.starters.length!==5){
+    throw new Error('Active Starter Deck manifest must be OSA v1.9.1 / Starter Authority v1.6.0 with exactly five starters.');
   }
-  next.builder_version='1.31-public-deck-builder';
-  next.format='Grandis Legacy Season 1 / OSA v1.9.0 / Starter60 v1.5 / 60-card Main Deck / max 3 normal / max 1 Ultimate';
-  next.source_database_version=`Grandis Legacy Source Authority v1.9.0 · Runtime Data v0.16.0 · Application Runtime Sync v2.58 · registry ${runtime.canonical_registry_hash}`;
-  next.builder_version_note='Deck Builder v1.31 consumes OSA v1.9.0 and Starter60 v1.5. Builder editing/export remains flexible; normal cards are maximum 3 copies and Ultimate cards maximum 1 copy. Official match legality is enforced by gameplay applications.';
-  return next;
+  const seenIds=new Set();
+  return manifest.starters.slice().sort((a,b)=>a.slot-b.slot).map(entry=>{
+    const filename=`${entry.starter_id}_GL_DECK_1_0.json`;
+    const file=path.join(ACTIVE_STARTER_DIR,filename);
+    if(!fs.existsSync(file))throw new Error(`Missing active OSA starter source: ${filename}`);
+    const starter=JSON.parse(fs.readFileSync(file,'utf8'));
+    if(seenIds.has(entry.starter_id))throw new Error(`Duplicate active starter id: ${entry.starter_id}`);
+    seenIds.add(entry.starter_id);
+    const total=(starter.main_deck||[]).reduce((sum,item)=>sum+Number(item.quantity||0),0);
+    if(total!==60||Number(starter.main_deck_count)!==60)throw new Error(`${filename} must contain exactly 60 Main Deck cards.`);
+    for(const item of starter.main_deck||[]){if(!canonicalById.has(item.card_id))throw new Error(`${filename}: unknown Main Deck card ${item.card_id}`);}
+    for(const item of [...(starter.legacy_deck_expanded||[]),...(starter.side_deck_expanded||[])]){if(!canonicalById.has(item.card_id))throw new Error(`${filename}: unknown Hero/Legacy card ${item.card_id}`);}
+    if(!String(starter.format||'').includes('v1.9.1')||!String(starter.format||'').includes('v1.6.0'))throw new Error(`${filename}: stale authority metadata`);
+    return starter;
+  });
 }
 
 function build(relativePath,builderVersion){
@@ -126,35 +134,30 @@ function build(relativePath,builderVersion){
     ...previous,
     schemaVersion:'GL-DECK-BUILDER-DATA-1.1',
     builderVersion,
-    sourceDatabaseVersion:`Grandis Legacy Source Authority v1.9.0 · Runtime Data v0.16.0 · Application Runtime Sync v2.58 · registry ${runtime.canonical_registry_hash}`,
+    sourceDatabaseVersion:`Grandis Legacy Source Authority v1.9.1 · Starter Deck Authority v1.6.0 · Runtime Data v0.16.0 · Application Runtime Sync v2.59 · registry ${runtime.canonical_registry_hash}`,
     canonicalRegistryHash:runtime.canonical_registry_hash,
     heroComponentRegistryHash:runtime.hero_component_registry_hash,
     sourceStack:{
-      sourceAuthority:'1.9.0',
-      oneSourceAuthority:'1.9.0',
+      sourceAuthority:'1.9.1',
+      oneSourceAuthority:'1.9.1',
       canonicalCardAuthority:'1.6.0',
       sharedRuntime:'1.94.0',
       runtimeData:'0.16.0',
       effectRecipe:'0.15.0',
       effectCheckpoint:'0.15.0',
-      starter60:'1.5',
+      starter60:'1.6.0',
       uiContract:'2.52',
-      applicationRuntimeSync:'2.58',
+      applicationRuntimeSync:'2.59',
       heroComponentAuthority:'1.1.0'
     },
     heroComponents:normalizeTermsDeep(runtime.hero_components),
     mainCards:all.filter(card=>{const c=canonicalById.get(card.id);return c&&c.family!=='LegacyModeDefinition'&&c.family!=='Hero';}).map(updateCard),
     legacyCards:(previous.legacyCards||[]).map(updateCard),
-    starters:fs.readdirSync(path.join(ROOT,'starter_deck_examples')).filter(file=>/^starter_.*_GL_DECK_1_0\.json$/i.test(file)).sort().map(file=>updateStarter(JSON.parse(fs.readFileSync(path.join(ROOT,'starter_deck_examples',file),'utf8'))))
+    starters:loadActiveStarters()
   };
   fs.writeFileSync(path.join(ROOT,relativePath),`window.GL_DECK_BUILDER_DATA = ${JSON.stringify(data)};\n`);
 }
 
 build('js/data.js','3.26-public-deck-builder');
 build('style-2/js/data.js','2.27-classic-split');
-for(const name of fs.readdirSync(path.join(ROOT,'starter_deck_examples')).filter(file=>file.endsWith('.json'))){
-  const target=path.join(ROOT,'starter_deck_examples',name);
-  const starter=updateStarter(JSON.parse(fs.readFileSync(target,'utf8')));
-  fs.writeFileSync(target,`${JSON.stringify(starter,null,2)}\n`);
-}
 console.log(`Built Deck Builder data from ${runtime.count} canonical cards.`);
