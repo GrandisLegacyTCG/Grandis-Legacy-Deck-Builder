@@ -2,7 +2,7 @@
   "schema_version": "GL-DECK-1.0",
   "builder_version": "2.27-classic-split",
   "deck_name": "Starter 1 - ElementalLord/Conqueror/Renegade",
-  "format": "Grandis Legacy Source Authority v1.9.1 / Starter Deck Authority v1.6.0 / 60-card Main Deck",
+  "format": "Grandis Legacy Source Authority v1.9.2 / Starter Deck Authority v1.6.1 / 60-card Main Deck",
   "main_deck_count": 60,
   "legacy_package_count": 3,
   "legacy_deck_count": 12,
@@ -216,7 +216,7 @@
     {
       "card_id": "S1-MAG-002",
       "card_name": "Ice Lance",
-      "quantity": 3
+      "quantity": 2
     },
     {
       "card_id": "S1-MAG-004",
@@ -241,7 +241,7 @@
     {
       "card_id": "S1-MAG-008",
       "card_name": "Frostbite",
-      "quantity": 2
+      "quantity": 3
     },
     {
       "card_id": "S1-MAG-011",
@@ -249,8 +249,8 @@
       "quantity": 1
     },
     {
-      "card_id": "S1-MAG-014",
-      "card_name": "Lightning Strike",
+      "card_id": "S1-MAG-015",
+      "card_name": "Permafrost",
       "quantity": 1
     },
     {
@@ -281,7 +281,7 @@
     {
       "card_id": "S1-THF-010",
       "card_name": "Back Slash",
-      "quantity": 2
+      "quantity": 3
     },
     {
       "card_id": "S1-THF-011",
@@ -296,22 +296,17 @@
     {
       "card_id": "S1-THF-013",
       "card_name": "Venom Strike",
-      "quantity": 3
+      "quantity": 2
     },
     {
       "card_id": "S1-THF-015",
       "card_name": "Venom Sovereign",
-      "quantity": 1
+      "quantity": 2
     },
     {
       "card_id": "S1-THF-016",
       "card_name": "Finishing Strike",
       "quantity": 2
-    },
-    {
-      "card_id": "S1-THF-017",
-      "card_name": "Venom Binding",
-      "quantity": 1
     },
     {
       "card_id": "S1-THF-018",
@@ -444,26 +439,27 @@
     "CENTER": "S1-WAR-H001",
     "RIGHT": "S1-THF-H001"
   },
-  "source_database_version": "Grandis Legacy Source Authority v1.9.1 · Starter Deck Authority v1.6.0 · canonical registry 85d25ebda9bb2bc260983a566e6d430dde97bfc7a32e8042ec2fddfeaff1b42f",
+  "source_database_version": "Grandis Legacy Source Authority v1.9.2 · Starter Deck Authority v1.6.1 · canonical registry 85d25ebda9bb2bc260983a566e6d430dde97bfc7a32e8042ec2fddfeaff1b42f",
   "builder_version_note": "Style 2 v2.27 / Deck Builder v1.31 allows export at any Main Deck count within the existing 80-card cutting workspace. Normal cards remain maximum 3 copies and Ultimate remains maximum 1 copy. Official match legality is validated by VS AI and PvP.",
   "active_starter_id": "starter_01_elemental_lord_conqueror_renegade",
   "active_starter_slot": 1,
-  "starter_authority_version": "v1.6.0",
+  "starter_authority_version": "v1.6.1",
   "authority_status": "ACTIVE_CANONICAL",
   "authority_provenance": {
-    "source_type": "NEW_USER_UPLOAD",
+    "source_type": "NEW_USER_UPLOAD_PATCH",
     "source_filename": "Starter_1_ElementalLord_Conqueror_Renegade.json",
-    "source_sha256": "0096a08038a2143b82f5b428162c6a81700083d5c530a542880c7d43fa72f403",
-    "adopted_in_osa": "v1.9.1",
-    "gameplay_semantics_preserved": true
+    "source_sha256": "f63e14a9cc43729fe2e27d77a6d1606a067bc399a5230fa2489eded3ad066353",
+    "previous_authority_source_sha256": "e1c918811f031cd23aca00f17d29e95351b5b75d257ada85b0cda950e8451c1d",
+    "adopted_in_osa": "v1.9.2",
+    "gameplay_semantics_preserved_from_input": true
   },
   "generated_only": true,
   "do_not_edit": true,
   "canonical_source": "Authority/Game/Starter-Decks/Active/starter_01_elemental_lord_conqueror_renegade.json",
-  "canonical_source_sha256": "e1c918811f031cd23aca00f17d29e95351b5b75d257ada85b0cda950e8451c1d",
+  "canonical_source_sha256": "15788ed47922f3a517992e58da7c3e887bc9618c91421a365f90459155a0a795",
   "generation": {
-    "generator": "Authority/Runtime/Validators/generate-v1.9.1.cjs",
-    "generator_version": "1.9.1-starter-generator.1",
+    "generator": "Authority/Runtime/Validators/generate-v1.9.2.cjs",
+    "generator_version": "1.9.2-starter1-generator.1",
     "generated_at": "2026-09-21"
   }
 }

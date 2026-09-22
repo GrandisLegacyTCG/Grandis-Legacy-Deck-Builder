@@ -2,7 +2,7 @@
   "package": "Grandis Legacy Public Deck Builder Style 2",
   "version": "2.22",
   "public_package_version": "1.31",
-  "date": "2026-09-21",
+  "date": "2026-09-22",
   "status": "ACTIVE",
   "active_ui_source": {
     "html": "index.html",
@@ -27,7 +27,10 @@
     "hide_delay_ms": 0,
     "direct_card_to_card": "immediate; no suppression/dead-zone"
   },
-  "starter_authority": "v1.6.0",
+  "starter_authority": "v1.6.1",
   "application_runtime_sync": "v2.59",
-  "active_starter_count": 5
+  "active_starter_count": 5,
+  "current_authority_reference": "Grandis Legacy Source Authority v1.9.5",
+  "starter_authority_source": "Grandis Legacy Source Authority v1.9.5",
+  "runtime_propagation": "NOT_PERFORMED"
 }

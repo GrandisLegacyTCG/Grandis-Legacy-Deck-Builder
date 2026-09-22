@@ -82,10 +82,12 @@ def run_style1(browser):
     # +/- remains usable after preview behavior.
     row = page.locator('.main-deck-row:has(button[data-add-main]:not([disabled]))').first
     row.scroll_into_view_if_needed(); row.hover()
+    card_id = row.get_attribute('data-main-deck-id')
     before = int(row.locator('.main-qty').text_content())
     row.locator('[data-add-main]').click()
-    # reacquire after rerender
-    row2 = page.locator('.main-deck-row').filter(has_text=row.locator('.main-card-info strong').text_content()).first
+    # Reacquire the same card after rerender. The old selector can move to a different row
+    # when this click reaches that card's copy limit.
+    row2 = page.locator(f'[data-main-deck-id="{card_id}"]')
     after = int(row2.locator('.main-qty').text_content())
     require(after == before + 1, 'Style 1 + control regressed')
     page.close()

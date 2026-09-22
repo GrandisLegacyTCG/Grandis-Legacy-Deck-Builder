@@ -2,7 +2,7 @@
   "schema_version": "GL-DECK-1.0",
   "builder_version": "2.27-classic-split",
   "deck_name": "Starter 2 - Saint/Crusader/GrandRanger",
-  "format": "Grandis Legacy Source Authority v1.9.1 / Starter Deck Authority v1.6.0 / 60-card Main Deck",
+  "format": "Grandis Legacy Source Authority v1.9.2 / Starter Deck Authority v1.6.1 / 60-card Main Deck",
   "main_deck_count": 60,
   "legacy_package_count": 3,
   "legacy_deck_count": 12,
@@ -419,26 +419,30 @@
     "CENTER": "S1-WAR-H004",
     "RIGHT": "S1-ARC-H001"
   },
-  "source_database_version": "Grandis Legacy Source Authority v1.9.1 · Starter Deck Authority v1.6.0 · canonical registry 85d25ebda9bb2bc260983a566e6d430dde97bfc7a32e8042ec2fddfeaff1b42f",
+  "source_database_version": "Grandis Legacy Source Authority v1.9.2 · Starter Deck Authority v1.6.1 · canonical registry 85d25ebda9bb2bc260983a566e6d430dde97bfc7a32e8042ec2fddfeaff1b42f",
   "builder_version_note": "Style 2 v2.27 / Deck Builder v1.31 allows export at any Main Deck count within the existing 80-card cutting workspace. Normal cards remain maximum 3 copies and Ultimate remains maximum 1 copy. Official match legality is validated by VS AI and PvP.",
   "active_starter_id": "starter_02_saint_crusader_grand_ranger",
   "active_starter_slot": 2,
-  "starter_authority_version": "v1.6.0",
+  "starter_authority_version": "v1.6.1",
   "authority_status": "ACTIVE_CANONICAL",
   "authority_provenance": {
     "source_type": "NEW_USER_UPLOAD",
     "source_filename": "Starter_2_Saint_Crusader_GrandRanger.json",
     "source_sha256": "7dd7efcdee83851411f4f8904c230b63e3a2b1e70fd6178909f65fccf1ae4299",
     "adopted_in_osa": "v1.9.1",
-    "gameplay_semantics_preserved": true
+    "gameplay_semantics_preserved": true,
+    "retained_from_osa": "v1.9.1",
+    "retained_canonical_sha256": "34e89d3ba77681116ee4dab563b7063807ba1d2dc81f9a433883616b0e14179d",
+    "current_authority": "v1.9.2",
+    "gameplay_semantics_unchanged": true
   },
   "generated_only": true,
   "do_not_edit": true,
   "canonical_source": "Authority/Game/Starter-Decks/Active/starter_02_saint_crusader_grand_ranger.json",
-  "canonical_source_sha256": "34e89d3ba77681116ee4dab563b7063807ba1d2dc81f9a433883616b0e14179d",
+  "canonical_source_sha256": "d1e36758a72a452123f1b72ac5b8d06aebf98692e1cd5cc4a193662080e50de3",
   "generation": {
-    "generator": "Authority/Runtime/Validators/generate-v1.9.1.cjs",
-    "generator_version": "1.9.1-starter-generator.1",
+    "generator": "Authority/Runtime/Validators/generate-v1.9.2.cjs",
+    "generator_version": "1.9.2-starter1-generator.1",
     "generated_at": "2026-09-21"
   }
 }

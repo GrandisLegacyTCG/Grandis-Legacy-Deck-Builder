@@ -1,17 +1,16 @@
 # Grandis Legacy Deck Builder v1.31
 
-Date: 2026-09-21
+Date: 2026-09-22
 
-## Final correction pass
+## Starter Authority v1.6.1 synchronization
 
-- Synchronized current consumer metadata to **Grandis Legacy Source Authority v1.9.1**.
-- Consumes **Starter Deck Authority v1.6.0** and **Application Runtime Sync v2.59**.
-- Active player-facing Starter Deck set is exactly **5**, sourced from OSA v1.9.1; the retired 15-starter model is not part of any current selector/build path.
-- All five current starters resolve against the 200-card registry and contain 60 Main Deck cards.
-- Style 1 preview remains **250×350** and preserves the original per-hovered-row vertical placement. Only the X anchor changes: preview center X aligns near the hovered row left edge, with viewport clamping and usable +/- controls.
-- Style 2 keeps approved placement (Library → RIGHT, Deck → LEFT) and **250×350** size. The former suppression/dead-zone logic was removed so direct adjacent card-to-card hover immediately transfers preview ownership.
-- Preview overlays remain `pointer-events:none`; source-card mouseleave hides immediately; no hover bridge or delayed close is used.
-- 200 canonical cards, Warp Scroll, Freeze Bomb, copy limits, import/export, filters, search, Hero selection, and mobile/touch behavior remain unchanged.
-- No other Grandis Legacy repository was modified by this release.
+- Public Deck Builder remains **v1.31**.
+- Active Starter Deck Authority is now **v1.6.1**, imported from the current **Grandis Legacy Source Authority v1.9.5** package.
+- Exactly **5** active Starter Decks remain. Starter 1 receives the authoritative v1.6.1 composition; Starters 2–5 remain semantically identical to the previous active set.
+- `js/data.js` and `style-2/js/data.js` are regenerated from the five active authority JSON files.
+- The Deck Builder intentionally retains its approved runtime/card/effect/UI stack: Runtime Data **v0.16.0**, Shared Runtime **v1.94.0**, Effect Recipe **v0.15.0**, Effect Checkpoint **v0.15.0**, UI Contract **v2.52**, and Application Runtime Sync **v2.59**.
+- No gameplay runtime propagation was performed. The current OSA v1.9.5 package is the source/reference for Starter Authority v1.6.1, not a claim that every runtime component was migrated.
+- Style 1 / Style 2 layout, preview behavior, hover behavior, navigation, mobile behavior, save/export policy, import flow, deck legality behavior, card copy limits, hero selection, artwork, and CSS are unchanged.
+- The retired 15-starter model remains non-active and is not part of any current selector/build path.
 
-Actual executable verification is recorded in `VERIFICATION_v1.31.md`.
+Executable verification is recorded in `VERIFICATION_v1.31.md`.

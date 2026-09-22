@@ -3,7 +3,7 @@
   "version": "3.20",
   "public_package_version": "1.31",
   "package_semver": "1.31.0",
-  "date": "2026-09-21",
+  "date": "2026-09-22",
   "status": "ACTIVE",
   "active_ui_source": {
     "html": "index.html",
@@ -27,7 +27,7 @@
     "season1_runtime_data": "0.16.0",
     "season1_effect_recipe": "0.15.0",
     "season1_effect_checkpoint": "0.15.0",
-    "starter60": "1.6.0",
+    "starter60": "1.6.1",
     "ui_contract": "2.52",
     "application_runtime_sync": "2.59",
     "hero_component_authority": "1.1.0"
@@ -39,7 +39,10 @@
   "builder_workspace_policy": "flexible editing/export; match legality enforced by gameplay applications",
   "normal_copy_limit": 3,
   "ultimate_copy_limit": 1,
-  "release_delta": "OSA v1.9.1 five-starter sync; Style 1 per-row Y preserved with corrected row-left X anchor; Style 2 direct card-to-card hover reliability fixed by removing suppression/dead-zone logic.",
+  "release_delta": "Starter Deck Authority v1.6.1 synchronized from current OSA v1.9.5; Starter 1 composition updated; Starters 2–5 semantically unchanged; gameplay/runtime propagation intentionally not performed. Existing v1.31 UI/preview behavior retained.",
   "active_starter_count": 5,
-  "starter_authority": "1.6.0"
+  "starter_authority": "1.6.1",
+  "current_authority_reference": "Grandis Legacy Source Authority v1.9.5",
+  "starter_authority_source": "Grandis Legacy Source Authority v1.9.5",
+  "runtime_propagation": "NOT_PERFORMED — Deck Builder v1.31 retains approved runtime/card/effect/UI component versions."
 }

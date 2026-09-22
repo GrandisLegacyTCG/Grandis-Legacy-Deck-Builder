@@ -1,6 +1,6 @@
 # Grandis Legacy Deck Builder v1.31
 
-Grandis Legacy Deck Builder v1.31 is synchronized to **Grandis Legacy Source Authority v1.9.1** and its current 200-card Season 1 registry (Runtime Data v0.16.0). The Deck Builder is a consumer of OSA data and does not redefine or execute gameplay effects.
+Grandis Legacy Deck Builder v1.31 keeps its approved **OSA v1.9.1-era 200-card/runtime stack** (Runtime Data v0.16.0) while its active Starter Deck data is synchronized to **Starter Deck Authority v1.6.1** from the current **Grandis Legacy Source Authority v1.9.5** package. This is intentionally a mixed-provenance consumer state: no gameplay/runtime migration was performed.
 
 ## Active sources
 
@@ -16,4 +16,4 @@ Style 1 keeps its 250×350 enlarged preview and original per-hovered-row vertica
 
 See `release/RELEASE_NOTE_v1.31.md` and `release/VERIFICATION_v1.31.md`. Historical v1.30 records and old source locks are preserved under `release/history/`.
 
-Current starter authority: **v1.6.0**, exactly **5 active Starter Decks**, consumed from OSA v1.9.1. Application Runtime Sync reference: **v2.59**.
+Current starter authority: **v1.6.1**, exactly **5 active Starter Decks**, imported from current OSA **v1.9.5**. The Deck Builder runtime remains on its approved **Application Runtime Sync v2.59** / Runtime Data **v0.16.0** stack, per the no-gameplay-runtime-propagation scope.
