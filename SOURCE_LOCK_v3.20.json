@@ -3,7 +3,7 @@
   "version": "3.20",
   "public_package_version": "1.31",
   "package_semver": "1.31.0",
-  "date": "2026-09-22",
+  "date": "2026-09-28",
   "status": "ACTIVE",
   "active_ui_source": {
     "html": "index.html",
@@ -39,10 +39,10 @@
   "builder_workspace_policy": "flexible editing/export; match legality enforced by gameplay applications",
   "normal_copy_limit": 3,
   "ultimate_copy_limit": 1,
-  "release_delta": "Starter Deck Authority v1.6.1 synchronized from current OSA v1.9.5; Starter 1 composition updated; Starters 2–5 semantically unchanged; gameplay/runtime propagation intentionally not performed. Existing v1.31 UI/preview behavior retained.",
+  "release_delta": "Same-version v1.31 UI correction: Style 1 Hero position Swap button now reuses the approved Style 2 position-swap SVG and final visual treatment. Gameplay, deck rules, source/card authority, Starter Decks, Style 2 behavior, and public version remain unchanged.",
   "active_starter_count": 5,
   "starter_authority": "1.6.1",
   "current_authority_reference": "Grandis Legacy Source Authority v1.9.5",
   "starter_authority_source": "Grandis Legacy Source Authority v1.9.5",
-  "runtime_propagation": "NOT_PERFORMED — Deck Builder v1.31 retains approved runtime/card/effect/UI component versions."
+  "runtime_propagation": "NOT_PERFORMED \u2014 Deck Builder v1.31 retains approved runtime/card/effect/UI component versions."
 }

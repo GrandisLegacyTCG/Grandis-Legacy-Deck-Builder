@@ -375,13 +375,14 @@ function assignLegacyToSlot(cardId,slotIndex){
   state.slots[slotIndex].legacyId=cardId;renderDeckPanels();renderLibrary();
 }
 
+function positionSwapIcon(){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h13m0 0-3-3m3 3-3 3M20 16H7m0 0 3-3m-3 3 3 3"/></svg>'}
 function renderDeckPanels(){renderLegacyDeck();renderMainDeck();updateExportButton()}
 function renderLegacyDeck(){
   const selected=selectedProgressions();$('legacyTotal').textContent=`${legacyCardCount()}/12`;$('heroTotalBadge').textContent=String(selected.length*3);$('legacyCountBadge').textContent=String(state.slots.filter(slot=>slot.legacyId).length);$('rankLabel').textContent=`RANK ${['I','II','III'][state.rankView-1]}`;
   const chunks=[];
   state.slots.forEach((slot,index)=>{
     const progression=state.progressionById.get(slot.progressionId),card=progression?cardById(progression.cardIds[state.rankView-1]):null;
-    if(index>0)chunks.push(`<button class="swap-button" type="button" data-swap-left="${index-1}" data-swap-right="${index}" ${state.slots[index-1].progressionId&&slot.progressionId?'':'disabled'} aria-label="Swap ${POSITIONS[index-1]} and ${POSITIONS[index]}">↔</button>`);
+    if(index>0)chunks.push(`<button class="position-swap" type="button" data-swap-left="${index-1}" data-swap-right="${index}" ${state.slots[index-1].progressionId&&slot.progressionId?'':'disabled'} title="Swap Position" aria-label="Swap ${POSITIONS[index-1]} and ${POSITIONS[index]}">${positionSwapIcon()}</button>`);
     chunks.push(card?`<article class="formation-slot" data-hero-drop-slot="${index}"><div class="deck-card-visual"><button class="formation-card-button" type="button" draggable="true" data-hero-slot-drag="${progression.id}" data-hero-slot-index="${index}"><img src="${card.image}" alt="${esc(card.name)}"></button><button class="deck-review-button" type="button" data-review-id="${card.id}" aria-label="Review ${esc(card.name)}"><img src="assets/ui/expand.png" alt=""></button></div><div class="formation-position">${POSITIONS[index]}</div></article>`:`<article class="formation-slot empty" data-hero-drop-slot="${index}"><div class="formation-card-placeholder">Drag or select Hero</div><div class="formation-position">${POSITIONS[index]}</div></article>`);
   });
   $('formationGrid').innerHTML=chunks.join('');
